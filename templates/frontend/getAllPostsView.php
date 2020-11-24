@@ -10,7 +10,6 @@
 	<div id="blog-posts">
 		<h2>Derniers billets du blog</h2>
 		<?php
-
 		while ($data = $posts->fetch())
 		{
 			if (!empty($data)) {					

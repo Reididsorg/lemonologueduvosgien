@@ -1,10 +1,10 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\Model;
+namespace BrunoGrosdidier\Blog\DAO;
 
-require_once("model/Manager.php");
+require_once("DAO/DAO.php");
 
-class CommentManager extends Manager
+class CommentDAO extends DAO
 {
 	public function insertOneComment($postId, $author, $comment)
 	{

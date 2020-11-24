@@ -1,30 +1,36 @@
 <?php
 
 // Chargement des classes
-require_once('model/PostManager.php');
-require_once('model/CommentManager.php');
+require_once('config/autoloader.php');
+//require_once('DAO/PostDAO.php');
+//require_once('DAO/CommentDAO.php');
+
+use BrunoGrosdidier\Blog\Config\Autoloader;
+Autoloader::register();
+use BrunoGrosdidier\Blog\DAO\ArticleDAO;
+use BrunoGrosdidier\Blog\DAO\CommentDAO;
 
 function getAllPosts()
 {
-	$postManager = new BrunoGrosdidier\Blog\Model\PostManager();
+	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
 	$posts = $postManager->selectAllPosts();
 
-	require('view/frontend/getAllPostsView.php');
+	require('templates/frontend/getAllPostsView.php');
 }
 
 function getOnePost()
 {
-	$postManager = new BrunoGrosdidier\Blog\Model\PostManager();
-	$commentManager = new BrunoGrosdidier\Blog\Model\CommentManager();
+	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
+	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
 	$post = $postManager->selectOnePost($_GET['id']);
 	$comments = $commentManager->selectAllCommentsOfOnePost($_GET['id']);
 
-	require('view/frontend/getOnePostView.php');
+	require('templates/frontend/getOnePostView.php');
 }
 
 function addOneComment($postId, $author, $comment)
 {
-	$commentManager = new BrunoGrosdidier\Blog\Model\CommentManager();
+	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
 
 	$affectedLines = $commentManager->insertOneComment($postId, $author, $comment);
 
@@ -38,18 +44,18 @@ function addOneComment($postId, $author, $comment)
 
 function editOneComment()
 {
-	$commentManager = new BrunoGrosdidier\Blog\Model\CommentManager();
-	$postManager = new BrunoGrosdidier\Blog\Model\PostManager();
+	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
+	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
 
 	$comment = $commentManager->selectOneComment($_GET['commentId']);
 	$post = $postManager->selectOnePost($_GET['postId']);
 
-	require('view/frontend/editOneCommentView.php');		
+	require('templates/frontend/editOneCommentView.php');		
 }
 
 function refreshOneComment($commentId, $commentText, $postId)
 {
-	$commentManager = new BrunoGrosdidier\Blog\Model\CommentManager();
+	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
 
 	$affectedLine = $commentManager->updateOneComment($commentId, $commentText);
 

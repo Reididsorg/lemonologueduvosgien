@@ -1,8 +1,8 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\Model;
+namespace BrunoGrosdidier\Blog\DAO;
 
-abstract class Manager
+abstract class DAO
 {
     const DB_HOST = 'mysql:host=localhost:3308;dbname=lemonologueduvosgien;charset=utf8';
     const DB_USER = 'lemonologueduvosgien';
@@ -43,13 +43,12 @@ abstract class Manager
         if($parameters)
         {
             $result = $this->checkConnection()->prepare($sql);
-            $result->setFetchMode(\PDO::FETCH_CLASS, PostManager::class);
+            $result->setFetchMode(\PDO::FETCH_CLASS, static::class);
             $result->execute($parameters);
-            //var_dump($result);
             return $result;
         }
         $result = $this->checkConnection()->query($sql);
-        $result->setFetchMode(\PDO::FETCH_CLASS, PostManager::class);
+        $result->setFetchMode(\PDO::FETCH_CLASS, static::class);
         return $result;
     }
 }

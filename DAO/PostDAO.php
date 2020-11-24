@@ -1,10 +1,10 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\Model;
+namespace BrunoGrosdidier\Blog\DAO;
 
-require_once("model/Manager.php");
+require_once("DAO/DAO.php");
 
-class PostManager extends Manager
+class PostDAO extends DAO
 {
 	public function insertOnePost($title, $content)
 	{
