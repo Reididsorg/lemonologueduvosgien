@@ -1,5 +1,7 @@
-<?php $title = 'LE MONOLOGUE DU VOSGIEN'; ?>
-
+<?php 
+	$title = 'LE MONOLOGUE DU VOSGIEN'; 
+	$onePost = $post->fetch();
+?>
 
 <?php ob_start(); ?>
 
@@ -13,18 +15,18 @@
 	
 		<div class="news">
 			<h3>
-				<?= htmlspecialchars($post['post_title']) ?>
-				<em>le <?= $post['creation_date_fr'] ?></em>
+				<?= htmlspecialchars($onePost->post_title) ?>
+				<em>le <?= $onePost->creation_date_fr ?></em>
 			</h3>
 			
 			<p>
-				<?= nl2br(htmlspecialchars($post['post_content'])) ?>
+				<?= nl2br(htmlspecialchars($onePost->post_content)) ?>
 			</p>
 		</div>
 
 		<h2>Commentaires</h2>
 
-		<form action="index.php?action=addOneComment&amp;id=<?= $post['id'] ?>" method="post">
+		<form action="index.php?action=addOneComment&amp;id=<?= $onePost->id ?>" method="post">
 			<div>
 				<label for="author">Auteur</label><br />
 				<input type="text" id="author" name="author" />
@@ -42,8 +44,8 @@
 		while ($comment = $comments->fetch())
 		{
 			?>
-				<p><strong><?= htmlspecialchars($comment['comment_author']) ?></strong> le <?= $comment['comment_date_fr'] ?> <a href="index.php?action=editOneComment&amp;commentId=<?= $comment['id'] ?>&amp;postId=<?= $post['id'] ?>">(modifier)</a></p>
-				<p><?= nl2br(htmlspecialchars($comment['comment_content'])) ?></p>
+				<p><strong><?= htmlspecialchars($comment->comment_author) ?></strong> le <?= $comment->comment_date_fr ?> <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->id ?>&amp;postId=<?= $onePost->id ?>">(modifier)</a></p>
+				<p><?= nl2br(htmlspecialchars($comment->comment_content)) ?></p>
 			<?php
 		}
 		?>	
