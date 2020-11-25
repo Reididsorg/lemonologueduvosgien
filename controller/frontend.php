@@ -1,18 +1,23 @@
 <?php
 
 // Chargement des classes
-require_once('config/autoloader.php');
+//require_once('config/autoloader.php');
+//require 'config/autoloader.php';
 //require_once('DAO/PostDAO.php');
 //require_once('DAO/CommentDAO.php');
 
-use BrunoGrosdidier\Blog\Config\Autoloader;
-Autoloader::register();
-use BrunoGrosdidier\Blog\DAO\ArticleDAO;
+//use BrunoGrosdidier\Blog\Config\Autoloader;
+//Autoloader::register();
+
+require_once ('vendor/autoload.php');
+//require 'vendor/autoload.php';
+
+use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
 
 function getAllPosts()
 {
-	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
+	$postManager = new PostDAO();
 	$posts = $postManager->selectAllPosts();
 
 	require('templates/frontend/getAllPostsView.php');

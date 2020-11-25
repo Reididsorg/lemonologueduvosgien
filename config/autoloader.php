@@ -11,10 +11,10 @@ class Autoloader
 
     public static function autoload($class)
     {
+        //var_dump($class);
         $class = str_replace('BrunoGrosdidier\Blog\\', '', $class);
-        //$class = str_replace('\', '/', $class);
         $class = str_replace("\\", '/', $class);
-        //require ('../'.$class.'.php');
+        //var_dump($class);
         require ($class.'.php');
     }
 }

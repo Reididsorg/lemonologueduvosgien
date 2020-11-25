@@ -3,6 +3,8 @@ session_start();
 //var_dump($_SESSION);
 //var_dump($_GET);
 
+//require_once ('vendor/autoload.php');
+
 require('controller/frontend.php');
 
 try {
