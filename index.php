@@ -10,7 +10,7 @@ if ($_SERVER['SCRIPT_FILENAME'] == 'Applications/MAMP/htdocs/lemonologueduvosgie
 
 require_once ('vendor/autoload.php');
 
-require('controller/frontend.php');
+require('src/controller/frontController.php');
 
 $router = new BrunoGrosdidier\Blog\config\Router();
 $router->run();
