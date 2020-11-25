@@ -1,7 +1,3 @@
-<?php 
-session_start();
-var_dump($_SESSION);
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -12,8 +8,8 @@ var_dump($_SESSION);
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 		<meta name="description" content="Le Monologue Du Vosgien">
 		<meta name="author" content="Le Vosgien">
-		<link rel="icon" href="images/icone-32x32.png">
-		<title>LE MONOLOGUE DU VOSGIEN</title>
+		<link rel="icon" type="image/png"  href="/images/icone.png" />
+		<title><?= $title ?></title>
 	</head>
 
 	<body>
@@ -25,7 +21,7 @@ var_dump($_SESSION);
 					<!-- Logo -->
 					<li class="nav-logo">
 						<a href="index.html">
-							<img src="/images/photo.jpg" alt="" />
+							<img src="/public/images/photo.jpg" alt="" />
 						</a>
 					</li>
 					<!-- Menu -->
@@ -59,46 +55,10 @@ var_dump($_SESSION);
 			</nav>
 		</header>
 
-		<h1>BLOG</h1>	
-			
-		<!-- Wrapper  -->	
-		<div id="wrapper">			
-		
-			<!-- Billets de blog  -->
-			<div id="blog-posts">
-				<h2>Derniers billets du blog</h2>
-				<?php
-				// Connexion à la base de données
-				try
-				{
-					$bdd = new PDO('mysql:host=localhost:3308;dbname=lemonologueduvosgien;charset=utf8', 'lemonologueduvosgien', 'Vosgica88');
-				}
-				catch(Exception $e)
-				{
-					die('Erreur : '.$e->getMessage());
-				}
-				// On récupère les 5 derniers billets
-				$req = $bdd->query('SELECT id, post_title, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS date_creation_fr FROM posts ORDER BY post_date DESC LIMIT 0, 5');
-				while ($donnees = $req->fetch())
-				{
-					if (!empty($donnees)) {					
-					?>
-					<div class="news">
-						<h3><?= $donnees['post_title'] ?><em> le <?= $donnees['date_creation_fr'] ?></em></h3>
-						<p><?= $donnees['post_content'] ?>
-							<br />
-							<em><a href="commentaires.php?billet=<?= $donnees['id'] ?>">Commentaires</a></em>
-						</p>
-					</div>
-					<?php
-					}
-				} // Fin de la boucle des billets
-				$req->closeCursor();
-				?>				
-			</div>
+		<div>
+			<h1>Erreur 404 : Page non trouvée.</h1>
+		</div>	
 
-		</div>			
-			
 	</body>
 	
 </html>

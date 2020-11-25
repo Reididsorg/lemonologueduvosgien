@@ -1,5 +1,5 @@
 <?php
-
+/*
 // Chargement des classes
 //require_once('config/autoloader.php');
 //require 'config/autoloader.php';
@@ -70,4 +70,78 @@ function refreshOneComment($commentId, $commentText, $postId)
 	else {
 		header('Location: index.php?action=getOnePost&id=' . $postId);
 	}
+}
+*/
+
+
+namespace BrunoGrosdidier\Blog\src\controller;
+
+require_once ('vendor/autoload.php');
+
+use BrunoGrosdidier\Blog\DAO\PostDAO;
+use BrunoGrosdidier\Blog\DAO\CommentDAO;
+
+class FrontController
+{
+	public function getAllPosts()
+	{
+		$postManager = new PostDAO();
+		$posts = $postManager->selectAllPosts();
+
+		require('templates/frontend/getAllPostsView.php');
+	}
+
+	public function getOnePost()
+	{
+		$postManager = new PostDAO();
+		$commentManager = new CommentDAO();
+		$post = $postManager->selectOnePost($_GET['id']);
+		$comments = $commentManager->selectAllCommentsOfOnePost($_GET['id']);
+
+		require('templates/frontend/getOnePostView.php');
+	}
+
+	public function addOneComment($postId, $author, $comment)
+	{
+		$commentManager = new CommentDAO();
+
+		$affectedLines = $commentManager->insertOneComment($postId, $author, $comment);
+
+		if ($affectedLines === false) {
+			throw new Exception('Impossible d\'ajouter le commentaire !');
+		}
+		else {
+			header('Location: index.php?action=getOnePost&id=' . $postId);
+		}
+	}
+
+	public function editOneComment()
+	{
+		$commentManager = new CommentDAO();
+		$postManager = new PostDAO();
+
+		$comment = $commentManager->selectOneComment($_GET['commentId']);
+		$post = $postManager->selectOnePost($_GET['postId']);
+
+		require('templates/frontend/editOneCommentView.php');		
+	}
+
+	public function refreshOneComment($commentId, $commentText, $postId)
+	{
+		$commentManager = new CommentDAO();
+
+		$affectedLine = $commentManager->updateOneComment($commentId, $commentText);
+
+		if ($affectedLine === false) {
+			throw new Exception('Impossible de mettre à jour le commentaire !');
+		}
+		else {
+			header('Location: index.php?action=getOnePost&id=' . $postId);
+		}
+	}
+
+
+
+
+
 }

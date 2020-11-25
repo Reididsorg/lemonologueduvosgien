@@ -1,9 +1,23 @@
 <?php
+
 namespace BrunoGrosdidier\Blog\config;
+
+use BrunoGrosdidier\Blog\src\controller\FrontController;
+use BrunoGrosdidier\Blog\src\controller\ErrorController;
 use Exception;
 
 Class Router
 {
+
+	private $frontController;
+	private $errorController;
+
+    public function __construct()
+    {
+        $this->frontController = new FrontController();
+        $this->errorController = new ErrorController();
+    }
+
 	public function run()
 	{
 
@@ -11,32 +25,34 @@ Class Router
 		try {
 			if (isset($_GET['action'])) {
 				if ($_GET['action'] == 'getAllPosts') {
-					getAllPosts();
+					$this->frontController->getAllPosts();
 				}
 				elseif ($_GET['action'] == 'getOnePost') {
 					if (isset($_GET['id']) && $_GET['id'] > 0) {
-						getOnePost();
+						$this->frontController->getOnePost();						
 					}
 					else {
-						throw new Exception('Aucun identifiant de billet envoyé');
+						//throw new Exception('Aucun identifiant de billet envoyé');
+						$this->ErrorController->errorNotFound();
 					}
 				}
 				elseif ($_GET['action'] == 'addOneComment') {
 					if (isset($_GET['id']) && $_GET['id'] > 0) {
 						if (!empty($_POST['author']) && !empty($_POST['comment'])) {
-							addOneComment($_GET['id'], $_POST['author'], $_POST['comment']);
+							$this->frontController->addOneComment($_GET['id'], $_POST['author'], $_POST['comment']);							
 						}
 						else {
 							throw new Exception('Tous les champs ne sont pas remplis !');
 						}
 					}
 					else {
-						throw new Exception('Aucun identifiant de billet envoyé');
+						//throw new Exception('Aucun identifiant de billet envoyé');
+						$this->ErrorController->errorNotFound();
 					}
 				}
 				elseif ($_GET['action'] == 'editOneComment') {
 					if (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
-						editOneComment();
+						$this->frontController->editOneComment();						
 					}
 					else {
 						throw new Exception('Aucun identifiant de commentaire envoyé');
@@ -46,14 +62,15 @@ Class Router
 					if (isset($_GET['postId']) && $_GET['postId'] > 0) {
 						if (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
 							if (!empty($_POST['commentText'])) {
-								refreshOneComment($_GET['commentId'], $_POST['commentText'], $_GET['postId']);
+								$this->frontController->refreshOneComment($_GET['commentId'], $_POST['commentText'], $_GET['postId']);								
 							}
 							else {
 								throw new Exception('Le champ n\'est pas rempli !');
 							}	
 						}
 						else {
-							throw new Exception('Aucun identifiant de commentaire envoyé');	
+							//throw new Exception('Aucun identifiant de commentaire envoyé');
+							$this->ErrorController->errorNotFound();	
 						}
 					}
 					else {
@@ -62,11 +79,12 @@ Class Router
 				}			
 			}
 			else {
-				getAllPosts();
+				$this->frontController->getAllPosts();				
 			}
 		}
 		catch(Exception $e) {
-			echo 'Erreur : ' . $e->getMessage();
+			//echo 'Erreur : ' . $e->getMessage();
+			$this->ErrorController->errorServer();
 		}
 
 
