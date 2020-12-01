@@ -10,21 +10,18 @@
 	<div id="blog-posts">
 		<h2>Derniers billets du blog</h2>
 		<?php
-		while ($data = $posts->fetch())
+        foreach($posts as $post)
 		{
-			if (!empty($data)) {					
 			?>
-			<div class="news">
-				<h3><?= $data->post_title ?><em> le <?= $data->creation_date_fr ?></em></h3>
-				<p><?= $data->post_content ?>
-					<br />
-					<em><a href="index.php?action=getOnePost&amp;id=<?= $data->id ?>">Commentaires</a></em>
-				</p>
-			</div>
+            <div class="news">
+                <h3><?= $post->getPostTitle() ?><em> le <?= $post->getPostDateFr() ?></em></h3>
+                <p><?= $post->getPostContent() ?>
+                    <br />
+                    <em><a href="index.php?action=getOnePost&amp;id=<?= $post->getId() ?>">Commentaires</a></em>
+                </p>
+            </div>
 			<?php
-			}
 		} // Fin de la boucle des billets
-		$posts->closeCursor();
 		?>				
 	</div>
 </div>			

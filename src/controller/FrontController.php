@@ -1,78 +1,4 @@
 <?php
-/*
-// Chargement des classes
-//require_once('config/autoloader.php');
-//require 'config/autoloader.php';
-//require_once('DAO/PostDAO.php');
-//require_once('DAO/CommentDAO.php');
-
-//use BrunoGrosdidier\Blog\Config\Autoloader;
-//Autoloader::register();
-
-require_once ('vendor/autoload.php');
-//require 'vendor/autoload.php';
-
-use BrunoGrosdidier\Blog\DAO\PostDAO;
-use BrunoGrosdidier\Blog\DAO\CommentDAO;
-
-function getAllPosts()
-{
-	$postManager = new PostDAO();
-	$posts = $postManager->selectAllPosts();
-
-	require('templates/frontend/getAllPostsView.php');
-}
-
-function getOnePost()
-{
-	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
-	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
-	$post = $postManager->selectOnePost($_GET['id']);
-	$comments = $commentManager->selectAllCommentsOfOnePost($_GET['id']);
-
-	require('templates/frontend/getOnePostView.php');
-}
-
-function addOneComment($postId, $author, $comment)
-{
-	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
-
-	$affectedLines = $commentManager->insertOneComment($postId, $author, $comment);
-
-	if ($affectedLines === false) {
-		throw new Exception('Impossible d\'ajouter le commentaire !');
-	}
-	else {
-		header('Location: index.php?action=getOnePost&id=' . $postId);
-	}
-}
-
-function editOneComment()
-{
-	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
-	$postManager = new BrunoGrosdidier\Blog\DAO\PostDAO();
-
-	$comment = $commentManager->selectOneComment($_GET['commentId']);
-	$post = $postManager->selectOnePost($_GET['postId']);
-
-	require('templates/frontend/editOneCommentView.php');		
-}
-
-function refreshOneComment($commentId, $commentText, $postId)
-{
-	$commentManager = new BrunoGrosdidier\Blog\DAO\CommentDAO();
-
-	$affectedLine = $commentManager->updateOneComment($commentId, $commentText);
-
-	if ($affectedLine === false) {
-		throw new Exception('Impossible de mettre à jour le commentaire !');
-	}
-	else {
-		header('Location: index.php?action=getOnePost&id=' . $postId);
-	}
-}
-*/
-
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
@@ -83,65 +9,64 @@ use BrunoGrosdidier\Blog\DAO\CommentDAO;
 
 class FrontController
 {
+    private $postDAO;
+    private $commentDAO;
+
+    public function __construct()
+    {
+        $this->postDAO = new PostDAO();
+        $this->commentDAO = new CommentDAO();
+    }
+
 	public function getAllPosts()
 	{
-		$postManager = new PostDAO();
-		$posts = $postManager->selectAllPosts();
-
+        $posts = $this->postDAO->selectAllPosts();
 		require('templates/frontend/getAllPostsView.php');
 	}
 
 	public function getOnePost()
 	{
-		$postManager = new PostDAO();
-		$commentManager = new CommentDAO();
-		$post = $postManager->selectOnePost($_GET['id']);
-		$comments = $commentManager->selectAllCommentsOfOnePost($_GET['id']);
-
+        $post = $this->postDAO->selectOnePost($_GET['id']);
+	    $comments = $this->commentDAO->selectAllCommentsOfOnePost($_GET['id']);
 		require('templates/frontend/getOnePostView.php');
 	}
 
-	public function addOneComment($postId, $author, $comment)
+	public function addOneComment($postId, $commentAuthor, $commentContent)
 	{
-		$commentManager = new CommentDAO();
+        $affectedLines = $this->commentDAO->insertOneComment($postId, $commentAuthor, $commentContent);
 
-		$affectedLines = $commentManager->insertOneComment($postId, $author, $comment);
-
-		if ($affectedLines === false) {
-			throw new Exception('Impossible d\'ajouter le commentaire !');
-		}
-		else {
-			header('Location: index.php?action=getOnePost&id=' . $postId);
-		}
+        if ($affectedLines === false) {
+            throw new Exception('Impossible d\'ajouter le commentaire !');
+        }
+        else {
+            header('Location: index.php?action=getOnePost&id=' . $postId);
+        }
 	}
 
 	public function editOneComment()
 	{
-		$commentManager = new CommentDAO();
-		$postManager = new PostDAO();
+        $comment = $this->commentDAO->selectOneComment($_GET['commentId']);
+        $post = $this->postDAO->selectOnePost($_GET['postId']);
 
-		$comment = $commentManager->selectOneComment($_GET['commentId']);
-		$post = $postManager->selectOnePost($_GET['postId']);
-
-		require('templates/frontend/editOneCommentView.php');		
+        require('templates/frontend/editOneCommentView.php');
 	}
 
-	public function refreshOneComment($commentId, $commentText, $postId)
+	public function refreshOneComment($id, $commentContent, $postId)
 	{
-		$commentManager = new CommentDAO();
+        $affectedLine = $this->commentDAO->updateOneComment($id, $commentContent);
 
-		$affectedLine = $commentManager->updateOneComment($commentId, $commentText);
+        //var_dump($affectedLine);
 
-		if ($affectedLine === false) {
-			throw new Exception('Impossible de mettre à jour le commentaire !');
-		}
-		else {
-			header('Location: index.php?action=getOnePost&id=' . $postId);
-		}
+        //var_dump($affectedLine->fetch());
+
+        if ($affectedLine === false) {
+            throw new Exception('Impossible de mettre à jour le commentaire !');
+        }
+        else {
+            header('Location: index.php?action=getOnePost&id=' . $postId);
+        }
+
 	}
-
-
-
-
 
 }
+

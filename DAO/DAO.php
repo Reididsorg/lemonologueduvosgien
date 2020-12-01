@@ -2,6 +2,9 @@
 
 namespace BrunoGrosdidier\Blog\DAO;
 
+use PDO;
+use Exception;
+
 abstract class DAO
 {
     private $connection;
@@ -22,8 +25,8 @@ abstract class DAO
     {
         //Tentative de connexion à la base de données
         try{
-            $this->connection = new \PDO(DB_HOST, DB_USER, DB_PASS);
-            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->connection = new PDO(DB_HOST, DB_USER, DB_PASS);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             //On renvoie la connexion
             return $this->connection;
         }
@@ -36,15 +39,19 @@ abstract class DAO
 
     protected function createQuery($sql, $parameters = null)
     {
+        //var_dump($sql);
+        //var_dump($parameters);
         if($parameters)
         {
             $result = $this->checkConnection()->prepare($sql);
-            $result->setFetchMode(\PDO::FETCH_CLASS, static::class);
+            //var_dump($result);
             $result->execute($parameters);
+            //var_dump($result);
+            //var_dump($result->fetch());
             return $result;
         }
         $result = $this->checkConnection()->query($sql);
-        $result->setFetchMode(\PDO::FETCH_CLASS, static::class);
+        //var_dump($result->fetch());
         return $result;
     }
 }
