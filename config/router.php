@@ -33,7 +33,7 @@ Class Router
 					}
 					else {
 						//throw new Exception('Aucun identifiant de billet envoyé');
-						$this->ErrorController->errorNotFound();
+                        $this->errorController->errorNotFound();
 					}
 				}
 				elseif ($_GET['action'] == 'addOneComment') {
@@ -47,7 +47,7 @@ Class Router
 					}
 					else {
 						//throw new Exception('Aucun identifiant de billet envoyé');
-						$this->ErrorController->errorNotFound();
+                        $this->errorController->errorNotFound();
 					}
 				}
 				elseif ($_GET['action'] == 'editOneComment') {
@@ -70,7 +70,7 @@ Class Router
 						}
 						else {
 							//throw new Exception('Aucun identifiant de commentaire envoyé');
-							$this->ErrorController->errorNotFound();	
+                            $this->errorController->errorNotFound();
 						}
 					}
 					else {
@@ -83,8 +83,8 @@ Class Router
 			}
 		}
 		catch(Exception $e) {
-			//echo 'Erreur : ' . $e->getMessage();
-			$this->ErrorController->errorServer();
+			echo 'Erreur : ' . $e->getMessage();
+            $this->errorController->errorServer();
 		}
 
 

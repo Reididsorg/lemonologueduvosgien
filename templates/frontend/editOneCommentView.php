@@ -1,13 +1,11 @@
 <?php 
-	$title = 'LE MONOLOGUE DU VOSGIEN'; 
-	$onePost = $post->fetch();
-	$oneComment = $comment->fetch();
+	$title = 'LE MONOLOGUE DU VOSGIEN';
 ?>
 
 
 <?php ob_start(); ?>
 
-<h1>Modification du commentaire de <?= htmlspecialchars($oneComment->comment_author) ?>, le <?= htmlspecialchars($oneComment->comment_date_fr) ?></h1>
+<h1>Modification du commentaire de <?= htmlspecialchars($comment->getCommentAuthor()) ?>, le <?= htmlspecialchars($comment->getCommentDateFr()) ?></h1>
 <p><a href="/index.php">Retour à la liste des billets</a></p>	
 	
 <!-- Wrapper  -->	
@@ -15,10 +13,10 @@
 	<!-- Commentaire du billet de blog  -->
 	<div id="blog-post-comment">
 
-		<form action="index.php?action=refreshOneComment&amp;commentId=<?= $oneComment->id ?>&amp;postId=<?= $onePost->id ?>" method="post">
+		<form action="index.php?action=refreshOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>" method="post">
 			<div>
 				<label for="commentText">Commentaire</label><br />
-				<textarea id="commentText" name="commentText"><?= htmlspecialchars($oneComment->comment_content) ?></textarea>
+				<textarea id="commentText" name="commentText"><?= htmlspecialchars($comment->getCommentContent()) ?></textarea>
 			</div>
 			<div>
 				<input type="submit" />
