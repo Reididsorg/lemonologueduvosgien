@@ -27,11 +27,11 @@ class FrontController
         ]);
     }
 
-    public function getOnePost($postId)
+    public function getOnePostAndHisComments($postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-        return $this->view->render('getOnePost', [
+        return $this->view->render('getOnePostAndHisComments', [
             'post' => $post,
             'comments' => $comments
         ]);
