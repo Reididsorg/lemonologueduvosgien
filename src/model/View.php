@@ -28,6 +28,6 @@ class View
             require $file;
             return ob_get_clean();
         }
-        header('Location: index.php?action=notFound');
+        //header('Location: index.php?action=notFound');
     }
 }

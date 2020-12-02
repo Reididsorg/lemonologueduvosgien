@@ -21,7 +21,7 @@
 
         <h2>Commentaires</h2>
 
-        <form action="index.php?action=addOneComment&amp;id=<?= $post->getId() ?>" method="post">
+        <form action="index.php?action=saveOneComment&amp;id=<?= $post->getId() ?>" method="post">
             <div>
                 <label for="author">Auteur</label><br />
                 <input type="text" id="author" name="author" />
@@ -39,11 +39,17 @@
         foreach($comments as $comment)
         {
             ?>
-            <p><strong><?= htmlspecialchars($comment->getCommentAuthor()) ?></strong> le <?= $comment->getCommentDateFr() ?> <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(modifier)</a></p>
+            <p>
+                <strong>
+                    <?= htmlspecialchars($comment->getCommentAuthor()) ?>
+                </strong> le <?= $comment->getCommentDateFr() ?>
+                <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(modifier)</a>
+                 |
+                <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(supprimer)</a>
+            </p>
             <p><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></p>
             <?php
         }
         ?>
-
     </div>
 </div>

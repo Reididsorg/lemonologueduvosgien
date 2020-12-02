@@ -32,12 +32,6 @@ class CommentDAO extends DAO
         return $comment;
     }
 
-	public function insertOneComment($postId, $commentAuthor, $commentContent)
-	{
-		$request = 'INSERT INTO comment (post_id, comment_author, comment_content, comment_date) VALUES(?, ?, ?, NOW())';
-        $this->createQuery($request, [$postId, $commentAuthor, $commentContent]);
-	}
-
 	public function selectAllCommentsOfOnePost($postId)
 	{
 		$request = 'SELECT id, comment_author, comment_content, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, post_id FROM comment WHERE post_id = ? ORDER BY comment_date DESC';
@@ -60,10 +54,14 @@ class CommentDAO extends DAO
         return $this->buildObject($comment);
 	}
 
+    public function insertOneComment($postId, $commentAuthor, $commentContent)
+    {
+        $request = 'INSERT INTO comment (post_id, comment_author, comment_content, comment_date) VALUES(?, ?, ?, NOW())';
+        $this->createQuery($request, [$postId, $commentAuthor, $commentContent]);
+    }
+
 	public function updateOneComment($id, $commentContent)
 	{
-        var_dump($id);
-	    var_dump($commentContent);
 	    $request = 'UPDATE comment SET comment_content = ?, comment_date = NOW() WHERE id = ?';
 		$this->createQuery($request, [$commentContent, $id]);
 	}
@@ -71,10 +69,6 @@ class CommentDAO extends DAO
 	public function deleteOneComment($id)
 	{
 		$request = 'DELETE FROM comment WHERE id = ?';
-        $result = $this->createQuery($request, [$id]);
-        $response = $result->fetch();
-        $result->closeCursor();
-        return $this->buildObject($response);
+        $this->createQuery($request, [$id]);
 	}
 }
-
