@@ -1,8 +1,22 @@
 * Convention de nommage
 
 	* MODEL
-		- Nom des méthodes avec préfixes en : insert_*, select_*, update_*, delete_*
+		- Nom des méthodes avec préfixes en : insert*, select*, update*, delete*
 
 	* CONTROLLER
-		- Nom des méthodes avec préfixes en : add_*, get_*, edit_*, refresh_*, remove_*
+		- Nom des méthodes avec préfixes en :
+		    add* (pages d'ajout)
+		    save* (MODEL : insert*)
+		    get* (MODEL : select*)
+		    edit* (pages d'édition)
+		    refresh* (MODEL : update*)
+		    remove* (MODEL : delete)
 
+    * VIEW
+        - Nom des vues avec préfixe en :
+		    add* (pages d'ajout)
+		    save* (MODEL : insert*)
+		    get* (MODEL : select*)
+		    edit* (pages d'édition)
+		    refresh* (MODEL : update*)
+		    remove* (MODEL : delete)

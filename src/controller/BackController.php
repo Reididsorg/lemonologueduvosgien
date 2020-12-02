@@ -31,12 +31,15 @@ class BackController
         }
     }
 
-    public function editOneComment()
+    public function editOneComment($id, $postId)
     {
-        $comment = $this->commentDAO->selectOneComment($_GET['commentId']);
-        $post = $this->postDAO->selectOnePost($_GET['postId']);
+        $comment = $this->commentDAO->selectOneComment($id);
+        $post = $this->postDAO->selectOnePost($postId);
+        return $this->view->render('editOneComment', [
+            'post' => $post,
+            'comment' => $comment
+        ]);
 
-        require('templates/frontend/editOneCommentView.php');
     }
 
     public function refreshOneComment($id, $commentContent, $postId)

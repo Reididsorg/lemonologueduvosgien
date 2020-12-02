@@ -22,8 +22,7 @@ class FrontController
     public function getAllPosts()
     {
         $posts = $this->postDAO->selectAllPosts();
-        //var_dump($posts);
-        return $this->view->render('home', [
+        return $this->view->render('getAllPosts', [
             'posts' => $posts
         ]);
     }
@@ -32,7 +31,7 @@ class FrontController
     {
         $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-        return $this->view->render('single', [
+        return $this->view->render('getOnePost', [
             'post' => $post,
             'comments' => $comments
         ]);

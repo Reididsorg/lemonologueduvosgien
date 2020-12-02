@@ -50,8 +50,15 @@ Class Router
 					}
 				}
 				elseif ($_GET['action'] == 'editOneComment') {
-					if (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
-						$this->backController->editOneComment();
+					if ((isset($_GET['commentId']) && $_GET['commentId'] > 0)) {
+                        if(isset($_GET['postId']) && $_GET['postId'] > 0)
+                        {
+                            //$this->backController->editOneComment();
+                            $this->backController->editOneComment($_GET['commentId'], $_GET['postId']);
+                        }
+                        else {
+                            throw new Exception('Aucun identifiant de billet envoyé');
+                        }
 					}
 					else {
 						throw new Exception('Aucun identifiant de commentaire envoyé');
