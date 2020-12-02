@@ -22,8 +22,7 @@ class FrontController
     public function getAllPosts()
     {
         $posts = $this->postDAO->selectAllPosts();
-        //var_dump($posts);
-        return $this->view->render('home', [
+        return $this->view->render('getAllPosts', [
             'posts' => $posts
         ]);
     }
@@ -32,44 +31,9 @@ class FrontController
     {
         $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-        return $this->view->render('single', [
+        return $this->view->render('getOnePost', [
             'post' => $post,
             'comments' => $comments
         ]);
     }
-
-	public function addOneComment($postId, $commentAuthor, $commentContent)
-	{
-        $affectedLines = $this->commentDAO->insertOneComment($postId, $commentAuthor, $commentContent);
-
-        if ($affectedLines === false) {
-            throw new Exception('Impossible d\'ajouter le commentaire !');
-        }
-        else {
-            header('Location: index.php?action=getOnePost&id=' . $postId);
-        }
-	}
-
-	public function editOneComment()
-	{
-        $comment = $this->commentDAO->selectOneComment($_GET['commentId']);
-        $post = $this->postDAO->selectOnePost($_GET['postId']);
-
-        require('templates/frontend/editOneCommentView.php');
-	}
-
-	public function refreshOneComment($id, $commentContent, $postId)
-	{
-        $affectedLine = $this->commentDAO->updateOneComment($id, $commentContent);
-
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de mettre à jour le commentaire !');
-        }
-        else {
-            header('Location: index.php?action=getOnePost&id=' . $postId);
-        }
-
-	}
-
 }
-
