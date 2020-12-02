@@ -2,34 +2,41 @@
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
-require_once ('vendor/autoload.php');
-
 use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
+use BrunoGrosdidier\Blog\src\model\View;
 
 class FrontController
 {
     private $postDAO;
     private $commentDAO;
+    private $view;
 
     public function __construct()
     {
         $this->postDAO = new PostDAO();
         $this->commentDAO = new CommentDAO();
+        $this->view = new View();
     }
 
-	public function getAllPosts()
-	{
+    public function getAllPosts()
+    {
         $posts = $this->postDAO->selectAllPosts();
-		require('templates/frontend/getAllPostsView.php');
-	}
+        //var_dump($posts);
+        return $this->view->render('home', [
+            'posts' => $posts
+        ]);
+    }
 
-	public function getOnePost()
-	{
-        $post = $this->postDAO->selectOnePost($_GET['id']);
-	    $comments = $this->commentDAO->selectAllCommentsOfOnePost($_GET['id']);
-		require('templates/frontend/getOnePostView.php');
-	}
+    public function getOnePost($postId)
+    {
+        $post = $this->postDAO->selectOnePost($postId);
+        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+        return $this->view->render('single', [
+            'post' => $post,
+            'comments' => $comments
+        ]);
+    }
 
 	public function addOneComment($postId, $commentAuthor, $commentContent)
 	{
@@ -54,10 +61,6 @@ class FrontController
 	public function refreshOneComment($id, $commentContent, $postId)
 	{
         $affectedLine = $this->commentDAO->updateOneComment($id, $commentContent);
-
-        //var_dump($affectedLine);
-
-        //var_dump($affectedLine->fetch());
 
         if ($affectedLine === false) {
             throw new Exception('Impossible de mettre à jour le commentaire !');

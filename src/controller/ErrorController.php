@@ -2,14 +2,23 @@
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
+use BrunoGrosdidier\Blog\src\model\View;
+
 class ErrorController
 {
+    private $view;
+
+    public function __construct()
+    {
+        $this->view = new View();
+    }
+
     public function errorNotFound()
     {
-        require_once ('templates/error/error_404.php');
+        return $this->view->render('error_404');
     }
     public function errorServer()
     {
-        require_once ('templates/error/error_500.php');
+        return $this->view->render('error_500');
     }	
 }
