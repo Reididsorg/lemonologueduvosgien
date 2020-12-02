@@ -71,4 +71,11 @@ class CommentDAO extends DAO
 		$request = 'DELETE FROM comment WHERE id = ?';
         $this->createQuery($request, [$id]);
 	}
+
+    public function deleteAllCommentsOfOnePost($postId)
+    {
+        var_dump($postId);
+        $request = 'DELETE FROM comment WHERE post_id = ?';
+        $this->createQuery($request, [$postId]);
+    }
 }

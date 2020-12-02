@@ -64,12 +64,18 @@ class BackController
 
     public function removeOnePost ($id)
     {
-        $affectedLine = $this->postDAO->deleteOnePost($id);
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de mettre à jour le billet !');
+        $affectedLines = $this->commentDAO->deleteAllCommentsOfOnePost($id);
+        if ($affectedLines === false) {
+            throw new Exception('Impossible de supprimer les commentaires du billet !');
         }
         else {
-            header('Location: index.php?action=getAllPosts');
+            $affectedLine = $this->postDAO->deleteOnePost($id);
+            if ($affectedLine === false) {
+                throw new Exception('Impossible de supprimer le billet !');
+            }
+            else {
+                header('Location: index.php?action=getAllPosts');
+            }
         }
     }
 
@@ -107,9 +113,6 @@ class BackController
 
     public function removeOneComment ($commentId, $postId)
     {
-        var_dump($commentId);
-        var_dump($postId);
-
         $affectedLine = $this->commentDAO->deleteOneComment($commentId);
         if ($affectedLine === false) {
             throw new Exception('Impossible de mettre à jour le billet !');
@@ -117,7 +120,6 @@ class BackController
         else {
             header('Location: index.php?action=getOnePostAndHisComments&id=' . $postId);
         }
-
     }
 
 }
