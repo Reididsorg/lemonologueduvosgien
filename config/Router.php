@@ -22,17 +22,16 @@ Class Router
 	{
 
 
-		try {
+	    try {
 			if (isset($_GET['action'])) {
 				if ($_GET['action'] == 'getAllPosts') {
 					$this->frontController->getAllPosts();
 				}
 				elseif ($_GET['action'] == 'getOnePost') {
 					if (isset($_GET['id']) && $_GET['id'] > 0) {
-						$this->frontController->getOnePost();						
+						$this->frontController->getOnePost($_GET['id']);
 					}
 					else {
-						//throw new Exception('Aucun identifiant de billet envoyé');
                         $this->errorController->errorNotFound();
 					}
 				}
@@ -46,7 +45,6 @@ Class Router
 						}
 					}
 					else {
-						//throw new Exception('Aucun identifiant de billet envoyé');
                         $this->errorController->errorNotFound();
 					}
 				}
@@ -69,14 +67,16 @@ Class Router
 							}	
 						}
 						else {
-							//throw new Exception('Aucun identifiant de commentaire envoyé');
                             $this->errorController->errorNotFound();
 						}
 					}
 					else {
 						throw new Exception('Putain ! Aucun identifiant de billet envoyé');
 					}			
-				}			
+				}
+                else {
+                    var_dump('coucou');
+                }
 			}
 			else {
 				$this->frontController->getAllPosts();				
@@ -88,5 +88,29 @@ Class Router
 		}
 
 
+        //var_dump($_GET);
+        /*
+        try{
+            if(isset($_GET['action']))
+            {
+                //if($_GET['action'] === 'getAllPosts'){
+                    //$this->frontController->getOnePost($_GET['postId']);
+                //}
+                //elseif($_GET['action'] === 'addPost'){
+                    //$this->frontController->addArticle($_POST);
+                //}
+                //else{
+                    //$this->errorController->errorNotFound();
+                //}
+            }
+            else{
+                $this->frontController->getAllPosts();
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->errorController->errorServer();
+        }
+        */
 	}
 }
