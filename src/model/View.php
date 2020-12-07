@@ -2,20 +2,28 @@
 
 namespace BrunoGrosdidier\Blog\src\model;
 
+use BrunoGrosdidier\Blog\config\Request;
+
 class View
 {
     private $file;
     private $title;
+    private $session;
+
+    public function __construct()
+    {
+        $request = new Request();
+        $this->session = $request->getSession();
+    }
 
     public function render($template, $data = [])
     {
-        //$this->file = '../templates/'.$template.'.php';
         $this->file = 'templates/'.$template.'.php';
         $content  = $this->renderFile($this->file, $data);
-        //$view = $this->renderFile('../templates/base.php', [
         $view = $this->renderFile('templates/base.php', [
             'title' => $this->title,
-            'content' => $content
+            'content' => $content,
+            'session' => $this->session
         ]);
         echo $view;
     }

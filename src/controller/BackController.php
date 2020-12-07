@@ -2,31 +2,26 @@
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
-use BrunoGrosdidier\Blog\DAO\PostDAO;
-use BrunoGrosdidier\Blog\DAO\CommentDAO;
-use BrunoGrosdidier\Blog\src\model\View;
+use BrunoGrosdidier\Blog\config\Parameter;
 
 class BackController extends Controller
 {
     public function addOnePost()
     {
-        $post = '';
-        return $this->view->render('addOnePost', [
-            'post' => $post
-        ]);
+        return $this->view->render('addOnePost');
     }
 
-    public function createOnePost($postTitle, $postContent)
+    public function createOnePost(Parameter $post)
     {
-        var_dump($postTitle);
-        var_dump($postContent);
-        $affectedLines = $this->postDAO->insertOnePost($postTitle, $postContent);
-        var_dump($affectedLines);
-        if ($affectedLines === false) {
-            throw new Exception('Impossible d\'ajouter le billet !');
-        }
-        else {
-            header('Location: index.php?action=getAllPosts');
+        if($post->get('submit')) {
+            $affectedLines = $this->postDAO->insertOnePost($post);
+            if ($affectedLines === false) {
+                throw new Exception('Impossible d\'ajouter le billet !');
+            }
+            else {
+                $this->session->set('createOnePost', 'Le nouveau billet a bien été ajouté');
+                header('Location: index.php?action=getAllPosts');
+            }
         }
     }
 
@@ -40,14 +35,15 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOnePost($id, $postTitle, $postContent)
+    public function refreshOnePost($id, Parameter $post)
     {
-        $affectedLine = $this->postDAO->updateOnePost($id, $postTitle, $postContent);
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de mettre à jour le billet !');
-        }
-        else {
-            header('Location: index.php?action=getAllPosts');
+        if($post->get('submit')) {
+            $affectedLine = $this->postDAO->updateOnePost($id, $post);
+            if ($affectedLine === false) {
+                throw new Exception('Impossible de mettre à jour le billet !');
+            } else {
+                header('Location: index.php?action=getAllPosts');
+            }
         }
     }
 
@@ -68,9 +64,9 @@ class BackController extends Controller
         }
     }
 
-    public function createOneComment($postId, $commentAuthor, $commentContent)
+    public function createOneComment($postId, Parameter $post)
     {
-        $affectedLines = $this->commentDAO->insertOneComment($postId, $commentAuthor, $commentContent);
+        $affectedLines = $this->commentDAO->insertOneComment($postId, $post);
         if ($affectedLines === false) {
             throw new Exception('Impossible d\'ajouter le commentaire !');
         }
@@ -89,9 +85,9 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOneComment($id, $commentContent, $postId)
+    public function refreshOneComment($id, Parameter $post, $postId)
     {
-        $affectedLine = $this->commentDAO->updateOneComment($id, $commentContent);
+        $affectedLine = $this->commentDAO->updateOneComment($id, $post);
         if ($affectedLine === false) {
             throw new Exception('Impossible de mettre à jour le commentaire !');
         }
@@ -110,5 +106,4 @@ class BackController extends Controller
             header('Location: index.php?action=getOnePostAndHisComments&id=' . $postId);
         }
     }
-
 }
