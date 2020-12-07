@@ -9,130 +9,59 @@ use Exception;
 
 Class Router
 {
-
 	private $frontController;
     private $backController;
 	private $errorController;
+	private $request;
 
     public function __construct()
     {
         $this->frontController = new FrontController();
         $this->backController = new BackController();
         $this->errorController = new ErrorController();
+        $this->request = new Request();
     }
 
 	public function run()
 	{
 	    try {
-			if (isset($_GET['action'])) {
-				if ($_GET['action'] == 'getAllPosts') {
+	        $action = $this->request->getGet()->get('action');
+			if (isset($action)) {
+				if ($action == 'getAllPosts') {
 					$this->frontController->getAllPosts();
 				}
-				elseif ($_GET['action'] == 'getOnePostAndHisComments') {
-					if (isset($_GET['id']) && $_GET['id'] > 0) {
-						$this->frontController->getOnePostAndHisComments($_GET['id']);
-					}
-					else {
-                        $this->errorController->errorNotFound();
-					}
+				elseif ($action == 'getOnePostAndHisComments') {
+                    $this->frontController->getOnePostAndHisComments($this->request->getGet()->get('id'));
 				}
-                elseif ($_GET['action'] == 'editOnePost') {
-                    if (isset($_GET['id']) && $_GET['id'] > 0) {
-                        $this->backController->editOnePost($_GET['id']);
-                    }
-                    else {
-                        $this->errorController->errorNotFound();
-                    }
+                elseif ($action == 'editOnePost') {
+                    $this->backController->editOnePost($this->request->getGet()->get('id'));
                 }
-                elseif ($_GET['action'] == 'refreshOnePost') {
-				    //var_dump($_GET);
-                    //var_dump($_POST);
-                    if (isset($_GET['id']) && $_GET['id'] > 0) {
-                        if (!empty($_POST['title']) && !empty($_POST['content'])) {
-                            $this->backController->refreshOnePost($_GET['id'], $_POST['title'], $_POST['content']);
-                        }
-                        else {
-                            throw new Exception('Tous les champs ne sont pas remplis !');
-                        }
-                    }
-                    else {
-                        $this->errorController->errorNotFound();
-                    }
+                elseif ($action == 'refreshOnePost') {
+                    $this->backController->refreshOnePost($this->request->getGet()->get('id'), $this->request->getPost());
                 }
-                elseif ($_GET['action'] == 'removeOnePost') {
-                    if (isset($_GET['id']) && $_GET['id'] > 0) {
-                        $this->backController->removeOnePost($_GET['id']);
-                    }
-                    else {
-                        $this->errorController->errorNotFound();
-                    }
+                elseif ($action == 'removeOnePost') {
+                    $this->backController->removeOnePost($this->request->getGet()->get('id'));
                 }
-				elseif ($_GET['action'] == 'addOnePost') {
+				elseif ($action == 'addOnePost') {
                     $this->backController->addOnePost();
                 }
-                elseif ($_GET['action'] == 'createOnePost') {
-                    if (!empty($_POST['title']) && !empty($_POST['content'])) {
-                        $this->backController->createOnePost($_POST['title'], $_POST['content']);
-                    }
+                elseif ($action == 'createOnePost') {
+                    $this->backController->createOnePost($this->request->getPost());
                 }
-				elseif ($_GET['action'] == 'createOneComment') {
-					if (isset($_GET['id']) && $_GET['id'] > 0) {
-						if (!empty($_POST['author']) && !empty($_POST['comment'])) {
-							$this->backController->createOneComment($_GET['id'], $_POST['author'], $_POST['comment']);
-						}
-						else {
-							throw new Exception('Tous les champs ne sont pas remplis !');
-						}
-					}
-					else {
-                        $this->errorController->errorNotFound();
-					}
+				elseif ($action == 'createOneComment') {
+                    $this->backController->createOneComment($this->request->getGet()->get('id'), $this->request->getPost());
 				}
-				elseif ($_GET['action'] == 'editOneComment') {
-					if ((isset($_GET['commentId']) && $_GET['commentId'] > 0)) {
-                        if(isset($_GET['postId']) && $_GET['postId'] > 0)
-                        {
-                            //$this->backController->editOneComment();
-                            $this->backController->editOneComment($_GET['commentId'], $_GET['postId']);
-                        }
-                        else {
-                            throw new Exception('Aucun identifiant de billet envoyé');
-                        }
-					}
-					else {
-						throw new Exception('Aucun identifiant de commentaire envoyé');
-					}
+				elseif ($action == 'editOneComment') {
+                    $this->backController->editOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
 				}
-				elseif ($_GET['action'] == 'refreshOneComment') {
-					if (isset($_GET['postId']) && $_GET['postId'] > 0) {
-						if (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
-							if (!empty($_POST['commentText'])) {
-								$this->backController->refreshOneComment($_GET['commentId'], $_POST['commentText'], $_GET['postId']);
-							}
-							else {
-								throw new Exception('Le champ n\'est pas rempli !');
-							}	
-						}
-						else {
-                            $this->errorController->errorNotFound();
-						}
-					}
-					else {
-						throw new Exception('Aucun identifiant de billet envoyé');
-					}			
+				elseif ($action == 'refreshOneComment') {
+                    $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost(), $this->request->getGet()->get('postId'));
 				}
-                elseif ($_GET['action'] == 'removeOneComment') {
-                    if (isset($_GET['commentId']) && $_GET['commentId'] > 0) {
-                        if (isset($_GET['postId']) && $_GET['postId'] > 0) {
-                            $this->backController->removeOneComment($_GET['commentId'], $_GET['postId']);
-                        }
-                        else {
-                            $this->errorController->errorNotFound();
-                        }
-                    }
-                    else {
-                        $this->errorController->errorNotFound();
-                    }
+                elseif ($action == 'removeOneComment') {
+                    $this->backController->removeOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                }
+				else{
+                    $this->errorController->errorNotFound();
                 }
 			}
 			else {

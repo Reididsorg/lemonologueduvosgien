@@ -1,4 +1,5 @@
 <?php $title = 'Accueil'; ?>
+<?= $this->session->show('createOnePost'); ?>
 
 <h1>ACCUEIL</h1>
 

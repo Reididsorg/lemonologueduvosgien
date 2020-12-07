@@ -2,6 +2,7 @@
 
 namespace BrunoGrosdidier\Blog\DAO;
 
+use BrunoGrosdidier\Blog\config\Parameter;
 use BrunoGrosdidier\Blog\src\model\Post;
 
 class PostDAO extends DAO
@@ -34,8 +35,20 @@ class PostDAO extends DAO
 
 	public function selectOnePost($postId)
 	{
-		$request = 'SELECT id, post_title, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr FROM post WHERE id = ?';
-        $result = $this->createQuery($request, [$postId]);
+		/*$request = 'SELECT id, post_title, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr FROM post WHERE id = ?';
+        $result = $this->createQuery($request, [$postId]);*/
+        $request = 'SELECT 
+                        id, 
+                        post_title, 
+                        post_content, 
+                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr 
+                    FROM
+                        post 
+                    WHERE 
+                        id = :id';
+        $result = $this->createQuery($request, [
+            'id'=>$postId
+        ]);
         $post = $result->fetch();
         $result->closeCursor();
         return $this->buildObject($post);
@@ -43,7 +56,16 @@ class PostDAO extends DAO
 
 	public function selectAllPosts()
 	{
-		$request = 'SELECT id, post_title, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr FROM post ORDER BY post_date DESC LIMIT 0, 15';
+        $request = 'SELECT 
+                        id, 
+                        post_title, 
+                        post_content, 
+                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr 
+                    FROM 
+                        post 
+                    ORDER BY 
+                        post_date DESC 
+                    LIMIT 0, 15';
         $result = $this->createQuery($request);
         $posts = [];
         foreach($result as $row){
@@ -54,21 +76,50 @@ class PostDAO extends DAO
         return $posts;
 	}
 
-    public function insertOnePost($postTitle, $postContent)
+    public function insertOnePost(Parameter $post)
     {
-        $request = 'INSERT INTO post (post_title, post_content, post_date) VALUES(?, ?, NOW())';
-        $this->createQuery($request, [$postTitle, $postContent]);
+        /*$request = 'INSERT INTO post (post_title, post_content, post_date) VALUES(?, ?, NOW())';
+        $this->createQuery($request, [$post->get('postTitle'), $post->get('postContent')]);*/
+        $request = 'INSERT INTO post 
+                        (post_title, 
+                         post_content, 
+                         post_date) 
+                    VALUES
+                        (:post_title, 
+                         :post_content, 
+                         NOW())';
+        $this->createQuery($request, [
+            'post_title'=>$post->get('title'),
+            'post_content'=>$post->get('content')
+        ]);
     }
 
-	public function updateOnePost($postId, $postTitle, $postContent)
-	{
-		$request = 'UPDATE post SET post_title = ?, post_content = ?, post_date = NOW() WHERE id = ?';
-		$this->createQuery($request, [$postTitle, $postContent, $postId]);
-	}
+    public function updateOnePost($postId, Parameter $post)
+    {
+        /*$request = 'UPDATE post SET post_title = ?, post_content = ?, post_date = NOW() WHERE id = ?';
+        $this->createQuery($request, [$post->get('title'), $post->get('content'), $postId]);*/
+        $request = 'UPDATE 
+                        post 
+                    SET 
+                        post_title = :post_title, 
+                        post_content = :post_content, 
+                        post_date = NOW() 
+                    WHERE 
+                        id = :id';
+        $this->createQuery($request, [
+            'post_title'=>$post->get('title'),
+            'post_content'=>$post->get('content'),
+            'id'=>$postId
+        ]);
+    }
 
 	public function deleteOnePost($postId)
 	{
-		$request = 'DELETE FROM post WHERE id = ?';
-        $this->createQuery($request, [$postId]);
+		/*$request = 'DELETE FROM post WHERE id = ?';
+        $this->createQuery($request, [$postId]);*/
+        $request = 'DELETE FROM post WHERE id = :id';
+        $this->createQuery($request, [
+            'id'=>$postId
+        ]);
 	}
 }
