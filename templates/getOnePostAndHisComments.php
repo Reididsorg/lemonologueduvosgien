@@ -21,7 +21,7 @@
 
         <h2>Commentaires</h2>
 
-        <form action="index.php?action=saveOneComment&amp;id=<?= $post->getId() ?>" method="post">
+        <form action="index.php?action=createOneComment&amp;id=<?= $post->getId() ?>" method="post">
             <div>
                 <label for="author">Auteur</label><br />
                 <input type="text" id="author" name="author" />

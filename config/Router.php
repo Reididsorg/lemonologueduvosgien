@@ -70,15 +70,15 @@ Class Router
 				elseif ($_GET['action'] == 'addOnePost') {
                     $this->backController->addOnePost();
                 }
-                elseif ($_GET['action'] == 'saveOnePost') {
+                elseif ($_GET['action'] == 'createOnePost') {
                     if (!empty($_POST['title']) && !empty($_POST['content'])) {
-                        $this->backController->saveOnePost($_POST['title'], $_POST['content']);
+                        $this->backController->createOnePost($_POST['title'], $_POST['content']);
                     }
                 }
-				elseif ($_GET['action'] == 'saveOneComment') {
+				elseif ($_GET['action'] == 'createOneComment') {
 					if (isset($_GET['id']) && $_GET['id'] > 0) {
 						if (!empty($_POST['author']) && !empty($_POST['comment'])) {
-							$this->backController->saveOneComment($_GET['id'], $_POST['author'], $_POST['comment']);
+							$this->backController->createOneComment($_GET['id'], $_POST['author'], $_POST['comment']);
 						}
 						else {
 							throw new Exception('Tous les champs ne sont pas remplis !');
