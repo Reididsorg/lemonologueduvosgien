@@ -31,7 +31,7 @@
                 <textarea id="comment" name="comment"></textarea>
             </div>
             <div>
-                <input type="submit" />
+                <input type="submit" value="Enregistrer" id="submit" name="submit">
             </div>
         </form>
 

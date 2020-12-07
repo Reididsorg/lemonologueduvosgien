@@ -19,7 +19,7 @@
 
             <!--<label for="author">Auteur</label><br>
             <input type="text" id="author" name="author"><br>-->
-            <input type="submit" value="Envoyer" id="submit" name="submit">
+            <input type="submit" value="Modifier" id="submit" name="submit">
         </form>
     </div>
     <div id="delete-post"><p><a href="index.php?action=removeOnePost&amp;id=<?= $post->getId() ?>">Supprimer ce billet</a></p></div>
