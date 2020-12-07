@@ -27,7 +27,7 @@ class BackController
         ]);
     }
 
-    public function saveOnePost($postTitle, $postContent)
+    public function createOnePost($postTitle, $postContent)
     {
         var_dump($postTitle);
         var_dump($postContent);
@@ -79,7 +79,7 @@ class BackController
         }
     }
 
-    public function saveOneComment($postId, $commentAuthor, $commentContent)
+    public function createOneComment($postId, $commentAuthor, $commentContent)
     {
         $affectedLines = $this->commentDAO->insertOneComment($postId, $commentAuthor, $commentContent);
         if ($affectedLines === false) {

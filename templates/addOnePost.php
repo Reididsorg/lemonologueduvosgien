@@ -7,7 +7,7 @@
 <div id="wrapper">
     <!-- Formulaire d'ajout de billet de blog -->
     <div id="form-add-post">
-        <form method="post" action="index.php?action=saveOnePost" method="post">
+        <form method="post" action="index.php?action=createOnePost" method="post">
             <label for="title">Titre</label><br>
             <input type="text" id="title" name="title"><br>
             <label for="content">Contenu</label><br>
