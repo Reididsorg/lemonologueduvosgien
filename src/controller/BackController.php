@@ -19,7 +19,7 @@ class BackController extends Controller
                 throw new Exception('Impossible d\'ajouter le billet !');
             }
             else {
-                $this->session->set('createOnePost', 'Le nouveau billet a bien été ajouté');
+                $this->session->set('message', 'Le billet a été créé');
                 header('Location: index.php?action=getAllPosts');
             }
         }
@@ -42,6 +42,7 @@ class BackController extends Controller
             if ($affectedLine === false) {
                 throw new Exception('Impossible de mettre à jour le billet !');
             } else {
+                $this->session->set('message', 'Le billet a été modifié');
                 header('Location: index.php?action=getAllPosts');
             }
         }
@@ -59,6 +60,7 @@ class BackController extends Controller
                 throw new Exception('Impossible de supprimer le billet !');
             }
             else {
+                $this->session->set('message', 'Le billet a été supprimé');
                 header('Location: index.php?action=getAllPosts');
             }
         }
@@ -71,6 +73,7 @@ class BackController extends Controller
             throw new Exception('Impossible d\'ajouter le commentaire !');
         }
         else {
+            $this->session->set('message', 'Le commentaire a été créé');
             header('Location: index.php?action=getOnePostAndHisComments&id=' . $postId);
         }
     }
@@ -92,6 +95,7 @@ class BackController extends Controller
             throw new Exception('Impossible de mettre à jour le commentaire !');
         }
         else {
+            $this->session->set('message', 'Le commentaire a été modifié');
             header('Location: index.php?action=getOnePostAndHisComments&id=' . $postId);
         }
     }
@@ -103,6 +107,7 @@ class BackController extends Controller
             throw new Exception('Impossible de mettre à jour le billet !');
         }
         else {
+            $this->session->set('message', 'Le commentaire a été supprimé');
             header('Location: index.php?action=getOnePostAndHisComments&id=' . $postId);
         }
     }

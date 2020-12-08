@@ -1,22 +1,31 @@
-<?php $this->title = 'Edition du commentaire'; ?>
+<?php $this->title = 'Modification du commentaire'; ?>
 
-<h1>Modification du commentaire de <?= htmlspecialchars($comment->getCommentAuthor()) ?>, le <?= htmlspecialchars($comment->getCommentDateFr()) ?></h1>
-<p><a href="/index.php">Retour à la liste des billets</a></p>
-
-<!-- Wrapper  -->
 <div id="wrapper">
-    <!-- Commentaire du billet de blog  -->
-    <div id="blog-post-comment">
+
+    <h1>Modification du commentaire</h1>
+    <p><em>Dernière modification : <?= htmlspecialchars($comment->getCommentDateFr()) ?></em></p>
+
+    <div id="edit-comment">
 
         <form action="index.php?action=refreshOneComment&amp;postId=<?= $post->getId() ?>&amp;commentId=<?= $comment->getId() ?> ?>" method="post">
-            <div>
-                <label for="commentText">Commentaire</label><br />
-                <textarea id="commentText" name="commentText"><?= htmlspecialchars($comment->getCommentContent()) ?></textarea>
-            </div>
-            <div>
-                <input type="submit" value="Modifier" id="submit" name="submit">
-            </div>
+            <label for="commentText">Commentaire</label>
+            <br />
+            <textarea id="commentText" name="commentText"><?= htmlspecialchars($comment->getCommentContent()) ?></textarea>
+            <br>
+            <input type="submit" value="Modifier" id="submit" name="submit">
         </form>
 
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="delete-comment">
+        <p>
+            <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">Supprimer ce commentaire</a>
+        </p>
+    </div>
+
 </div>
