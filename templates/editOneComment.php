@@ -20,7 +20,7 @@
 
     <div id="delete-comment">
         <p>
-            <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">Supprimer ce commentaire</a>
+            <a href="index.php?action=removeOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Supprimer ce commentaire</a>
         </p>
     </div>
 

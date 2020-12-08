@@ -24,7 +24,7 @@ if(null!==($this->session->get('message'))) {
 
         <div>
             <p>
-                <a href="index.php?action=editOnePost&amp;id=<?= $post->getId() ?>">Modifier ce billet</a>
+                <a href="index.php?action=editOnePost&postId=<?= $post->getId() ?>">Modifier ce billet</a>
             </p>
         </div>
 
@@ -46,7 +46,7 @@ if(null!==($this->session->get('message'))) {
                 </div>
                 <div><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></div>
                 <div>
-                    <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">Modifier ce commentaire</a>
+                    <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Modifier ce commentaire</a>
                 </div>
                 <br>
             </li>

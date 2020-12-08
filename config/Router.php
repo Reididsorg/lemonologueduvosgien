@@ -27,42 +27,46 @@ Class Router
 	    try {
 	        $action = $this->request->getGet()->get('action');
 			if (isset($action)) {
-				if ($action == 'getAllPosts') {
-					$this->frontController->getAllPosts();
-				}
-				elseif ($action == 'getOnePostAndHisComments') {
-                    $this->frontController->getOnePostAndHisComments($this->request->getGet()->get('id'));
-				}
-                elseif ($action == 'editOnePost') {
-                    $this->backController->editOnePost($this->request->getGet()->get('id'));
+
+			    switch ($action) {
+
+                    case 'getAllPosts':
+                        $this->frontController->getAllPosts();
+                        break;
+                    case 'getOnePostAndHisComments':
+                        $this->frontController->getOnePostAndHisComments($this->request->getGet()->get('postId'));
+                        break;
+                    case 'editOnePost':
+                        $this->backController->editOnePost($this->request->getGet()->get('postId'));
+                        break;
+                    case 'refreshOnePost':
+                        $this->backController->refreshOnePost($this->request->getGet()->get('postId'), $this->request->getPost());
+                        break;
+                    case 'removeOnePost':
+                        $this->backController->removeOnePost($this->request->getGet()->get('postId'));
+                        break;
+                    case 'addOnePost':
+                        $this->backController->addOnePost();
+                        break;
+                    case 'createOnePost':
+                        $this->backController->createOnePost($this->request->getPost());
+                        break;
+                    case 'createOneComment':
+                        $this->backController->createOneComment($this->request->getGet()->get('postId'), $this->request->getPost());
+                        break;
+                    case 'editOneComment':
+                        $this->backController->editOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                        break;
+                    case 'refreshOneComment':
+                        $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost(), $this->request->getGet()->get('postId'));
+                        break;
+                    case 'removeOneComment':
+                        $this->backController->removeOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                        break;
+                    default:
+                        $this->errorController->errorNotFound();
                 }
-                elseif ($action == 'refreshOnePost') {
-                    $this->backController->refreshOnePost($this->request->getGet()->get('id'), $this->request->getPost());
-                }
-                elseif ($action == 'removeOnePost') {
-                    $this->backController->removeOnePost($this->request->getGet()->get('id'));
-                }
-				elseif ($action == 'addOnePost') {
-                    $this->backController->addOnePost();
-                }
-                elseif ($action == 'createOnePost') {
-                    $this->backController->createOnePost($this->request->getPost());
-                }
-				elseif ($action == 'createOneComment') {
-                    $this->backController->createOneComment($this->request->getGet()->get('id'), $this->request->getPost());
-				}
-				elseif ($action == 'editOneComment') {
-                    $this->backController->editOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
-				}
-				elseif ($action == 'refreshOneComment') {
-                    $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost(), $this->request->getGet()->get('postId'));
-				}
-                elseif ($action == 'removeOneComment') {
-                    $this->backController->removeOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
-                }
-				else{
-                    $this->errorController->errorNotFound();
-                }
+
 			}
 			else {
 				$this->frontController->getAllPosts();				

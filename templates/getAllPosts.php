@@ -1,7 +1,4 @@
-<?php $title = 'Accueil';
-
-//var_dump($posts);
-?>
+<?php $title = 'Accueil'; ?>
 
 <?php
 if(null!==($this->session->get('message'))) {
@@ -23,7 +20,7 @@ if(null!==($this->session->get('message'))) {
             ?>
             <div>
                 <h2>
-                    <a href="index.php?action=getOnePostAndHisComments&amp;id=<?= $post->getId() ?>"><?= $post->getPostTitle() ?></a>
+                    <a href="index.php?action=getOnePostAndHisComments&postId=<?= $post->getId() ?>"><?= $post->getPostTitle() ?></a>
                 </h2>
                 <p>
                     <?= $post->getPostContent() ?>

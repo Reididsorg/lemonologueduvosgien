@@ -1,5 +1,6 @@
 <?php
-$formTarget = isset($post) && $post->getId() ? 'refreshOnePost&id='.$post->getId() : 'createOnePost';
+
+$formTarget = isset($post) && $post->getId() ? 'refreshOnePost&postId='.$post->getId() : 'createOnePost';
 $author = isset($post) && $post->getPostAuthor() ? htmlspecialchars($post->getPostAuthor()) : '';
 $title = isset($post) && $post->getPostTitle() ? htmlspecialchars($post->getPostTitle()) : '';
 $content = isset($post) && $post->getPostContent() ? htmlspecialchars($post->getPostContent()) : '';

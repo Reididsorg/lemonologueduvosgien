@@ -16,7 +16,7 @@
 
     <div id="delete-post">
         <p>
-            <a href="index.php?action=removeOnePost&amp;id=<?= $post->getId() ?>">Supprimer ce billet</a>
+            <a href="index.php?action=removeOnePost&postId=<?= $post->getId() ?>">Supprimer ce billet</a>
         </p>
     </div>
 
