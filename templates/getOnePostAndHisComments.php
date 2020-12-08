@@ -1,25 +1,63 @@
 <?php $this->title = 'Billet de blog'; ?>
 
-<h1>BILLET DE BLOG</h1>
-<p><a href="/index.php">Retour à la liste des billets</a></p>
+<?php
+if(null!==($this->session->get('message'))) {
+    ?>
+    <p style="background-color: #008000; color: #fff; font-weight: bold;"><?= $this->session->show('message'); ?></p>
+    <?php
+}
+?>
 
-<!-- Wrapper  -->
 <div id="wrapper">
-    <!-- Billets de blog  -->
-    <div id="blog-post">
 
-        <div class="news">
-            <h3>
+    <div id="post">
+
+        <div>
+            <h1>
                 <?= htmlspecialchars($post->getPostTitle()); ?>
-                <em>le <?= $post->getPostDateFr(); ?></em>
-            </h3>
-
+            </h1>
             <p>
                 <?= nl2br(htmlspecialchars($post->getPostContent())); ?>
             </p>
+            <em>(<?= $post->getPostDateFr(); ?>)</em>
         </div>
 
+        <div>
+            <p>
+                <a href="index.php?action=editOnePost&amp;id=<?= $post->getId() ?>">Modifier ce billet</a>
+            </p>
+        </div>
+
+    </div>
+
+    <div id="comments">
+
         <h2>Commentaires</h2>
+
+        <ul>
+        <?php
+        foreach($comments as $comment)
+        {
+            ?>
+            <li>
+                <div>
+                    <strong><?= htmlspecialchars($comment->getCommentAuthor()) ?></strong>
+                    <em>(<?= $comment->getCommentDateFr() ?>)</em>
+                </div>
+                <div><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></div>
+                <div>
+                    <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(modifier)</a>
+                    |
+                    <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(supprimer)</a>
+                </div>
+                <br>
+            </li>
+            <?php
+        }
+        ?>
+        </ul>
+
+        <h3>Ajouter un commentaire</h3>
 
         <form action="index.php?action=createOneComment&amp;id=<?= $post->getId() ?>" method="post">
             <div>
@@ -31,25 +69,11 @@
                 <textarea id="comment" name="comment"></textarea>
             </div>
             <div>
-                <input type="submit" value="Enregistrer" id="submit" name="submit">
+                <input type="submit" value="Ajouter" id="submit" name="submit">
             </div>
         </form>
 
-        <?php
-        foreach($comments as $comment)
-        {
-            ?>
-            <p>
-                <strong>
-                    <?= htmlspecialchars($comment->getCommentAuthor()) ?>
-                </strong> le <?= $comment->getCommentDateFr() ?>
-                <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(modifier)</a>
-                 |
-                <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(supprimer)</a>
-            </p>
-            <p><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></p>
-            <?php
-        }
-        ?>
+
     </div>
+
 </div>

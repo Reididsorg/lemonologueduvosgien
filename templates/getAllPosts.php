@@ -1,32 +1,44 @@
 <?php $title = 'Accueil'; ?>
-<?= $this->session->show('createOnePost'); ?>
 
-<h1>ACCUEIL</h1>
+<?php
+if(null!==($this->session->get('message'))) {
+    ?>
+    <p style="background-color: #008000; color: #fff; font-weight: bold;"><?= $this->session->show('message'); ?></p>
+    <?php
+}
+?>
 
-<!-- Wrapper  -->
 <div id="wrapper">
-    <!-- Ajout d'un nouveau billet -->
-    <div id="add-new-post">
-        <a href="index.php?action=addOnePost">Ajouter un billet</a>
-    </div>
 
+    <h1>ACCUEIL</h1>
 
-    <!-- Billets de blog  -->
-    <div id="blog-posts">
-        <h2>Derniers billets du blog</h2>
+    <div id="posts">
+
         <?php
         foreach($posts as $post)
         {
             ?>
-            <div class="news">
-                <h3><a href="index.php?action=editOnePost&amp;id=<?= $post->getId() ?>"><?= $post->getPostTitle() ?><em> le <?= $post->getPostDateFr() ?></em></a></h3>
-                <p><?= $post->getPostContent() ?>
-                    <br />
-                    <em><a href="index.php?action=getOnePostAndHisComments&amp;id=<?= $post->getId() ?>">Commentaires</a></em>
+            <div>
+                <h2>
+                    <a href="index.php?action=getOnePostAndHisComments&amp;id=<?= $post->getId() ?>"><?= $post->getPostTitle() ?></a>
+                </h2>
+                <p>
+                    <?= $post->getPostContent() ?>
                 </p>
+                <em>(<?= $post->getPostDateFr() ?>)</em>
             </div>
             <?php
-        } // Fin de la boucle des billets
+        }
         ?>
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="add-new-post">
+        <p><a href="index.php?action=addOnePost">Ajouter un billet</a></p>
+    </div>
+
 </div>
