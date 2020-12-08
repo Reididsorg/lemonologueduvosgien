@@ -98,7 +98,7 @@ class CommentDAO extends DAO
         $this->createQuery($request, [
             'post_id'=>$postId,
             'comment_author'=>$post->get('author'),
-            'comment_content'=>$post->get('comment')
+            'comment_content'=>$post->get('content')
         ]);
     }
 
@@ -109,11 +109,13 @@ class CommentDAO extends DAO
 	    $request = 'UPDATE 
                         comment 
                     SET 
+                        comment_author = :comment_author, 
                         comment_content = :comment_content, 
                         comment_date = NOW() 
                     WHERE id = :id';
 		$this->createQuery($request, [
-		    'comment_content'=>$post->get('commentText'),
+            'comment_author'=>$post->get('author'),
+		    'comment_content'=>$post->get('content'),
             'id'=>$id
         ]);
 	}

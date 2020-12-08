@@ -22,9 +22,9 @@ class PostDAO extends DAO
         {
             $post->setPostContent($row['post_content']);
         }
-        if(isset($row['author']))
+        if(isset($row['post_author']))
         {
-            $post->setPostAuthor($row['author']);
+            $post->setPostAuthor($row['post_author']);
         }
         if(isset($row['post_date_fr']))
         {
@@ -40,8 +40,9 @@ class PostDAO extends DAO
         $request = 'SELECT 
                         id, 
                         post_title, 
-                        post_content, 
-                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr 
+                        post_content,
+                        post_author,
+                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr
                     FROM
                         post 
                     WHERE 
@@ -60,7 +61,8 @@ class PostDAO extends DAO
                         id, 
                         post_title, 
                         post_content, 
-                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr 
+                        post_author,
+                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr
                     FROM 
                         post 
                     ORDER BY 
@@ -83,14 +85,17 @@ class PostDAO extends DAO
         $request = 'INSERT INTO post 
                         (post_title, 
                          post_content, 
-                         post_date) 
+                         post_date,
+                         post_author) 
                     VALUES
                         (:post_title, 
                          :post_content, 
-                         NOW())';
+                         NOW(),
+                         :post_author)';
         $this->createQuery($request, [
             'post_title'=>$post->get('title'),
-            'post_content'=>$post->get('content')
+            'post_content'=>$post->get('content'),
+            'post_author'=>$post->get('author')
         ]);
     }
 
@@ -103,12 +108,14 @@ class PostDAO extends DAO
                     SET 
                         post_title = :post_title, 
                         post_content = :post_content, 
-                        post_date = NOW() 
+                        post_date = NOW(),
+                        post_author = :post_author
                     WHERE 
                         id = :id';
         $this->createQuery($request, [
             'post_title'=>$post->get('title'),
             'post_content'=>$post->get('content'),
+            'post_author'=>$post->get('author'),
             'id'=>$postId
         ]);
     }

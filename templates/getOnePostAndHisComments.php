@@ -19,7 +19,7 @@ if(null!==($this->session->get('message'))) {
             <p>
                 <?= nl2br(htmlspecialchars($post->getPostContent())); ?>
             </p>
-            <em>(<?= $post->getPostDateFr(); ?>)</em>
+            <em>(<?= $post->getPostDateFr(); ?>) par <strong><?= $post->getPostAuthor() ?></strong></em>
         </div>
 
         <div>
@@ -46,9 +46,7 @@ if(null!==($this->session->get('message'))) {
                 </div>
                 <div><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></div>
                 <div>
-                    <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(modifier)</a>
-                    |
-                    <a href="index.php?action=removeOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">(supprimer)</a>
+                    <a href="index.php?action=editOneComment&amp;commentId=<?= $comment->getId() ?>&amp;postId=<?= $post->getId() ?>">Modifier ce commentaire</a>
                 </div>
                 <br>
             </li>
@@ -59,20 +57,9 @@ if(null!==($this->session->get('message'))) {
 
         <h3>Ajouter un commentaire</h3>
 
-        <form action="index.php?action=createOneComment&amp;id=<?= $post->getId() ?>" method="post">
-            <div>
-                <label for="author">Auteur</label><br />
-                <input type="text" id="author" name="author" />
-            </div>
-            <div>
-                <label for="comment">Commentaire</label><br />
-                <textarea id="comment" name="comment"></textarea>
-            </div>
-            <div>
-                <input type="submit" value="Ajouter" id="submit" name="submit">
-            </div>
-        </form>
-
+        <div id="form-comment">
+            <?php include ('formComment.php'); ?>
+        </div>
 
     </div>
 

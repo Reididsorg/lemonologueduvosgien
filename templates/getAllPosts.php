@@ -1,4 +1,7 @@
-<?php $title = 'Accueil'; ?>
+<?php $title = 'Accueil';
+
+//var_dump($posts);
+?>
 
 <?php
 if(null!==($this->session->get('message'))) {
@@ -25,7 +28,7 @@ if(null!==($this->session->get('message'))) {
                 <p>
                     <?= $post->getPostContent() ?>
                 </p>
-                <em>(<?= $post->getPostDateFr() ?>)</em>
+                <em>(<?= $post->getPostDateFr() ?>) par <strong><?= $post->getPostAuthor() ?></strong></em>
             </div>
             <?php
         }

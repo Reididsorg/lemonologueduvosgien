@@ -8,22 +8,28 @@ class Post
      * @var int
      */
     private $id;
+
     /**
      * @var string
      */
     private $postTitle;
+
     /**
      * @var string
      */
     private $postContent;
+
     /**
      * @var string
      */
-    //private $author;
+    private $postAuthor;
+
     /**
      * @var \DateTime
      */
     private $postDateFr;
+
+
 
 
     /**
@@ -33,6 +39,7 @@ class Post
     {
         return $this->id;
     }
+
     /**
      * @param int $id
      */
@@ -40,6 +47,8 @@ class Post
     {
         $this->id = $id;
     }
+
+
     /**
      * @return string
      */
@@ -47,6 +56,7 @@ class Post
     {
         return $this->postTitle;
     }
+
     /**
      * @param string $postTitle
      */
@@ -54,6 +64,8 @@ class Post
     {
         $this->postTitle = $postTitle;
     }
+
+
     /**
      * @return string
      */
@@ -61,6 +73,7 @@ class Post
     {
         return $this->postContent;
     }
+
     /**
      * @param string $postContent
      */
@@ -68,20 +81,25 @@ class Post
     {
         $this->postContent = $postContent;
     }
+
+
     /**
      * @return string
      */
-    /*public function getAuthor()
+    public function getPostAuthor()
     {
         return $this->postAuthor;
-    }*/
+    }
+
     /**
      * @param string $postAuthor
      */
-    /*public function setAuthor($postAuthor)
+    public function setPostAuthor($postAuthor)
     {
         $this->postAuthor = $postAuthor;
-    }*/
+    }
+
+
     /**
      * @return \DateTime
      */
@@ -89,6 +107,7 @@ class Post
     {
         return $this->postDateFr;
     }
+
     /**
      * @param \DateTime $postDateFr
      */

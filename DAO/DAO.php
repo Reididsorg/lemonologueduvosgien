@@ -13,7 +13,6 @@ abstract class DAO
     {
         //Vérifie si la connexion est nulle et fait appel à getConnection()
         if($this->connection === null) {
-            //var_dump('connexion inconnue');
             return $this->getConnection();
         }
         //Si la connexion existe, elle est renvoyée, inutile de refaire une connexion
@@ -39,19 +38,13 @@ abstract class DAO
 
     protected function createQuery($sql, $parameters = null)
     {
-        //var_dump($sql);
-        //var_dump($parameters);
         if($parameters)
         {
             $result = $this->checkConnection()->prepare($sql);
-            //var_dump($result);
             $result->execute($parameters);
-            //var_dump($result);
-            //var_dump($result->fetch());
             return $result;
         }
         $result = $this->checkConnection()->query($sql);
-        //var_dump($result->fetch());
         return $result;
     }
 }
