@@ -8,18 +8,22 @@ class Comment
      * @var int
      */
     private $id;
+
     /**
      * @var string
      */
     private $commentAuthor;
+
     /**
      * @var string
      */
     private $commentContent;
+
     /**
      * @var \DateTime
      */
     private $commentDateFr;
+
     /**
      * @var int
      */
@@ -34,6 +38,7 @@ class Comment
     {
         return $this->id;
     }
+
     /**
      * @param int $id
      */
@@ -42,6 +47,7 @@ class Comment
         $this->id = $id;
     }
 
+
     /**
      * @return string
      */
@@ -49,6 +55,7 @@ class Comment
     {
         return $this->commentAuthor;
     }
+
     /**
      * @param string $commentAuthor
      */
@@ -57,6 +64,7 @@ class Comment
         $this->commentAuthor = $commentAuthor;
     }
 
+
     /**
      * @return string
      */
@@ -64,6 +72,7 @@ class Comment
     {
         return $this->commentContent;
     }
+
     /**
      * @param string $commentContent
      */
@@ -72,6 +81,7 @@ class Comment
         $this->commentContent = $commentContent;
     }
 
+
     /**
      * @return \DateTime
      */
@@ -79,6 +89,7 @@ class Comment
     {
         return $this->commentDateFr;
     }
+
     /**
      * @param \DateTime $commentDateFr
      */
@@ -87,6 +98,7 @@ class Comment
         $this->commentDateFr = $commentDateFr;
     }
 
+
     /**
      * @return int
      */
@@ -94,6 +106,7 @@ class Comment
     {
         return $this->postId;
     }
+
     /**
      * @param int $postId
      */

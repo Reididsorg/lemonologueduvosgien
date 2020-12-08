@@ -7,13 +7,9 @@
 
     <div id="edit-comment">
 
-        <form action="index.php?action=refreshOneComment&amp;postId=<?= $post->getId() ?>&amp;commentId=<?= $comment->getId() ?> ?>" method="post">
-            <label for="commentText">Commentaire</label>
-            <br />
-            <textarea id="commentText" name="commentText"><?= htmlspecialchars($comment->getCommentContent()) ?></textarea>
-            <br>
-            <input type="submit" value="Modifier" id="submit" name="submit">
-        </form>
+        <div id="form-comment">
+            <?php include ('formComment.php'); ?>
+        </div>
 
     </div>
 
