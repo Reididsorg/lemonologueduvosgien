@@ -94,42 +94,74 @@ class BackController extends Controller
         }
     }
 
-    public function createOneComment($postId, Parameter $post)
+    public function createOneComment($postId, Parameter $formData)
     {
-        if($post->get('submit')) {
-            $affectedLines = $this->commentDAO->insertOneComment($postId, $post);
-            if ($affectedLines === false) {
-                throw new Exception('Impossible d\'ajouter le commentaire !');
+        $post = $this->postDAO->selectOnePost($postId);
+        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+        if($formData->get('submit')) {
+            $errors = $this->validation->validate($formData, 'Comment');
+            if(!$errors) {
+                $affectedLines = $this->commentDAO->insertOneComment($postId, $formData);
+                if ($affectedLines === false) {
+                    throw new Exception('Impossible d\'ajouter le commentaire !');
+                }
+                else {
+                    $this->session->set('message', 'Le commentaire a été créé');
+                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+                }
             }
-            else {
-                $this->session->set('message', 'Le commentaire a été créé');
-                header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
-            }
+            return $this->view->render('getOnePostAndHisComments', [
+                'post' => $post,
+                'comments' => $comments,
+                'formData' => $formData,
+                'errors' => $errors
+            ]);
+
         }
+        return $this->view->render('getOnePostAndHisComments', [
+            'post' => $post,
+            'comments' => $comments
+        ]);
     }
 
     public function editOneComment($commentId, $postId)
     {
-        $comment = $this->commentDAO->selectOneComment($commentId);
         $post = $this->postDAO->selectOnePost($postId);
+        $comment = $this->commentDAO->selectOneComment($commentId);
         return $this->view->render('editOneComment', [
             'post' => $post,
             'comment' => $comment
         ]);
     }
 
-    public function refreshOneComment($commentId, Parameter $post, $postId)
+    public function refreshOneComment($commentId, Parameter $formData, $postId)
     {
-        if($post->get('submit')) {
-            $affectedLine = $this->commentDAO->updateOneComment($commentId, $post);
-            if ($affectedLine === false) {
-                throw new Exception('Impossible de mettre à jour le commentaire !');
+        $post = $this->postDAO->selectOnePost($postId);
+        $comment = $this->commentDAO->selectOneComment($commentId);
+        if($formData->get('submit')) {
+            $errors = $this->validation->validate($formData, 'Comment');
+            if (!$errors) {
+                $affectedLine = $this->commentDAO->updateOneComment($commentId, $formData);
+                if ($affectedLine === false) {
+                    throw new Exception('Impossible de mettre à jour le commentaire !');
+                }
+                else {
+                    $this->session->set('message', 'Le commentaire a été modifié');
+                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+                }
             }
-            else {
-                $this->session->set('message', 'Le commentaire a été modifié');
-                header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
-            }
+            return $this->view->render('editOneComment', [
+                'post' => $post,
+                'comment' => $comment,
+                'formData' => $formData,
+                'errors' => $errors
+            ]);
         }
+        return $this->view->render('editOneComment', [
+            'post' => $post,
+            'comment' => $comment,
+            'formData' => $formData
+        ]);
     }
 
     public function removeOneComment ($commentId, $postId)

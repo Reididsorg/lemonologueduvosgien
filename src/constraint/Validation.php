@@ -11,6 +11,13 @@ class Validation
             $postValidation = new PostValidation();
             return $postValidation->check($data);
         }
+
+        // 'Comment' désigne un commentaire
+        if($name === 'Comment') {
+            $commentValidation = new CommentValidation();
+            return $commentValidation->check($data);
+        }
+
         return null;
     }
 }
