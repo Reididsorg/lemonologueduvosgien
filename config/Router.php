@@ -37,7 +37,7 @@ Class Router
                         $this->frontController->getOnePostAndHisComments($this->request->getGet()->get('postId'));
                         break;
                     case 'editOnePost':
-                        $this->backController->editOnePost($this->request->getGet()->get('postId'));
+                        $this->backController->editOnePost($this->request->getGet()->get('postId'), $this->request->getPost());
                         break;
                     case 'refreshOnePost':
                         $this->backController->refreshOnePost($this->request->getGet()->get('postId'), $this->request->getPost());
