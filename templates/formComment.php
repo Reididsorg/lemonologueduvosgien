@@ -4,7 +4,7 @@
 if (isset($comments)) {
     if (isset($post)) {
         // Création d'un nouveau commentaire (pas de form)
-        if(!isset($formData)) {
+        if(!isset($commentForm)) {
             $formTarget = 'createOneComment&postId='.$post->getId();
             $author = '';
             $content = '';
@@ -15,8 +15,8 @@ if (isset($comments)) {
             // validation erreur
             if(isset($errors)) {
                 $formTarget = 'createOneComment&postId='.$post->getId();
-                $author = $formData->get('author');
-                $content = $formData->get('content');
+                $author = $commentForm->get('author');
+                $content = $commentForm->get('content');
                 $submit = 'Ajouter';
             }
             // validation OK
@@ -32,10 +32,10 @@ if (isset($comments)) {
 // (action : editOneComment&commentId*)
 else {
     // Edition d'un commentaire après validation
-    if (isset($formData)) {
+    if (isset($commentForm)) {
         $formTarget = 'refreshOneComment&postId='.$post->getId().'&commentId='.$comment->getId();
-        $author = htmlspecialchars($formData->get('author'));
-        $content = htmlspecialchars($formData->get('content'));
+        $author = htmlspecialchars($commentForm->get('author'));
+        $content = htmlspecialchars($commentForm->get('content'));
         $submit = 'Modifier';
     }
     // Edition d'un commentaire déjà enregistré
