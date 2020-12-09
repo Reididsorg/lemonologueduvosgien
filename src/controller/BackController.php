@@ -14,20 +14,35 @@ class BackController extends Controller
     public function createOnePost(Parameter $post)
     {
         if($post->get('submit')) {
-            $affectedLines = $this->postDAO->insertOnePost($post);
-            if ($affectedLines === false) {
-                throw new Exception('Impossible d\'ajouter le billet !');
+            $errors = $this->validation->validate($post, 'Post');
+            if(!$errors) {
+                $affectedLines = $this->postDAO->insertOnePost($post);
+                if ($affectedLines === false) {
+                    throw new Exception('Impossible d\'ajouter le billet !');
+                }
+                else {
+                    $this->session->set('message', 'Le billet a été créé');
+                    header('Location: index.php?action=getAllPosts');
+                }
             }
-            else {
-                $this->session->set('message', 'Le billet a été créé');
-                header('Location: index.php?action=getAllPosts');
-            }
+            return $this->view->render('addOnePost', [
+                'post' => $post,
+                'errors' => $errors
+            ]);
         }
+        return $this->view->render('addOnePost', [
+            'post' => $post
+        ]);
     }
 
-    public function editOnePost($postId)
+    public function editOnePost($postId, Parameter $post)
     {
-        $post = $this->postDAO->selectOnePost($postId);
+        $article = $this->postDAO->selectOnePost($postId);
+        $post->set('id', $article->getId());
+        $post->set('title', $article->getPostTitle());
+        $post->set('content', $article->getPostContent());
+        $post->set('author', $article->getPostAuthor());
+        $post->set('dateFr', $article->getPostDateFr());
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         return $this->view->render('editOnePost', [
             'post' => $post,
@@ -38,14 +53,27 @@ class BackController extends Controller
     public function refreshOnePost($postId, Parameter $post)
     {
         if($post->get('submit')) {
-            $affectedLine = $this->postDAO->updateOnePost($postId, $post);
-            if ($affectedLine === false) {
-                throw new Exception('Impossible de mettre à jour le billet !');
-            } else {
-                $this->session->set('message', 'Le billet a été modifié');
-                header('Location: index.php?action=getAllPosts');
+            $errors = $this->validation->validate($post, 'Post');
+            if(!$errors) {
+                $affectedLine = $this->postDAO->updateOnePost($postId, $post);
+                if ($affectedLine === false) {
+                    throw new Exception('Impossible de mettre à jour le billet !');
+                } else {
+                    $this->session->set('message', 'Le billet a été modifié');
+                    header('Location: index.php?action=getAllPosts');
+                }
             }
+            $article = $this->postDAO->selectOnePost($postId);
+            $post->set('id', $article->getId());
+            $post->set('dateFr', $article->getPostDateFr());
+            return $this->view->render('editOnePost', [
+                'post' => $post,
+                'errors' => $errors
+            ]);
         }
+        return $this->view->render('editOnePost', [
+            'post' => $post
+        ]);
     }
 
     public function removeOnePost ($postId)
@@ -68,13 +96,15 @@ class BackController extends Controller
 
     public function createOneComment($postId, Parameter $post)
     {
-        $affectedLines = $this->commentDAO->insertOneComment($postId, $post);
-        if ($affectedLines === false) {
-            throw new Exception('Impossible d\'ajouter le commentaire !');
-        }
-        else {
-            $this->session->set('message', 'Le commentaire a été créé');
-            header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+        if($post->get('submit')) {
+            $affectedLines = $this->commentDAO->insertOneComment($postId, $post);
+            if ($affectedLines === false) {
+                throw new Exception('Impossible d\'ajouter le commentaire !');
+            }
+            else {
+                $this->session->set('message', 'Le commentaire a été créé');
+                header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+            }
         }
     }
 
@@ -90,13 +120,15 @@ class BackController extends Controller
 
     public function refreshOneComment($commentId, Parameter $post, $postId)
     {
-        $affectedLine = $this->commentDAO->updateOneComment($commentId, $post);
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de mettre à jour le commentaire !');
-        }
-        else {
-            $this->session->set('message', 'Le commentaire a été modifié');
-            header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+        if($post->get('submit')) {
+            $affectedLine = $this->commentDAO->updateOneComment($commentId, $post);
+            if ($affectedLine === false) {
+                throw new Exception('Impossible de mettre à jour le commentaire !');
+            }
+            else {
+                $this->session->set('message', 'Le commentaire a été modifié');
+                header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+            }
         }
     }
 
