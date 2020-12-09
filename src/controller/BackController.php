@@ -11,12 +11,12 @@ class BackController extends Controller
         return $this->view->render('addOnePost');
     }
 
-    public function createOnePost(Parameter $post)
+    public function createOnePost(Parameter $postForm)
     {
-        if($post->get('submit')) {
-            $errors = $this->validation->validate($post, 'Post');
+        if($postForm->get('submit')) {
+            $errors = $this->validation->validate($postForm, 'Post');
             if(!$errors) {
-                $affectedLines = $this->postDAO->insertOnePost($post);
+                $affectedLines = $this->postDAO->insertOnePost($postForm);
                 if ($affectedLines === false) {
                     throw new Exception('Impossible d\'ajouter le billet !');
                 }
@@ -26,36 +26,36 @@ class BackController extends Controller
                 }
             }
             return $this->view->render('addOnePost', [
-                'post' => $post,
+                'postForm' => $postForm,
                 'errors' => $errors
             ]);
         }
         return $this->view->render('addOnePost', [
-            'post' => $post
+            'postForm' => $postForm
         ]);
     }
 
-    public function editOnePost($postId, Parameter $post)
+    public function editOnePost($postId, Parameter $postForm)
     {
         $article = $this->postDAO->selectOnePost($postId);
-        $post->set('id', $article->getId());
-        $post->set('title', $article->getPostTitle());
-        $post->set('content', $article->getPostContent());
-        $post->set('author', $article->getPostAuthor());
-        $post->set('dateFr', $article->getPostDateFr());
+        $postForm->set('id', $article->getId());
+        $postForm->set('title', $article->getPostTitle());
+        $postForm->set('content', $article->getPostContent());
+        $postForm->set('author', $article->getPostAuthor());
+        $postForm->set('dateFr', $article->getPostDateFr());
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         return $this->view->render('editOnePost', [
-            'post' => $post,
+            'postForm' => $postForm,
             'comments' => $comments
         ]);
     }
 
-    public function refreshOnePost($postId, Parameter $post)
+    public function refreshOnePost($postId, Parameter $postForm)
     {
-        if($post->get('submit')) {
-            $errors = $this->validation->validate($post, 'Post');
+        if($postForm->get('submit')) {
+            $errors = $this->validation->validate($postForm, 'Post');
             if(!$errors) {
-                $affectedLine = $this->postDAO->updateOnePost($postId, $post);
+                $affectedLine = $this->postDAO->updateOnePost($postId, $postForm);
                 if ($affectedLine === false) {
                     throw new Exception('Impossible de mettre à jour le billet !');
                 } else {
@@ -64,15 +64,15 @@ class BackController extends Controller
                 }
             }
             $article = $this->postDAO->selectOnePost($postId);
-            $post->set('id', $article->getId());
-            $post->set('dateFr', $article->getPostDateFr());
+            $postForm->set('id', $article->getId());
+            $postForm->set('dateFr', $article->getPostDateFr());
             return $this->view->render('editOnePost', [
-                'post' => $post,
+                'postForm' => $postForm,
                 'errors' => $errors
             ]);
         }
         return $this->view->render('editOnePost', [
-            'post' => $post
+            'postForm' => $postForm
         ]);
     }
 
@@ -94,14 +94,14 @@ class BackController extends Controller
         }
     }
 
-    public function createOneComment($postId, Parameter $formData)
+    public function createOneComment($postId, Parameter $commentForm)
     {
         $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-        if($formData->get('submit')) {
-            $errors = $this->validation->validate($formData, 'Comment');
+        if($commentForm->get('submit')) {
+            $errors = $this->validation->validate($commentForm, 'Comment');
             if(!$errors) {
-                $affectedLines = $this->commentDAO->insertOneComment($postId, $formData);
+                $affectedLines = $this->commentDAO->insertOneComment($postId, $commentForm);
                 if ($affectedLines === false) {
                     throw new Exception('Impossible d\'ajouter le commentaire !');
                 }
@@ -113,7 +113,7 @@ class BackController extends Controller
             return $this->view->render('getOnePostAndHisComments', [
                 'post' => $post,
                 'comments' => $comments,
-                'formData' => $formData,
+                'commentForm' => $commentForm,
                 'errors' => $errors
             ]);
 
@@ -134,14 +134,14 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOneComment($commentId, Parameter $formData, $postId)
+    public function refreshOneComment($commentId, Parameter $commentForm, $postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
         $comment = $this->commentDAO->selectOneComment($commentId);
-        if($formData->get('submit')) {
-            $errors = $this->validation->validate($formData, 'Comment');
+        if($commentForm->get('submit')) {
+            $errors = $this->validation->validate($commentForm, 'Comment');
             if (!$errors) {
-                $affectedLine = $this->commentDAO->updateOneComment($commentId, $formData);
+                $affectedLine = $this->commentDAO->updateOneComment($commentId, $commentForm);
                 if ($affectedLine === false) {
                     throw new Exception('Impossible de mettre à jour le commentaire !');
                 }
@@ -153,14 +153,14 @@ class BackController extends Controller
             return $this->view->render('editOneComment', [
                 'post' => $post,
                 'comment' => $comment,
-                'formData' => $formData,
+                'commentForm' => $commentForm,
                 'errors' => $errors
             ]);
         }
         return $this->view->render('editOneComment', [
             'post' => $post,
             'comment' => $comment,
-            'formData' => $formData
+            'commentForm' => $commentForm
         ]);
     }
 
