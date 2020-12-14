@@ -88,14 +88,14 @@ class PostDAO extends DAO
                          post_date,
                          post_author) 
                     VALUES
-                        (:post_title, 
-                         :post_content, 
+                        (:title, 
+                         :content, 
                          NOW(),
-                         :post_author)';
+                         :author)';
         $this->createQuery($request, [
-            'post_title'=>$post->get('title'),
-            'post_content'=>$post->get('content'),
-            'post_author'=>$post->get('author')
+            'title'=>$post->get('title'),
+            'content'=>$post->get('content'),
+            'author'=>$post->get('author')
         ]);
     }
 
