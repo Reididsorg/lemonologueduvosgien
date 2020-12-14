@@ -13,7 +13,7 @@ class View
     public function __construct()
     {
         $request = new Request();
-        $this->session = $request->getSession();
+        $this->session = $request->getsentBySession();
     }
 
     public function render($template, $data = [])

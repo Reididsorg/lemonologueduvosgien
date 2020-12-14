@@ -4,44 +4,44 @@ namespace BrunoGrosdidier\Blog\config;
 
 class Request
 {
-    private $get;
-    private $post;
-    private $session;
+    private $sentByGet;
+    private $sentByPost;
+    private $sentBySession;
 
     public function __construct()
     {
-        $this->get = new Parameter($_GET);
-        $this->post = new Parameter($_POST);
-        $this->session = new Session($_SESSION);
+        $this->sentByGet = new Parameter($_GET);
+        $this->sentByPost = new Parameter($_POST);
+        $this->sentBySession = new Session($_SESSION);
     }
 
     /**
      * @return Parameter
      */
-    public function getGet()
+    public function getSentByGet()
     {
         {
-            return $this->get;
+            return $this->sentByGet;
         }
     }
 
     /**
      * @return Parameter
      */
-    public function getPost()
+    public function getSentByPost()
     {
         {
-            return $this->post;
+            return $this->sentByPost;
         }
     }
 
     /**
      * @return Session
      */
-    public function getSession()
+    public function getSentBySession()
     {
         {
-            return $this->session;
+            return $this->sentBySession;
         }
     }
 }

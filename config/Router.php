@@ -25,7 +25,7 @@ Class Router
 	public function run()
 	{
 	    try {
-	        $action = $this->request->getGet()->get('action');
+	        $action = $this->request->getSentByGet()->get('action');
 			if (isset($action)) {
 
 			    switch ($action) {
@@ -34,40 +34,40 @@ Class Router
                         $this->frontController->getAllPosts();
                         break;
                     case 'getOnePostAndHisComments':
-                        $this->frontController->getOnePostAndHisComments($this->request->getGet()->get('postId'));
+                        $this->frontController->getOnePostAndHisComments($this->request->getSentByGet()->get('postId'));
                         break;
                     case 'editOnePost':
-                        $this->backController->editOnePost($this->request->getGet()->get('postId'), $this->request->getPost());
+                        $this->backController->editOnePost($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
                         break;
                     case 'refreshOnePost':
-                        $this->backController->refreshOnePost($this->request->getGet()->get('postId'), $this->request->getPost());
+                        $this->backController->refreshOnePost($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
                         break;
                     case 'removeOnePost':
-                        $this->backController->removeOnePost($this->request->getGet()->get('postId'));
+                        $this->backController->removeOnePost($this->request->getSentByGet()->get('postId'));
                         break;
                     case 'addOnePost':
                         $this->backController->addOnePost();
                         break;
                     case 'createOnePost':
-                        $this->backController->createOnePost($this->request->getPost());
+                        $this->backController->createOnePost($this->request->getSentByPost());
                         break;
                     case 'createOneComment':
-                        $this->backController->createOneComment($this->request->getGet()->get('postId'), $this->request->getPost());
+                        $this->backController->createOneComment($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
                         break;
                     case 'editOneComment':
-                        $this->backController->editOneComment($this->request->getGet()->get('commentId'));
+                        $this->backController->editOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
                     case 'refreshOneComment':
-                        $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost());
+                        $this->backController->refreshOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByPost());
                         break;
                     case 'removeOneComment':
-                        $this->backController->removeOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                        $this->backController->removeOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByGet()->get('postId'));
                         break;
                     case 'flagOneComment':
-                        $this->backController->flagOneComment($this->request->getGet()->get('commentId'));
+                        $this->backController->flagOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
                     case 'createOneUser':
-                        $this->frontController->createOneUser($this->request->getPost());
+                        $this->frontController->createOneUser($this->request->getSentByPost());
                         break;
                     default:
                         $this->errorController->errorNotFound();

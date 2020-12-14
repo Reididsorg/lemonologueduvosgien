@@ -15,9 +15,9 @@ abstract class Controller
     protected $commentDAO;
     protected $userDAO;
     protected $view;
-    protected $get;
-    protected $post;
-    protected $session;
+    protected $sentByGet;
+    protected $sentByPost;
+    protected $sentBySession;
     protected $validation;
 
     public function __construct()
@@ -28,8 +28,8 @@ abstract class Controller
         $this->view = new View();
         $this->validation = new Validation();
         $request = new Request();
-        $this->get = $request->getGet();
-        $this->post = $request->getPost();
-        $this->session = $request->getSession();
+        $this->sentByGet = $request->getSentByGet();
+        $this->sentByPost = $request->getSentByPost();
+        $this->sentBySession = $request->getSentBySession();
     }
 }
