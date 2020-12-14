@@ -26,9 +26,13 @@ class CommentDAO extends DAO
         {
             $comment->setCommentDateFr($row['comment_date_fr']);
         }
-        if(isset($row['post_id']))
+        if(isset($row['comment_post_id']))
         {
-            $comment->setPostId($row['post_id']);
+            $comment->setCommentPostId($row['comment_post_id']);
+        }
+        if(isset($row['comment_flag']))
+        {
+            $comment->setCommentFlag($row['comment_flag']);
         }
         return $comment;
     }
@@ -42,14 +46,15 @@ class CommentDAO extends DAO
                         comment_author, 
                         comment_content, 
                         DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, 
-                        post_id 
+                        comment_post_id,
+                        comment_flag
                     FROM 
                         comment 
                     WHERE 
-                        post_id = :post_id 
+                        comment_post_id = :postId 
                     ORDER BY comment_date DESC';
         $result = $this->createQuery($request, [
-            'post_id'=>$postId
+            'postId'=>$postId
         ]);
         $comments = [];
         foreach($result as $row){
@@ -62,19 +67,21 @@ class CommentDAO extends DAO
 
 	public function selectOneComment($commentId)
 	{
-		/*$request = 'SELECT id, comment_author, comment_content, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comment WHERE id = ?';
+		/*$request = 'SELECT id, comment_author, comment_content, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, comment_post_id FROM comment WHERE id = ?';
         $result = $this->createQuery($request, [$id]);*/
         $request = 'SELECT 
                         id, 
                         comment_author, 
                         comment_content, 
-                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr 
+                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr,
+                        comment_post_id,
+                        comment_flag
                     FROM 
                         comment 
                     WHERE 
-                        id = :id';
+                        id = :commentId';
         $result = $this->createQuery($request, [
-            'id'=>$commentId
+            'commentId'=>$commentId
         ]);
         $comment = $result->fetch();
         $result->closeCursor();
@@ -83,22 +90,25 @@ class CommentDAO extends DAO
 
     public function insertOneComment($postId, Parameter $post)
     {
-        /*$request = 'INSERT INTO comment (post_id, comment_author, comment_content, comment_date) VALUES(?, ?, ?, NOW())';
+        /*$request = 'INSERT INTO comment (comment_post_id, comment_author, comment_content, comment_date) VALUES(?, ?, ?, NOW())';
         $this->createQuery($request, [$postId, $post->get('author'), $post->get('comment')]);*/
         $request = 'INSERT INTO comment 
-                        (post_id, 
-                         comment_author, 
+                        (comment_author, 
                          comment_content, 
-                         comment_date)
+                         comment_date,
+                         comment_post_id,
+                         comment_flag)
                     VALUES
-                        (:post_id,
-                         :comment_author,
+                        (:comment_author,
                          :comment_content,
-                         NOW())';
+                         NOW(),
+                         :post_id,
+                         :comment_flag)';
         $this->createQuery($request, [
-            'post_id'=>$postId,
             'comment_author'=>$post->get('author'),
-            'comment_content'=>$post->get('content')
+            'comment_content'=>$post->get('content'),
+            'post_id'=>$postId,
+            'comment_flag'=>0,
         ]);
     }
 
@@ -124,19 +134,32 @@ class CommentDAO extends DAO
 	{
         /*$request = 'DELETE FROM comment WHERE id = ?';
         $this->createQuery($request, [$id]);*/
-	    $request = 'DELETE FROM comment WHERE id = :id';
+	    $request = 'DELETE FROM comment WHERE id = :commentId';
         $this->createQuery($request, [
-            'id'=>$commentId
+            'commentId'=>$commentId
         ]);
 	}
 
     public function deleteAllCommentsOfOnePost($postId)
     {
-        /*$request = 'DELETE FROM comment WHERE post_id = ?';
+        /*$request = 'DELETE FROM comment WHERE comment_post_id = ?';
         $this->createQuery($request, [$postId]);*/
-        $request = 'DELETE FROM comment WHERE post_id = :id';
+        $request = 'DELETE FROM comment WHERE comment_post_id = :postId';
         $this->createQuery($request, [
-            'id'=>$postId
+            'postId'=>$postId
+        ]);
+    }
+
+    public function flagOneComment($commentId)
+    {
+        $request = 'UPDATE 
+                        comment 
+                    SET 
+                        comment_flag = :comment_flag
+                    WHERE id = :id';
+        $this->createQuery($request, [
+            'comment_flag'=>1,
+            'id'=>$commentId
         ]);
     }
 }

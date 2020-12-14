@@ -21,7 +21,7 @@ class BackController extends Controller
                     throw new Exception('Impossible d\'ajouter le billet !');
                 }
                 else {
-                    $this->session->set('message', 'Le billet a été créé');
+                    $this->session->set('messageCreateOnePost', 'Le billet a été créé');
                     header('Location: index.php?action=getAllPosts');
                 }
             }
@@ -59,7 +59,7 @@ class BackController extends Controller
                 if ($affectedLine === false) {
                     throw new Exception('Impossible de mettre à jour le billet !');
                 } else {
-                    $this->session->set('message', 'Le billet a été modifié');
+                    $this->session->set('messageRefreshOnePost', 'Le billet a été modifié');
                     header('Location: index.php?action=getAllPosts');
                 }
             }
@@ -88,7 +88,7 @@ class BackController extends Controller
                 throw new Exception('Impossible de supprimer le billet !');
             }
             else {
-                $this->session->set('message', 'Le billet a été supprimé');
+                $this->session->set('messageRemoveOnePost', 'Le billet a été supprimé');
                 header('Location: index.php?action=getAllPosts');
             }
         }
@@ -96,18 +96,23 @@ class BackController extends Controller
 
     public function createOneComment($postId, Parameter $commentForm)
     {
+        var_dump($commentForm);
         $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         if($commentForm->get('submit')) {
             $errors = $this->validation->validate($commentForm, 'Comment');
             if(!$errors) {
                 $affectedLines = $this->commentDAO->insertOneComment($postId, $commentForm);
+                $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
                 if ($affectedLines === false) {
                     throw new Exception('Impossible d\'ajouter le commentaire !');
                 }
                 else {
-                    $this->session->set('message', 'Le commentaire a été créé');
-                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+                    $this->session->set('messageCreateOneComment', 'Le commentaire a été créé');
+                    return $this->view->render('getOnePostAndHisComments', [
+                        'post' => $post,
+                        'comments' => $comments
+                    ]);
                 }
             }
             return $this->view->render('getOnePostAndHisComments', [
@@ -124,19 +129,16 @@ class BackController extends Controller
         ]);
     }
 
-    public function editOneComment($commentId, $postId)
+    public function editOneComment($commentId)
     {
-        $post = $this->postDAO->selectOnePost($postId);
         $comment = $this->commentDAO->selectOneComment($commentId);
         return $this->view->render('editOneComment', [
-            'post' => $post,
             'comment' => $comment
         ]);
     }
 
-    public function refreshOneComment($commentId, Parameter $commentForm, $postId)
+    public function refreshOneComment($commentId, Parameter $commentForm)
     {
-        $post = $this->postDAO->selectOnePost($postId);
         $comment = $this->commentDAO->selectOneComment($commentId);
         if($commentForm->get('submit')) {
             $errors = $this->validation->validate($commentForm, 'Comment');
@@ -146,19 +148,17 @@ class BackController extends Controller
                     throw new Exception('Impossible de mettre à jour le commentaire !');
                 }
                 else {
-                    $this->session->set('message', 'Le commentaire a été modifié');
-                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
+                    $this->session->set('messageRefreshOneComment', 'Le commentaire a été modifié');
+                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
                 }
             }
             return $this->view->render('editOneComment', [
-                'post' => $post,
                 'comment' => $comment,
                 'commentForm' => $commentForm,
                 'errors' => $errors
             ]);
         }
         return $this->view->render('editOneComment', [
-            'post' => $post,
             'comment' => $comment,
             'commentForm' => $commentForm
         ]);
@@ -171,8 +171,15 @@ class BackController extends Controller
             throw new Exception('Impossible de mettre à jour le billet !');
         }
         else {
-            $this->session->set('message', 'Le commentaire a été supprimé');
+            $this->session->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
             header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
         }
+    }
+
+    public function flagOneComment($commentId)
+    {
+        $this->commentDAO->flagOneComment($commentId);
+        $this->session->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
+        header('Location: index.php?action=editOneComment&commentId='.$commentId);
     }
 }
