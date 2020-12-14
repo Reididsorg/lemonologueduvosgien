@@ -18,6 +18,12 @@ class Validation
             return $commentValidation->check($data);
         }
 
+        // 'User' désigne un utilisateur
+        if($name === 'User') {
+            $userValidation = new UserValidation();
+            return $userValidation->check($data);
+        }
+
         return null;
     }
 }

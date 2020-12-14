@@ -66,6 +66,9 @@ Class Router
                     case 'flagOneComment':
                         $this->backController->flagOneComment($this->request->getGet()->get('commentId'));
                         break;
+                    case 'createOneUser':
+                        $this->frontController->createOneUser($this->request->getPost());
+                        break;
                     default:
                         $this->errorController->errorNotFound();
                 }

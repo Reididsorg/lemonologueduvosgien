@@ -2,9 +2,7 @@
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
-use BrunoGrosdidier\Blog\DAO\PostDAO;
-use BrunoGrosdidier\Blog\DAO\CommentDAO;
-use BrunoGrosdidier\Blog\src\model\View;
+use BrunoGrosdidier\Blog\config\Parameter;
 
 class FrontController extends Controller
 {
@@ -24,5 +22,26 @@ class FrontController extends Controller
             'post' => $post,
             'comments' => $comments
         ]);
+    }
+
+    public function createOneUser(Parameter $userForm)
+    {
+
+        if($userForm->get('submit')) {
+            $errors = $this->validation->validate($userForm, 'User');
+            if($this->userDAO->checkOneUser($userForm, 'User')) {
+                $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
+            }
+            if(!$errors){
+                $this->userDAO->insertOneUser($userForm);
+                $this->session->set('messageCreateOneUser', 'Votre inscription a bien été effectuée');
+                header('Location: index.php?action=getAllPosts');
+            }
+            return $this->view->render('editOneUser', [
+                'userForm'=>$userForm,
+                'errors'=>$errors
+            ]);
+        }
+        return $this->view->render('editOneUser');
     }
 }

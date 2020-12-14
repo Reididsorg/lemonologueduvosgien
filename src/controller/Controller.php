@@ -6,12 +6,14 @@ use BrunoGrosdidier\Blog\config\Request;
 use BrunoGrosdidier\Blog\src\constraint\Validation;
 use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
+use BrunoGrosdidier\Blog\DAO\UserDAO;
 use BrunoGrosdidier\Blog\src\model\View;
 
 abstract class Controller
 {
     protected $postDAO;
     protected $commentDAO;
+    protected $userDAO;
     protected $view;
     protected $get;
     protected $post;
@@ -22,6 +24,7 @@ abstract class Controller
     {
         $this->postDAO = new PostDAO();
         $this->commentDAO = new CommentDAO();
+        $this->userDAO = new UserDAO();
         $this->view = new View();
         $this->validation = new Validation();
         $request = new Request();
