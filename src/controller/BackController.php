@@ -21,7 +21,7 @@ class BackController extends Controller
                     throw new Exception('Impossible d\'ajouter le billet !');
                 }
                 else {
-                    $this->session->set('messageCreateOnePost', 'Le billet a été créé');
+                    $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
                     header('Location: index.php?action=getAllPosts');
                 }
             }
@@ -59,7 +59,7 @@ class BackController extends Controller
                 if ($affectedLine === false) {
                     throw new Exception('Impossible de mettre à jour le billet !');
                 } else {
-                    $this->session->set('messageRefreshOnePost', 'Le billet a été modifié');
+                    $this->sentBySession->set('messageRefreshOnePost', 'Le billet a été modifié');
                     header('Location: index.php?action=getAllPosts');
                 }
             }
@@ -88,7 +88,7 @@ class BackController extends Controller
                 throw new Exception('Impossible de supprimer le billet !');
             }
             else {
-                $this->session->set('messageRemoveOnePost', 'Le billet a été supprimé');
+                $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
                 header('Location: index.php?action=getAllPosts');
             }
         }
@@ -108,7 +108,7 @@ class BackController extends Controller
                     throw new Exception('Impossible d\'ajouter le commentaire !');
                 }
                 else {
-                    $this->session->set('messageCreateOneComment', 'Le commentaire a été créé');
+                    $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
                     return $this->view->render('getOnePostAndHisComments', [
                         'post' => $post,
                         'comments' => $comments
@@ -148,7 +148,7 @@ class BackController extends Controller
                     throw new Exception('Impossible de mettre à jour le commentaire !');
                 }
                 else {
-                    $this->session->set('messageRefreshOneComment', 'Le commentaire a été modifié');
+                    $this->sentBySession->set('messageRefreshOneComment', 'Le commentaire a été modifié');
                     header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
                 }
             }
@@ -171,7 +171,7 @@ class BackController extends Controller
             throw new Exception('Impossible de mettre à jour le billet !');
         }
         else {
-            $this->session->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
+            $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
             header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
         }
     }
@@ -179,7 +179,7 @@ class BackController extends Controller
     public function flagOneComment($commentId)
     {
         $this->commentDAO->flagOneComment($commentId);
-        $this->session->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
+        $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
         header('Location: index.php?action=editOneComment&commentId='.$commentId);
     }
 }

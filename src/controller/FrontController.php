@@ -34,7 +34,7 @@ class FrontController extends Controller
             }
             if(!$errors){
                 $this->userDAO->insertOneUser($userForm);
-                $this->session->set('messageCreateOneUser', 'Votre inscription a bien été effectuée');
+                $this->sentBySession->set('messageCreateOneUser', 'Votre inscription a bien été effectuée');
                 header('Location: index.php?action=getAllPosts');
             }
             return $this->view->render('editOneUser', [
