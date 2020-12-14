@@ -2,30 +2,29 @@
 
 // (action : createOneComment*)
 if (isset($comments)) {
-    if (isset($post)) {
-        // Création d'un nouveau commentaire (pas de form)
-        if(!isset($commentForm)) {
-            $formTarget = 'createOneComment&postId='.$post->getId();
+    // Création d'un nouveau commentaire (pas de form)
+    if(!isset($commentForm)) {
+        //$formTarget = 'createOneComment&postId='.$comment->getCommentPostId();
+        $formTarget = 'createOneComment&postId='.$post->getId();
+        $author = '';
+        $content = '';
+        $submit = 'Ajouter';
+    }
+    // Validation form
+    else {
+        // validation erreur
+        if(isset($errors)) {
+            $formTarget = 'createOneComment&postId='.$comment->getCommentPostId();
+            $author = $commentForm->get('author');
+            $content = $commentForm->get('content');
+            $submit = 'Ajouter';
+        }
+        // validation OK
+        else {
+            $formTarget = 'createOneComment&postId='.$comment->getCommentPostId();
             $author = '';
             $content = '';
             $submit = 'Ajouter';
-        }
-        // Validation form
-        else {
-            // validation erreur
-            if(isset($errors)) {
-                $formTarget = 'createOneComment&postId='.$post->getId();
-                $author = $commentForm->get('author');
-                $content = $commentForm->get('content');
-                $submit = 'Ajouter';
-            }
-            // validation OK
-            else {
-                $formTarget = 'createOneComment&postId='.$post->getId();
-                $author = '';
-                $content = '';
-                $submit = 'Ajouter';
-            }
         }
     }
 }
@@ -33,14 +32,14 @@ if (isset($comments)) {
 else {
     // Edition d'un commentaire après validation
     if (isset($commentForm)) {
-        $formTarget = 'refreshOneComment&postId='.$post->getId().'&commentId='.$comment->getId();
+        $formTarget = 'refreshOneComment&commentId='.$comment->getId();
         $author = htmlspecialchars($commentForm->get('author'));
         $content = htmlspecialchars($commentForm->get('content'));
         $submit = 'Modifier';
     }
     // Edition d'un commentaire déjà enregistré
     else {
-        $formTarget = 'refreshOneComment&postId='.$post->getId().'&commentId='.$comment->getId();
+        $formTarget = 'refreshOneComment&commentId='.$comment->getId();
         $author = htmlspecialchars($comment->getCommentAuthor());
         $content = htmlspecialchars($comment->getCommentContent());
         $submit = 'Modifier';

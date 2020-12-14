@@ -1,12 +1,8 @@
 <?php $this->title = 'Billet de blog'; ?>
 
-<?php
-if(null!==($this->session->get('message'))) {
-    ?>
-    <p style="background-color: #008000; color: #fff; font-weight: bold;"><?= $this->session->show('message'); ?></p>
-    <?php
-}
-?>
+<?= null!==($this->session->get('messageCreateOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCreateOneComment').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRefreshOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRefreshOneComment').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRemoveOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveOneComment').'</p>' : ''; ?>
 
 <div id="wrapper">
 
@@ -46,7 +42,7 @@ if(null!==($this->session->get('message'))) {
                 </div>
                 <div><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></div>
                 <div>
-                    <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Modifier ce commentaire</a>
+                    <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>">Modifier ce commentaire</a>
                 </div>
                 <br>
             </li>

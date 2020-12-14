@@ -27,7 +27,12 @@ class Comment
     /**
      * @var int
      */
-    private $postId;
+    private $commentPostId;
+
+    /**
+     * @var bool
+     */
+    private $commentFlag;
 
 
 
@@ -102,17 +107,33 @@ class Comment
     /**
      * @return int
      */
-    public function getPostId()
+    public function getCommentPostId()
     {
-        return $this->postId;
+        return $this->commentPostId;
     }
 
     /**
-     * @param int $postId
+     * @param int $commentPostId
      */
-    public function setPostId($postId)
+    public function setCommentPostId($commentPostId)
     {
-        $this->postId = $postId;
+        $this->commentPostId = $commentPostId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommentFlag()
+    {
+        return $this->commentFlag;
+    }
+
+    /**
+     * @param bool $flag
+     */
+    public function setcommentFlag($commentFlag)
+    {
+        $this->commentFlag = $commentFlag;
     }
 
 }

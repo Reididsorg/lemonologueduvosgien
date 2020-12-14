@@ -1,12 +1,8 @@
 <?php $title = 'Accueil'; ?>
 
-<?php
-if(null!==($this->session->get('message'))) {
-    ?>
-    <p style="background-color: #008000; color: #fff; font-weight: bold;"><?= $this->session->show('message'); ?></p>
-    <?php
-}
-?>
+<?= null!==($this->session->get('messageCreateOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCreateOnePost').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRefreshOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRefreshOnePost').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRemoveOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveOnePost').'</p>' : ''; ?>
 
 <div id="wrapper">
 

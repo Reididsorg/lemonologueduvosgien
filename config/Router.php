@@ -55,13 +55,16 @@ Class Router
                         $this->backController->createOneComment($this->request->getGet()->get('postId'), $this->request->getPost());
                         break;
                     case 'editOneComment':
-                        $this->backController->editOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                        $this->backController->editOneComment($this->request->getGet()->get('commentId'));
                         break;
                     case 'refreshOneComment':
-                        $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost(), $this->request->getGet()->get('postId'));
+                        $this->backController->refreshOneComment($this->request->getGet()->get('commentId'), $this->request->getPost());
                         break;
                     case 'removeOneComment':
                         $this->backController->removeOneComment($this->request->getGet()->get('commentId'), $this->request->getGet()->get('postId'));
+                        break;
+                    case 'flagOneComment':
+                        $this->backController->flagOneComment($this->request->getGet()->get('commentId'));
                         break;
                     default:
                         $this->errorController->errorNotFound();
