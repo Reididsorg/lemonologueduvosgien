@@ -2,11 +2,10 @@
 
 <div id="wrapper">
 
-    <h1>Modification du billet</h1>
-    <p><em>(Dernière modification : <?= isset($userForm) ? htmlspecialchars($userForm->get('dateFr')): ''; ?>)</em></p>
+    <h1>Inscription</h1>
 
-    <div id="form-post">
-        <form method="post" action="index.php?action=createOneUser">
+    <div id="form-register">
+        <form method="post" action="index.php?action=register">
             <label for="pseudo">Pseudo</label>
             <br>
             <input type="text" id="pseudo" name="pseudo" value="<?= isset($userForm) ? htmlspecialchars($userForm->get('pseudo')): ''; ?>">

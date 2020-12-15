@@ -66,8 +66,23 @@ Class Router
                     case 'flagOneComment':
                         $this->backController->flagOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
-                    case 'createOneUser':
-                        $this->frontController->createOneUser($this->request->getSentByPost());
+                    case 'register':
+                        $this->frontController->register($this->request->getSentByPost());
+                        break;
+                    case 'login':
+                        $this->frontController->login($this->request->getSentByPost());
+                        break;
+                    case 'profile':
+                        $this->backController->profile();
+                        break;
+                    case 'refreshPassword':
+                        $this->backController->refreshPassword($this->request->getSentByPost());
+                        break;
+                    case 'logout':
+                        $this->backController->logout();
+                        break;
+                    case 'removeAccount':
+                        $this->backController->removeAccount();
                         break;
                     default:
                         $this->errorController->errorNotFound();
