@@ -24,7 +24,7 @@ class FrontController extends Controller
         ]);
     }
 
-    public function createOneUser(Parameter $userForm)
+    public function register(Parameter $userForm)
     {
 
         if($userForm->get('submit')) {
@@ -33,15 +33,34 @@ class FrontController extends Controller
                 $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
             }
             if(!$errors){
-                $this->userDAO->insertOneUser($userForm);
-                $this->sentBySession->set('messageCreateOneUser', 'Votre inscription a bien été effectuée');
+                $this->userDAO->register($userForm);
+                $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée');
                 header('Location: index.php?action=getAllPosts');
             }
-            return $this->view->render('editOneUser', [
+            return $this->view->render('register', [
                 'userForm'=>$userForm,
                 'errors'=>$errors
             ]);
         }
-        return $this->view->render('editOneUser');
+        return $this->view->render('register');
+    }
+
+    public function login(Parameter $userForm) {
+        if($userForm->get('submit')) {
+            $result = $this->userDAO->login($userForm);
+            if($result && $result['isPasswordValid']) {
+                $this->sentBySession->set('messageLogin', 'Content de vous revoir !');
+                $this->sentBySession->set('id', $result['result']['id']);
+                $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
+                header('Location: index.php?action=getAllPosts');
+            }
+            else {
+                $this->sentBySession->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');
+                return $this->view->render('login', [
+                    'userForm'=> $userForm
+                ]);
+            }
+        }
+        return $this->view->render('login');
     }
 }

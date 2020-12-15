@@ -11,7 +11,7 @@ class BackController extends Controller
         return $this->view->render('addOnePost');
     }
 
-    public function createOnePost(Parameter $postForm)
+    public function createOnePost (Parameter $postForm)
     {
         if($postForm->get('submit')) {
             $errors = $this->validation->validate($postForm, 'Post');
@@ -35,7 +35,7 @@ class BackController extends Controller
         ]);
     }
 
-    public function editOnePost($postId, Parameter $postForm)
+    public function editOnePost ($postId, Parameter $postForm)
     {
         $article = $this->postDAO->selectOnePost($postId);
         $postForm->set('id', $article->getId());
@@ -50,7 +50,7 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOnePost($postId, Parameter $postForm)
+    public function refreshOnePost ($postId, Parameter $postForm)
     {
         if($postForm->get('submit')) {
             $errors = $this->validation->validate($postForm, 'Post');
@@ -94,7 +94,7 @@ class BackController extends Controller
         }
     }
 
-    public function createOneComment($postId, Parameter $commentForm)
+    public function createOneComment ($postId, Parameter $commentForm)
     {
         var_dump($commentForm);
         $post = $this->postDAO->selectOnePost($postId);
@@ -129,7 +129,7 @@ class BackController extends Controller
         ]);
     }
 
-    public function editOneComment($commentId)
+    public function editOneComment ($commentId)
     {
         $comment = $this->commentDAO->selectOneComment($commentId);
         return $this->view->render('editOneComment', [
@@ -137,7 +137,7 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOneComment($commentId, Parameter $commentForm)
+    public function refreshOneComment ($commentId, Parameter $commentForm)
     {
         $comment = $this->commentDAO->selectOneComment($commentId);
         if($commentForm->get('submit')) {
@@ -176,10 +176,53 @@ class BackController extends Controller
         }
     }
 
-    public function flagOneComment($commentId)
+    public function flagOneComment ($commentId)
     {
         $this->commentDAO->flagOneComment($commentId);
         $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
         header('Location: index.php?action=editOneComment&commentId='.$commentId);
+    }
+
+    public function profile ()
+    {
+        return $this->view->render('profile');
+    }
+
+    public function refreshPassword (Parameter $password)
+    {
+        if($password->get('submit')) {
+            $affectedLine = $this->userDAO->updatePassword($password, $this->sentBySession->get('pseudo'));
+            if ($affectedLine === false) {
+                throw new Exception('Impossible de mettre à jour le mot de passe !');
+            }
+            else {
+                $this->sentBySession->set('messageRefreshPassword', 'Le mot de passe a été mis à jour');
+                header('Location: index.php?action=profile');
+            }
+        }
+        return $this->view->render('refreshpassword');
+    }
+
+    public function logout ()
+    {
+        $this->sentBySession->stop();
+        $this->sentBySession->start();
+        $this->sentBySession->set('messageLogout', 'A bientôt !');
+        header('Location: index.php?action=getAllPosts');
+    }
+
+    public function removeAccount ()
+    {
+        $affectedLine = $this->userDAO->deleteOneUser($this->sentBySession->get('pseudo'));
+
+        if ($affectedLine === false) {
+            throw new Exception('Impossible de supprimer le compte !');
+        }
+        else {
+            $this->sentBySession->stop();
+            $this->sentBySession->start();
+            $this->sentBySession->set('messageRemoveAccount', 'Votre compte a bien été supprimé');
+            header('Location: index.php?action=getAllPosts');
+        }
     }
 }

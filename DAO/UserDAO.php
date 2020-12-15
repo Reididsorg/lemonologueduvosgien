@@ -7,7 +7,7 @@ use BrunoGrosdidier\Blog\config\Parameter;
 
 class UserDAO extends DAO
 {
-    public function insertOneUser(Parameter $userForm)
+    public function register (Parameter $userForm)
     {
         $request = 'INSERT INTO user 
                         (user_pseudo, 
@@ -23,9 +23,14 @@ class UserDAO extends DAO
         ]);
     }
 
-    public function checkOneUser(Parameter $user)
+    public function checkOneUser (Parameter $user)
     {
-        $request = 'SELECT COUNT(user_pseudo) FROM user WHERE user_pseudo = :pseudo';
+        $request = 'SELECT 
+                        COUNT(user_pseudo) 
+                    FROM 
+                        user 
+                    WHERE 
+                        user_pseudo = :pseudo';
         $result = $this->createQuery($request, [
             'pseudo'=>$user->get('pseudo')
         ]);
@@ -33,5 +38,53 @@ class UserDAO extends DAO
         if($isUnique) {
             return '<p>Le pseudo existe déjà</p>';
         }
+    }
+
+    public function login (Parameter $user)
+    {
+        $request = 'SELECT 
+                    id, 
+                    user_password 
+                FROM 
+                    user 
+                WHERE 
+                    user_pseudo = :pseudo';
+        $data = $this->createQuery($request, [
+            'pseudo'=>$user->get('pseudo')
+        ]);
+        $result = $data->fetch();
+        if ($result) {
+            $isPasswordValid = password_verify($user->get('password'), $result['user_password']);
+            return [
+                'result' => $result,
+                'isPasswordValid' => $isPasswordValid
+            ];
+        }
+        return null;
+    }
+
+    public function updatePassword (Parameter $user, $pseudo)
+    {
+        $request = 'UPDATE 
+                        user 
+                    SET
+                        user_password = :password
+                    WHERE
+                        user_pseudo = :pseudo';
+        $this->createQuery($request, [
+            'password'=>password_hash($user->get('password'), PASSWORD_BCRYPT),
+            'pseudo'=>$pseudo
+        ]);
+    }
+
+    public function deleteOneUser ($pseudo)
+    {
+        $request = 'DELETE FROM
+                        user
+                    WHERE
+                        user_pseudo = :pseudo';
+        $this->createQuery($request, [
+            'pseudo'=>$pseudo
+        ]);
     }
 }

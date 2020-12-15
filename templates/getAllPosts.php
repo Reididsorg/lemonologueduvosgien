@@ -3,11 +3,29 @@
 <?= null!==($this->session->get('messageCreateOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCreateOnePost').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRefreshOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRefreshOnePost').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRemoveOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveOnePost').'</p>' : ''; ?>
-<?= null!==($this->session->get('messageCreateOneUser')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCreateOneUser').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRegister')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRegister').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageLogin')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageLogin').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageLogout')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageLogout').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageRemoveAccount')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveAccount').'</p>' : ''; ?>
+
+<?php
+if($this->session->get('pseudo')) {
+?>
+    <a href="index.php?action=logout">Déconnexion</a>
+    <a href="index.php?action=profile">Profil</a>
+    <a href="index.php?action=createOnePost">Ajouter un billet</a>
+<?php
+}
+else {
+?>
+    <a href="index.php?action=register">Inscription</a>
+    <a href="index.php?action=login">Connexion</a>
+<?php
+}
+?>
 
 
-<a href="index.php?action=createOneUser">Inscription</a>
-<a href="index.php?action=login">Connexion</a>
+
 
 <div id="wrapper">
 
