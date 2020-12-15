@@ -183,9 +183,9 @@ class BackController extends Controller
         header('Location: index.php?action=editOneComment&commentId='.$commentId);
     }
 
-    public function profile ()
+    public function editProfile ()
     {
-        return $this->view->render('profile');
+        return $this->view->render('editProfile');
     }
 
     public function refreshPassword (Parameter $password)

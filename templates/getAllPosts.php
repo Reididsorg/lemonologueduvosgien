@@ -12,7 +12,7 @@
 if($this->session->get('pseudo')) {
 ?>
     <a href="index.php?action=logout">Déconnexion</a>
-    <a href="index.php?action=profile">Profil</a>
+    <a href="index.php?action=editProfile">Profil</a>
     <a href="index.php?action=createOnePost">Ajouter un billet</a>
 <?php
 }

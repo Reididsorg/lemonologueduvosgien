@@ -7,7 +7,7 @@ use BrunoGrosdidier\Blog\config\Parameter;
 
 class UserDAO extends DAO
 {
-    public function register (Parameter $userForm)
+    public function createUser (Parameter $userForm)
     {
         $request = 'INSERT INTO user 
                         (user_pseudo, 

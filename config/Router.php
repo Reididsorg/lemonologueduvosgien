@@ -72,14 +72,14 @@ Class Router
                     case 'login':
                         $this->frontController->login($this->request->getSentByPost());
                         break;
-                    case 'profile':
-                        $this->backController->profile();
+                    case 'logout':
+                        $this->backController->logout();
+                        break;
+                    case 'editProfile':
+                        $this->backController->editProfile();
                         break;
                     case 'refreshPassword':
                         $this->backController->refreshPassword($this->request->getSentByPost());
-                        break;
-                    case 'logout':
-                        $this->backController->logout();
                         break;
                     case 'removeAccount':
                         $this->backController->removeAccount();
