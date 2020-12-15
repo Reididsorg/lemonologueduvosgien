@@ -1,15 +1,15 @@
-#Convention de nommage
+# Convention de nommage
 
-##MODEL
->Nom des méthodes avec préfixes en :
+## MODEL
+> Nom des méthodes avec préfixes en :
 
 + insert*
 + select*
 + update*
 + delete*
 
-##CONTROLLER
->Nom des méthodes avec préfixes en :
+## CONTROLLER
+> Nom des méthodes avec préfixes en :
 
 + add* (pages d'ajout)
 + create* (MODEL : insert*)
@@ -18,8 +18,8 @@
 + refresh* (MODEL : update*)
 + remove* (MODEL : delete)
 
-##VIEW
->Nom des vues avec préfixe en :
+## VIEW
+> Nom des vues avec préfixe en :
 
 + add* (pages d'ajout)
 + create* (MODEL : insert*)

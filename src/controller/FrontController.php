@@ -33,7 +33,7 @@ class FrontController extends Controller
                 $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
             }
             if(!$errors){
-                $this->userDAO->register($userForm);
+                $this->userDAO->createUser($userForm);
                 $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée');
                 header('Location: index.php?action=getAllPosts');
             }
