@@ -10,42 +10,22 @@ class CommentDAO extends DAO
     private function buildObject($row)
     {
         $comment = new Comment();
-        if(isset($row['id']))
-        {
-            $comment->setId($row['id']);
-        }
-        if(isset($row['comment_author']))
-        {
-            $comment->setCommentAuthor($row['comment_author']);
-        }
-        if(isset($row['comment_content']))
-        {
-            $comment->setCommentContent($row['comment_content']);
-        }
-        if(isset($row['comment_date_fr']))
-        {
-            $comment->setCommentDateFr($row['comment_date_fr']);
-        }
-        if(isset($row['comment_post_id']))
-        {
-            $comment->setCommentPostId($row['comment_post_id']);
-        }
-        if(isset($row['comment_flag']))
-        {
-            $comment->setCommentFlag($row['comment_flag']);
-        }
+        $comment->setId($row['id']);
+        $comment->setCommentAuthor($row['comment_author']);
+        $comment->setCommentContent($row['comment_content']);
+        $comment->setCommentDateFr($row['comment_date_fr']);
+        $comment->setCommentPostId($row['comment_post_id']);
+        $comment->setCommentFlag($row['comment_flag']);
         return $comment;
     }
 
 	public function selectAllCommentsOfOnePost($postId)
 	{
-		/*$request = 'SELECT id, comment_author, comment_content, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, post_id FROM comment WHERE post_id = ? ORDER BY comment_date DESC';
-        $result = $this->createQuery($request, [$postId]);*/
         $request = 'SELECT 
                         id, 
                         comment_author, 
                         comment_content, 
-                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, 
+                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS comment_date_fr, 
                         comment_post_id,
                         comment_flag
                     FROM 
@@ -67,13 +47,11 @@ class CommentDAO extends DAO
 
 	public function selectOneComment($commentId)
 	{
-		/*$request = 'SELECT id, comment_author, comment_content, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr, comment_post_id FROM comment WHERE id = ?';
-        $result = $this->createQuery($request, [$id]);*/
         $request = 'SELECT 
                         id, 
                         comment_author, 
                         comment_content, 
-                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr,
+                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS comment_date_fr,
                         comment_post_id,
                         comment_flag
                     FROM 
@@ -90,8 +68,6 @@ class CommentDAO extends DAO
 
     public function insertOneComment($postId, Parameter $post)
     {
-        /*$request = 'INSERT INTO comment (comment_post_id, comment_author, comment_content, comment_date) VALUES(?, ?, ?, NOW())';
-        $this->createQuery($request, [$postId, $post->get('author'), $post->get('comment')]);*/
         $request = 'INSERT INTO comment 
                         (comment_author, 
                          comment_content, 
@@ -114,8 +90,6 @@ class CommentDAO extends DAO
 
 	public function updateOneComment($commentId, Parameter $post)
 	{
-        /*$request = 'UPDATE comment SET comment_content = ?, comment_date = NOW() WHERE id = ?';
-        $this->createQuery($request, [$post->get('commentText'), $id]);*/
 	    $request = 'UPDATE 
                         comment 
                     SET 
@@ -132,8 +106,6 @@ class CommentDAO extends DAO
 
 	public function deleteOneComment($commentId)
 	{
-        /*$request = 'DELETE FROM comment WHERE id = ?';
-        $this->createQuery($request, [$id]);*/
 	    $request = 'DELETE FROM comment WHERE id = :commentId';
         $this->createQuery($request, [
             'commentId'=>$commentId
@@ -142,8 +114,6 @@ class CommentDAO extends DAO
 
     public function deleteAllCommentsOfOnePost($postId)
     {
-        /*$request = 'DELETE FROM comment WHERE comment_post_id = ?';
-        $this->createQuery($request, [$postId]);*/
         $request = 'DELETE FROM comment WHERE comment_post_id = :postId';
         $this->createQuery($request, [
             'postId'=>$postId
@@ -161,5 +131,45 @@ class CommentDAO extends DAO
             'comment_flag'=>1,
             'id'=>$commentId
         ]);
+    }
+
+    public function unflagOneComment($commentId)
+    {
+        $request = 'UPDATE 
+                        comment 
+                    SET 
+                        comment_flag = :comment_flag
+                    WHERE id = :id';
+        $this->createQuery($request, [
+            'comment_flag'=>0,
+            'id'=>$commentId
+        ]);
+    }
+
+    public function getFlagComments()
+    {
+        $request = 'SELECT 
+                        id, 
+                        comment_author, 
+                        comment_content, 
+                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS comment_date_fr, 
+                        comment_post_id,
+                        comment_flag
+                    FROM 
+                        comment 
+                    WHERE 
+                        comment_flag = :commentFlag 
+                    ORDER BY 
+                         comment_date DESC';
+        $result = $this->createQuery($request, [
+            'commentFlag'=>1
+        ]);
+        $comments = [];
+        foreach ($result as $row) {
+            $commentId = $row['id'];
+            $comments[$commentId] = $this->buildObject($row);
+        }
+        $result->closeCursor();
+        return $comments;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidider\Blog\src\model;
+namespace BrunoGrosdidier\Blog\src\model;
 
 class User
 {
@@ -22,7 +22,17 @@ class User
     /**
      * @var \DateTime
      */
-    private $userCreatedAt;
+    private $userCreatedAtFr;
+
+    /**
+     * @var int
+     */
+    private $roleId;
+
+    /**
+     * @var string
+     */
+    private $roleName;
 
 
 
@@ -81,16 +91,50 @@ class User
     /**
      * @return \DateTime
      */
-    public function getUserCreatedAt()
+    public function getUserCreatedAtFr()
     {
-        return $this->userCreatedAt;
+        return $this->userCreatedAtFr;
     }
 
     /**
-     * @param \DateTime $userCreatedAt
+     * @param \DateTime $userCreatedAtFr
      */
-    public function setUserCreatedAt($userCreatedAt)
+    public function setUserCreatedAtFr($userCreatedAtFr)
     {
-        $this->userCreatedAt = $userCreatedAt;
+        $this->userCreatedAtFr = $userCreatedAtFr;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getRoleId()
+    {
+        return $this->roleId;
+    }
+
+    /**
+     * @param int $roleId
+     */
+    public function setRoleId($roleId)
+    {
+        $this->roleId = $roleId;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getRoleName()
+    {
+        return $this->roleName;
+    }
+
+    /**
+     * @param string $roleName
+     */
+    public function setRoleName($roleName)
+    {
+        $this->roleName = $roleName;
     }
 }

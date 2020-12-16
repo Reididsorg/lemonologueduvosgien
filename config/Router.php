@@ -29,7 +29,15 @@ Class Router
 			if (isset($action)) {
 
 			    switch ($action) {
-
+                    case 'getBlog':
+                        $this->frontController->getBlog();
+                        break;
+                    case 'getCv':
+                        $this->frontController->getCv();
+                        break;
+                    case 'getContact':
+                        $this->frontController->getContact();
+                        break;
                     case 'getAllPosts':
                         $this->frontController->getAllPosts();
                         break;
@@ -37,7 +45,7 @@ Class Router
                         $this->frontController->getOnePostAndHisComments($this->request->getSentByGet()->get('postId'));
                         break;
                     case 'editOnePost':
-                        $this->backController->editOnePost($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
+                        $this->backController->editOnePost($this->request->getSentByGet()->get('postId'));
                         break;
                     case 'refreshOnePost':
                         $this->backController->refreshOnePost($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
@@ -64,7 +72,10 @@ Class Router
                         $this->backController->removeOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByGet()->get('postId'));
                         break;
                     case 'flagOneComment':
-                        $this->backController->flagOneComment($this->request->getSentByGet()->get('commentId'));
+                        $this->backController->flagOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByGet()->get('postId'));
+                        break;
+                    case 'unflagOneComment':
+                        $this->backController->unflagOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
                     case 'register':
                         $this->frontController->register($this->request->getSentByPost());
@@ -83,6 +94,12 @@ Class Router
                         break;
                     case 'removeAccount':
                         $this->backController->removeAccount();
+                        break;
+                    case 'removeSpecificUser':
+                        $this->backController->removeSpecificUser($this->request->getSentByGet()->get('userId'));
+                        break;
+                    case 'admin':
+                        $this->backController->admin();
                         break;
                     default:
                         $this->errorController->errorNotFound();

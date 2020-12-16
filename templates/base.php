@@ -28,36 +28,35 @@
                         <a href="/index.php">ACCUEIL</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/pages/blog/blog.php">BLOG</a>
+                        <a href="index.php?action=getBlog">BLOG</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/pages/cv/cv.php">CV</a>
+                        <a href="index.php?action=getCv">CV</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/pages/contact/contact.php">CONTACT</a>
+                        <a href="index.php?action=getContact">CONTACT</a>
                     </li>
                 </ul>
             </nav>
 
             <div>
                 <?php
-                /*
-                // Vérification de l'existence d'une éventuelle session_cache_expire
-                if (!empty($_SESSION)) {
-                    ?>
-                    <div>
-                        Bienvenue <span class="member-name"><?= $_SESSION['pseudo'] ?></span> ! | <a href="/pages/logout/logout.php">Se déconnecter</a>
-                    </div>
-                    <?php
+                if($this->session->get('pseudo')) {
+                ?>
+                    <p>Bonjour <strong><?= $this->session->get('pseudo'); ?></strong></p>
+                    <a href="index.php?action=logout">Déconnexion</a>
+                    <a href="index.php?action=editProfile">Profil</a>
+                    <?php if($this->session->get('roleName') === 'admin') { ?>
+                        <a href="index.php?action=admin">Administration</a>
+                    <?php } ?>
+                <?php
                 }
                 else {
-                    ?>
-                    <div>
-                        <a href="/pages/login/form_login.php">Se connecter</a> | <a href="/pages/signin/form_signin.php">S'inscrire</a>
-                    </div>
-                    <?php
+                ?>
+                    <a href="index.php?action=login">Connexion</a>
+                    <a href="index.php?action=register">Inscription</a>
+                <?php
                 }
-                */
                 ?>
             </div>
 

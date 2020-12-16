@@ -26,6 +26,8 @@ class FrontController extends Controller
 
     public function register(Parameter $userForm)
     {
+        // Default value of user role : 3 (user)
+        $userForm->set('roleId', 3);
 
         if($userForm->get('submit')) {
             $errors = $this->validation->validate($userForm, 'User');
@@ -33,7 +35,7 @@ class FrontController extends Controller
                 $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
             }
             if(!$errors){
-                $this->userDAO->createUser($userForm);
+                $this->userDAO->insertOneUser($userForm);
                 $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée');
                 header('Location: index.php?action=getAllPosts');
             }
@@ -49,8 +51,9 @@ class FrontController extends Controller
         if($userForm->get('submit')) {
             $result = $this->userDAO->login($userForm);
             if($result && $result['isPasswordValid']) {
-                $this->sentBySession->set('messageLogin', 'Content de vous revoir !');
+                $this->sentBySession->set('messageLogin', 'Content de vous revoir '.$result['result']['user_pseudo'].'!');
                 $this->sentBySession->set('id', $result['result']['id']);
+                $this->sentBySession->set('roleName', $result['result']['roleName']);
                 $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
                 header('Location: index.php?action=getAllPosts');
             }
@@ -62,5 +65,29 @@ class FrontController extends Controller
             }
         }
         return $this->view->render('login');
+    }
+
+    public function getBlog()
+    {
+        $content = 'BLOG';
+        return $this->view->render('getBlog', [
+            'content' => $content
+        ]);
+    }
+
+    public function getCv()
+    {
+        $content = 'CV';
+        return $this->view->render('getCv', [
+            'content' => $content
+        ]);
+    }
+
+    public function getContact()
+    {
+        $content = 'CONTACT';
+        return $this->view->render('getContact', [
+            'content' => $content
+        ]);
     }
 }

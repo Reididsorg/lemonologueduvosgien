@@ -20,7 +20,13 @@
 
         <div>
             <p>
-                <a href="index.php?action=editOnePost&postId=<?= $post->getId() ?>">Modifier ce billet</a>
+                <?php
+                if($this->session->get('roleName') === 'admin' || ($this->session->get('pseudo') === $post->getPostAuthor())) {
+                    ?>
+                        <a href="index.php?action=editOnePost&postId=<?= $post->getId() ?>">Modifier</a>
+                    <?php
+                }
+                ?>
             </p>
         </div>
 
@@ -42,7 +48,29 @@
                 </div>
                 <div><?= nl2br(htmlspecialchars($comment->getCommentContent())) ?></div>
                 <div>
-                    <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>">Modifier ce commentaire</a>
+
+                    <?php
+                    if ($comment->isCommentFlag()) {
+                        ?>
+                        <em>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></em>
+                        <?php
+                    }
+                    else {
+                        if ($this->session->get('roleName') === 'admin' || $this->session->get('roleName') === 'editor') {
+                            ?>
+                            <em><a href="index.php?action=flagOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Signaler ce commentaire</a></em>
+                            <?php
+                        }
+                    }
+                    ?>
+
+                    <?php
+                    if($this->session->get('roleName') === 'admin' || ($this->session->get('pseudo') === $comment->getCommentAuthor())) {
+                        ?>
+                        <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>">Modifier</a>
+                        <?php
+                    }
+                    ?>
                 </div>
                 <br>
             </li>

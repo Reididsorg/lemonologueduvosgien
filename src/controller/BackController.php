@@ -11,17 +11,17 @@ class BackController extends Controller
         return $this->view->render('addOnePost');
     }
 
-    public function createOnePost (Parameter $postForm)
+    public function createOnePost(Parameter $postForm)
     {
         if($postForm->get('submit')) {
             $errors = $this->validation->validate($postForm, 'Post');
             if(!$errors) {
-                $affectedLines = $this->postDAO->insertOnePost($postForm);
-                if ($affectedLines === false) {
-                    throw new Exception('Impossible d\'ajouter le billet !');
+                $this->postDAO->insertOnePost($postForm, $this->sentBySession->get('id'));
+                $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
+                if($this->sentBySession->get('roleName') === 'admin') {
+                    header('Location: index.php?action=admin');
                 }
-                else {
-                    $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
+                if($this->sentBySession->get('roleName') === 'editor') {
                     header('Location: index.php?action=getAllPosts');
                 }
             }
@@ -35,101 +35,83 @@ class BackController extends Controller
         ]);
     }
 
-    public function editOnePost ($postId, Parameter $postForm)
+    public function editOnePost($postId)
     {
-        $article = $this->postDAO->selectOnePost($postId);
-        $postForm->set('id', $article->getId());
-        $postForm->set('title', $article->getPostTitle());
-        $postForm->set('content', $article->getPostContent());
-        $postForm->set('author', $article->getPostAuthor());
-        $postForm->set('dateFr', $article->getPostDateFr());
+        $post = $this->postDAO->selectOnePost($postId);
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         return $this->view->render('editOnePost', [
-            'postForm' => $postForm,
+            'post' => $post,
             'comments' => $comments
         ]);
     }
 
-    public function refreshOnePost ($postId, Parameter $postForm)
+    public function refreshOnePost($postId, Parameter $postForm)
     {
         if($postForm->get('submit')) {
             $errors = $this->validation->validate($postForm, 'Post');
             if(!$errors) {
-                $affectedLine = $this->postDAO->updateOnePost($postId, $postForm);
-                if ($affectedLine === false) {
-                    throw new Exception('Impossible de mettre à jour le billet !');
-                } else {
-                    $this->sentBySession->set('messageRefreshOnePost', 'Le billet a été modifié');
-                    header('Location: index.php?action=getAllPosts');
-                }
+                $this->postDAO->updateOnePost($postId, $postForm, $this->sentBySession->get('id'));
+                $this->sentBySession->set('messageRefreshOnePost', 'Le billet a été modifié');
+                header('Location: index.php?action=admin');
             }
-            $article = $this->postDAO->selectOnePost($postId);
-            $postForm->set('id', $article->getId());
-            $postForm->set('dateFr', $article->getPostDateFr());
+            $post = $this->postDAO->selectOnePost($postId);
+            $post->setPostTitle($postForm->get('title'));
+            $post->setPostContent($postForm->get('content'));
             return $this->view->render('editOnePost', [
-                'postForm' => $postForm,
+                'post' => $post,
                 'errors' => $errors
             ]);
         }
         return $this->view->render('editOnePost', [
-            'postForm' => $postForm
+            'post' => $postForm
         ]);
     }
 
-    public function removeOnePost ($postId)
+    public function removeOnePost($postId)
     {
-        $affectedLines = $this->commentDAO->deleteAllCommentsOfOnePost($postId);
-        if ($affectedLines === false) {
-            throw new Exception('Impossible de supprimer les commentaires du billet !');
+        $this->commentDAO->deleteAllCommentsOfOnePost($postId);
+        $this->postDAO->deleteOnePost($postId);
+        $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
+        if($this->sentBySession->get('roleName') === 'admin') {
+            header('Location: index.php?action=admin');
         }
-        else {
-            $affectedLine = $this->postDAO->deleteOnePost($postId);
-            if ($affectedLine === false) {
-                throw new Exception('Impossible de supprimer le billet !');
-            }
-            else {
-                $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
-                header('Location: index.php?action=getAllPosts');
-            }
+        if($this->sentBySession->get('roleName') === 'editor') {
+            header('Location: index.php?action=getAllPosts');
         }
     }
 
-    public function createOneComment ($postId, Parameter $commentForm)
+    public function createOneComment($postId, Parameter $commentForm)
     {
-        var_dump($commentForm);
-        $post = $this->postDAO->selectOnePost($postId);
-        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         if($commentForm->get('submit')) {
             $errors = $this->validation->validate($commentForm, 'Comment');
             if(!$errors) {
-                $affectedLines = $this->commentDAO->insertOneComment($postId, $commentForm);
+                $this->commentDAO->insertOneComment($postId, $commentForm);
+                $post = $this->postDAO->selectOnePost($postId);
                 $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-                if ($affectedLines === false) {
-                    throw new Exception('Impossible d\'ajouter le commentaire !');
-                }
-                else {
-                    $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
-                    return $this->view->render('getOnePostAndHisComments', [
-                        'post' => $post,
-                        'comments' => $comments
-                    ]);
-                }
+                $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
+                return $this->view->render('getOnePostAndHisComments', [
+                    'post' => $post,
+                    'comments' => $comments
+                ]);
             }
+            $post = $this->postDAO->selectOnePost($postId);
+            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
             return $this->view->render('getOnePostAndHisComments', [
                 'post' => $post,
                 'comments' => $comments,
                 'commentForm' => $commentForm,
                 'errors' => $errors
             ]);
-
         }
+        $post = $this->postDAO->selectOnePost($postId);
+        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
         return $this->view->render('getOnePostAndHisComments', [
             'post' => $post,
             'comments' => $comments
         ]);
     }
 
-    public function editOneComment ($commentId)
+    public function editOneComment($commentId)
     {
         $comment = $this->commentDAO->selectOneComment($commentId);
         return $this->view->render('editOneComment', [
@@ -137,20 +119,15 @@ class BackController extends Controller
         ]);
     }
 
-    public function refreshOneComment ($commentId, Parameter $commentForm)
+    public function refreshOneComment($commentId, Parameter $commentForm)
     {
         $comment = $this->commentDAO->selectOneComment($commentId);
         if($commentForm->get('submit')) {
             $errors = $this->validation->validate($commentForm, 'Comment');
             if (!$errors) {
-                $affectedLine = $this->commentDAO->updateOneComment($commentId, $commentForm);
-                if ($affectedLine === false) {
-                    throw new Exception('Impossible de mettre à jour le commentaire !');
-                }
-                else {
-                    $this->sentBySession->set('messageRefreshOneComment', 'Le commentaire a été modifié');
-                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
-                }
+                $this->commentDAO->updateOneComment($commentId, $commentForm);
+                $this->sentBySession->set('messageRefreshOneComment', 'Le commentaire a été modifié');
+                header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
             }
             return $this->view->render('editOneComment', [
                 'comment' => $comment,
@@ -164,46 +141,48 @@ class BackController extends Controller
         ]);
     }
 
-    public function removeOneComment ($commentId, $postId)
+    public function removeOneComment($commentId, $postId)
     {
-        $affectedLine = $this->commentDAO->deleteOneComment($commentId);
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de mettre à jour le billet !');
-        }
-        else {
-            $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
-            header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
-        }
+        $this->commentDAO->deleteOneComment($commentId);
+        $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
+        header('Location: index.php?action=getOnePostAndHisComments&postId='.$postId);
     }
 
-    public function flagOneComment ($commentId)
+    public function flagOneComment($commentId, $postId)
     {
         $this->commentDAO->flagOneComment($commentId);
         $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
-        header('Location: index.php?action=editOneComment&commentId='.$commentId);
+        $post = $this->postDAO->selectOnePost($postId);
+        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+        return $this->view->render('getOnePostAndHisComments', [
+            'post' => $post,
+            'comments' => $comments
+        ]);
     }
 
-    public function editProfile ()
+    public function unflagOneComment($commentId)
+    {
+        $this->commentDAO->unflagOneComment($commentId);
+        $this->sentBySession->set('MessageUnflagOneComment', 'Le commentaire a bien été désignalé');
+        header('Location: index.php?action=admin');
+    }
+
+    public function editProfile()
     {
         return $this->view->render('editProfile');
     }
 
-    public function refreshPassword (Parameter $password)
+    public function refreshPassword(Parameter $passwordForm)
     {
-        if($password->get('submit')) {
-            $affectedLine = $this->userDAO->updatePassword($password, $this->sentBySession->get('pseudo'));
-            if ($affectedLine === false) {
-                throw new Exception('Impossible de mettre à jour le mot de passe !');
-            }
-            else {
-                $this->sentBySession->set('messageRefreshPassword', 'Le mot de passe a été mis à jour');
-                header('Location: index.php?action=profile');
-            }
+        if($passwordForm->get('submit')) {
+            $this->userDAO->updatePassword($passwordForm, $this->sentBySession->get('pseudo'));
+            $this->sentBySession->set('messageRefreshPassword', 'Le mot de passe a été mis à jour');
+            header('Location: index.php?action=profile');
         }
         return $this->view->render('refreshpassword');
     }
 
-    public function logout ()
+    public function logout()
     {
         $this->sentBySession->stop();
         $this->sentBySession->start();
@@ -211,18 +190,32 @@ class BackController extends Controller
         header('Location: index.php?action=getAllPosts');
     }
 
-    public function removeAccount ()
+    public function removeAccount()
     {
-        $affectedLine = $this->userDAO->deleteOneUser($this->sentBySession->get('pseudo'));
+        $this->userDAO->deleteCurrentUser($this->sentBySession->get('pseudo'));
+        $this->sentBySession->stop();
+        $this->sentBySession->start();
+        $this->sentBySession->set('messageRemoveAccount', 'Votre compte a bien été supprimé');
+        header('Location: index.php?action=getAllPosts');
+    }
 
-        if ($affectedLine === false) {
-            throw new Exception('Impossible de supprimer le compte !');
-        }
-        else {
-            $this->sentBySession->stop();
-            $this->sentBySession->start();
-            $this->sentBySession->set('messageRemoveAccount', 'Votre compte a bien été supprimé');
-            header('Location: index.php?action=getAllPosts');
-        }
+    public function removeSpecificUser($userId)
+    {
+        var_dump($userId);
+        $this->userDAO->deleteSpecificUser($userId);
+        $this->sentBySession->set('messageRemoveSpecificUser', 'L\'utilisateur a bien été supprimé');
+        header('Location: index.php?action=admin');
+    }
+
+    public function admin ()
+    {
+        $posts = $this->postDAO->selectAllPosts();
+        $flagComments = $this->commentDAO->getFlagComments();
+        $users = $this->userDAO->getAllUsers();
+        return $this->view->render('admin', [
+            'posts' => $posts,
+            'flagComments'=>$flagComments,
+            'users'=>$users
+        ]);
     }
 }

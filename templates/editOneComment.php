@@ -6,18 +6,6 @@
 
     <h1>Modification du commentaire</h1>
     <p><em>Dernière modification : <?= htmlspecialchars($comment->getCommentDateFr()) ?></em></p>
-    <?php
-    if ($comment->isCommentFlag()) {
-        ?>
-        <p>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></p>
-    <?php
-    }
-    else {
-        ?>
-        <p><a href="index.php?action=flagOneComment&commentId=<?= $comment->getId() ?>">Signaler ce commentaire</a></p>
-    <?php
-    }
-    ?>
 
     <div id="edit-comment">
 
