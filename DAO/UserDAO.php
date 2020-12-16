@@ -3,27 +3,40 @@
 namespace BrunoGrosdidier\Blog\DAO;
 
 use BrunoGrosdidier\Blog\config\Parameter;
-//use BrunoGrosdidier\Blog\src\model\User;
+use BrunoGrosdidier\Blog\src\model\User;
 
 class UserDAO extends DAO
 {
-    public function createUser (Parameter $userForm)
+    private function buildObject($row)
+    {
+        $user = new User();
+        $user->setId($row['id']);
+        $user->setUserPseudo($row['user_pseudo']);
+        $user->setUserCreatedAtFr($row['user_created_at_fr']);
+        $user->setRoleName($row['role_name']);
+        return $user;
+    }
+
+    public function insertOneUser(Parameter $userForm)
     {
         $request = 'INSERT INTO user 
                         (user_pseudo, 
                          user_password, 
-                         user_created_at) 
+                         user_created_at,
+                         role_id) 
                     VALUES 
                         (:pseudo, 
                          :password, 
-                         NOW())';
+                         NOW(),
+                         :roleId)';
         $this->createQuery($request, [
             'pseudo'=>$userForm->get('pseudo'),
-            'password'=>password_hash($userForm->get('password'), PASSWORD_BCRYPT)
+            'password'=>password_hash($userForm->get('password'), PASSWORD_BCRYPT),
+            'roleId'=>$userForm->get('roleId')
         ]);
     }
 
-    public function checkOneUser (Parameter $user)
+    public function checkOneUser(Parameter $user)
     {
         $request = 'SELECT 
                         COUNT(user_pseudo) 
@@ -40,15 +53,19 @@ class UserDAO extends DAO
         }
     }
 
-    public function login (Parameter $user)
+    public function login(Parameter $user)
     {
         $request = 'SELECT 
-                    id, 
-                    user_password 
+                    user.id,
+                    user_pseudo,
+                    user.user_password,
+                    role.role_name AS roleName
                 FROM 
-                    user 
+                    user
+                LEFT JOIN role
+                    ON role.id = user.role_id
                 WHERE 
-                    user_pseudo = :pseudo';
+                    user.user_pseudo = :pseudo';
         $data = $this->createQuery($request, [
             'pseudo'=>$user->get('pseudo')
         ]);
@@ -63,7 +80,7 @@ class UserDAO extends DAO
         return null;
     }
 
-    public function updatePassword (Parameter $user, $pseudo)
+    public function updatePassword(Parameter $user, $pseudo)
     {
         $request = 'UPDATE 
                         user 
@@ -77,7 +94,7 @@ class UserDAO extends DAO
         ]);
     }
 
-    public function deleteOneUser ($pseudo)
+    public function deleteCurrentUser($pseudo)
     {
         $request = 'DELETE FROM
                         user
@@ -86,5 +103,38 @@ class UserDAO extends DAO
         $this->createQuery($request, [
             'pseudo'=>$pseudo
         ]);
+    }
+
+    public function deleteSpecificUser($userId)
+    {
+        $request = 'DELETE FROM
+                        user
+                    WHERE
+                        id = :userId';
+        $this->createQuery($request, [
+            'userId'=>$userId
+        ]);
+    }
+
+    public function getAllUsers()
+    {
+        $request = 'SELECT 
+                    user.id, 
+                    user.user_pseudo,
+                    DATE_FORMAT(user.user_created_at, \'%d/%m/%Y à %Hh%i\') AS user_created_at_fr,
+                    role.role_name 
+                FROM 
+                    user 
+                INNER JOIN role 
+                    ON role.id = user.role_id
+                ORDER BY user.id DESC';
+        $result = $this->createQuery($request);
+        $users = [];
+        foreach ($result as $row){
+            $userId = $row['id'];
+            $users[$userId] = $this->buildObject($row);
+        }
+        $result->closeCursor();
+        return $users;
     }
 }

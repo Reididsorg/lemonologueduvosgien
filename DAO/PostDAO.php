@@ -10,43 +10,28 @@ class PostDAO extends DAO
     private function buildObject($row)
     {
         $post = new Post();
-        if(isset($row['id']))
-        {
-            $post->setId($row['id']);
-        }
-        if(isset($row['post_title']))
-        {
-            $post->setPostTitle($row['post_title']);
-        }
-        if(isset($row['post_content']))
-        {
-            $post->setPostContent($row['post_content']);
-        }
-        if(isset($row['post_author']))
-        {
-            $post->setPostAuthor($row['post_author']);
-        }
-        if(isset($row['post_date_fr']))
-        {
-            $post->setPostDateFr($row['post_date_fr']);
-        }
+        $post->setId($row['id']);
+        $post->setPostTitle($row['post_title']);
+        $post->setPostContent($row['post_content']);
+        $post->setPostAuthor($row['postAuthor']);
+        $post->setPostDateFr($row['post_date_fr']);
         return $post;
     }
 
 	public function selectOnePost($postId)
 	{
-		/*$request = 'SELECT id, post_title, post_content, DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr FROM post WHERE id = ?';
-        $result = $this->createQuery($request, [$postId]);*/
         $request = 'SELECT 
-                        id, 
-                        post_title, 
-                        post_content,
-                        post_author,
-                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr
+                        post.id, 
+                        post.post_title, 
+                        post.post_content,
+                        DATE_FORMAT(post.post_date, \'%d/%m/%Y à %Hh%i\') AS post_date_fr,
+                        user.user_pseudo AS postAuthor
                     FROM
-                        post 
+                        post
+                    INNER JOIN user
+                        ON user.id = post.user_id
                     WHERE 
-                        id = :id';
+                        post.id = :id';
         $result = $this->createQuery($request, [
             'id'=>$postId
         ]);
@@ -58,13 +43,15 @@ class PostDAO extends DAO
 	public function selectAllPosts()
 	{
         $request = 'SELECT 
-                        id, 
-                        post_title, 
-                        post_content, 
-                        post_author,
-                        DATE_FORMAT(post_date, \'%d/%m/%Y à %Hh%imin%ss\') AS post_date_fr
+                        post.id, 
+                        post.post_title, 
+                        post.post_content, 
+                        DATE_FORMAT(post.post_date, \'%d/%m/%Y à %Hh%i\') AS post_date_fr,
+                        user_pseudo AS postAuthor
                     FROM 
-                        post 
+                        post
+                    INNER JOIN user
+                        ON user.id = post.user_id
                     ORDER BY 
                         post_date DESC 
                     LIMIT 0, 15';
@@ -78,52 +65,46 @@ class PostDAO extends DAO
         return $posts;
 	}
 
-    public function insertOnePost(Parameter $post)
+    public function insertOnePost(Parameter $post, $userId)
     {
-        /*$request = 'INSERT INTO post (post_title, post_content, post_date) VALUES(?, ?, NOW())';
-        $this->createQuery($request, [$post->get('postTitle'), $post->get('postContent')]);*/
-        $request = 'INSERT INTO post 
+        $request = 'INSERT INTO post
                         (post_title, 
                          post_content, 
                          post_date,
-                         post_author) 
+                         user_id) 
                     VALUES
                         (:title, 
                          :content, 
                          NOW(),
-                         :author)';
+                         :userId)';
         $this->createQuery($request, [
             'title'=>$post->get('title'),
             'content'=>$post->get('content'),
-            'author'=>$post->get('author')
+            'userId'=>$userId
         ]);
     }
 
-    public function updateOnePost($postId, Parameter $post)
+    public function updateOnePost($postId, Parameter $post, $userId)
     {
-        /*$request = 'UPDATE post SET post_title = ?, post_content = ?, post_date = NOW() WHERE id = ?';
-        $this->createQuery($request, [$post->get('title'), $post->get('content'), $postId]);*/
         $request = 'UPDATE 
                         post 
                     SET 
                         post_title = :post_title, 
                         post_content = :post_content, 
                         post_date = NOW(),
-                        post_author = :post_author
+                        user_id = :userId
                     WHERE 
                         id = :id';
         $this->createQuery($request, [
             'post_title'=>$post->get('title'),
             'post_content'=>$post->get('content'),
-            'post_author'=>$post->get('author'),
+            'userId'=>$userId,
             'id'=>$postId
         ]);
     }
 
 	public function deleteOnePost($postId)
 	{
-		/*$request = 'DELETE FROM post WHERE id = ?';
-        $this->createQuery($request, [$postId]);*/
         $request = 'DELETE FROM post WHERE id = :id';
         $this->createQuery($request, [
             'id'=>$postId
