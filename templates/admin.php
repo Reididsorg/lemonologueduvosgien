@@ -4,8 +4,9 @@
 <?= null!==($this->session->get('messageRefreshOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRefreshOnePost').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRemoveOnePost')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveOnePost').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRemoveOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveOneComment').'</p>' : ''; ?>
-<?= null!==($this->session->get('MessageUnflagOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('MessageUnflagOneComment').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageUnflagOneComment')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageUnflagOneComment').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRemoveSpecificUser')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRemoveSpecificUser').'</p>' : ''; ?>
+<?= null!==($this->session->get('messageActivateSpecificUser')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageActivateSpecificUser').'</p>' : ''; ?>
 
 <div id="wrapper">
 
@@ -90,6 +91,13 @@
                     <td>Créé le : <?= htmlspecialchars($user->getUserCreatedAtFr());?></td>
                     <td><?= htmlspecialchars($user->getRoleName());?></td>
                     <td>
+                        <?php
+                        if($user->getRoleName() === 'new') {
+                            ?>
+                            <a href="index.php?action=activateSpecificUser&userId=<?= $user->getId(); ?>">Activer</a>
+                        <?php
+                        }
+                        ?>
                         <a href="index.php?action=removeSpecificUser&userId=<?= $user->getId(); ?>">Supprimer</a>
                     </td>
                 </tr>

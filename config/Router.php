@@ -80,6 +80,9 @@ Class Router
                     case 'register':
                         $this->frontController->register($this->request->getSentByPost());
                         break;
+                    case 'activateSpecificUser':
+                        $this->backController->activateSpecificUser($this->request->getSentByGet()->get('userId'));
+                        break;
                     case 'login':
                         $this->frontController->login($this->request->getSentByPost());
                         break;

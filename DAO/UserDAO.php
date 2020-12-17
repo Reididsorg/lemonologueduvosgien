@@ -137,4 +137,20 @@ class UserDAO extends DAO
         $result->closeCursor();
         return $users;
     }
+
+    public function activateSpecificUser($userId)
+    {
+        $request = 'UPDATE 
+                        user
+                    SET 
+                        role_id = :roleId
+                    WHERE
+                        id = :userId
+                    ';
+        // roleId = 2 (Editor)
+        $this->createQuery($request, [
+            'roleId'=>2,
+            'userId'=>$userId
+        ]);
+    }
 }

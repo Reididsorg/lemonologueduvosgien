@@ -1,5 +1,6 @@
 <?php $this->title = 'Mon profil'; ?>
 
+<?= null!==($this->session->get('messageCheckAdmin')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCheckAdmin').'</p>' : ''; ?>
 <?= null!==($this->session->get('messageRefreshPassword')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageRefreshPassword').'</p>' : ''; ?>
 
 <div id="wrapper">
