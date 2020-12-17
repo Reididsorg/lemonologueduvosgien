@@ -26,7 +26,7 @@ class FrontController extends Controller
 
     public function register(Parameter $userForm)
     {
-        // Default value of user role : 3 (user)
+        // Default value of user role : 3 (new)
         $userForm->set('roleId', 3);
 
         if($userForm->get('submit')) {
@@ -36,7 +36,7 @@ class FrontController extends Controller
             }
             if(!$errors){
                 $this->userDAO->insertOneUser($userForm);
-                $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée');
+                $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) Votre compte sera activé bientôt !');
                 header('Location: index.php?action=getAllPosts');
             }
             return $this->view->render('register', [

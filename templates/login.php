@@ -1,5 +1,7 @@
 <?php $this->title = 'Connexion'; ?>
 
+<?= null!==($this->session->get('messageCheckLoggedIn')) ? '<p style="background-color: #008000; color: #fff; font-weight: bold;">'.$this->session->show('messageCheckLoggedIn').'</p>' : ''; ?>
+
 <div id="wrapper">
 
     <h1>Connexion</h1>
