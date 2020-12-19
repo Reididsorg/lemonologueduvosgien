@@ -50,7 +50,7 @@ else {
 <form method="post" action="index.php?action=<?= $formTarget; ?>">
     <label for="author">Auteur</label>
     <br>
-    <input type="text" id="author" name="author" value="<?= $author; ?>">
+    <input type="text" id="author" name="author" value="<?= $this->session->get('pseudo'); ?>" readonly>
     <br>
     <?= isset($errors['author']) ? $errors['author'] : ''; ?>
     <br>

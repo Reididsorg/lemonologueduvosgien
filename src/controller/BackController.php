@@ -203,7 +203,7 @@ class BackController extends Controller
 
     public function flagOneComment($commentId, $postId)
     {
-        if($this->checkAdmin()) {
+        if($this->checkLoggedIn()) {
             $this->commentDAO->flagOneComment($commentId);
             $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
             $post = $this->postDAO->selectOnePost($postId);
