@@ -50,27 +50,26 @@
                 <div>
 
                     <?php
+                    if($this->session->get('roleName') === 'admin' || ($this->session->get('pseudo') === $comment->getCommentAuthor())) {
+                        ?>
+                        <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>">Modifier</a><br>
+                        <?php
+                    }
+
                     if ($comment->isCommentFlag()) {
                         ?>
-                        <em>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></em>
+                        <p><em>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></em></p>
                         <?php
                     }
                     else {
                         if ($this->session->get('roleName') === 'admin' || $this->session->get('roleName') === 'editor') {
                             ?>
-                            <em><a href="index.php?action=flagOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Signaler ce commentaire</a></em>
+                            <p><em><a href="index.php?action=flagOneComment&commentId=<?= $comment->getId() ?>&postId=<?= $post->getId() ?>">Signaler</a></em></p>
                             <?php
                         }
                     }
                     ?>
 
-                    <?php
-                    if($this->session->get('roleName') === 'admin' || ($this->session->get('pseudo') === $comment->getCommentAuthor())) {
-                        ?>
-                        <a href="index.php?action=editOneComment&commentId=<?= $comment->getId() ?>">Modifier</a>
-                        <?php
-                    }
-                    ?>
                 </div>
                 <br>
             </li>
@@ -79,11 +78,18 @@
         ?>
         </ul>
 
-        <h3>Ajouter un commentaire</h3>
+        <?php
 
-        <div id="form-comment">
-            <?php include ('formComment.php'); ?>
-        </div>
+        if($this->session->get('roleName') === 'admin' || $this->session->get('roleName') === 'editor') {
+            ?>
+            <h3>Ajouter un commentaire</h3>
+
+            <div id="form-comment">
+                <?php include ('formComment.php'); ?>
+            </div>
+            <?php
+        }
+        ?>
 
     </div>
 
