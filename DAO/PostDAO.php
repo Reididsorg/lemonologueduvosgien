@@ -40,7 +40,16 @@ class PostDAO extends DAO
         return $this->buildObject($post);
 	}
 
-	public function selectAllPosts()
+    public function countAllPosts()
+    {
+        $request = 'SELECT 
+                        COUNT(*) 
+                    FROM 
+                        post';
+        return $this->createQuery($request)->fetchColumn();
+    }
+
+    public function selectAllPosts($limit = null, $start = null)
 	{
         $request = 'SELECT 
                         post.id, 
@@ -53,8 +62,10 @@ class PostDAO extends DAO
                     INNER JOIN user
                         ON user.id = post.user_id
                     ORDER BY 
-                        post_date DESC 
-                    LIMIT 0, 15';
+                        post_date DESC';
+        if($limit) {
+            $request .= ' LIMIT '.$limit.' OFFSET '.$start;
+        }
         $result = $this->createQuery($request);
         $posts = [];
         foreach($result as $row){

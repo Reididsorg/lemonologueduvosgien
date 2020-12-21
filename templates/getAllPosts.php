@@ -30,6 +30,30 @@
         ?>
     </div>
 
+    <?php
+    if($pagination->getPageNumber() > 1) {
+       ?>
+        <div id="pagination">
+            <p>
+                <?php
+                for($i = 1; $i <= $pagination->getPageNumber(); $i++) {
+                    if($pagination->getPage() == $i){
+                        ?>
+                        <?= $i; ?>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="index.php?page=<?= $i; ?>"><?= $i; ?></a>
+                        <?php
+                    }
+                }
+                ?>
+            </p>
+        </div>
+    <?php
+    }
+    ?>
+
     <br>
     <br>
     <br>

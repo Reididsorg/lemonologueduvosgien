@@ -8,19 +8,23 @@ class FrontController extends Controller
 {
     public function getAllPosts()
     {
-        $posts = $this->postDAO->selectAllPosts();
+        $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->postDAO->countAllPosts());
+        $posts = $this->postDAO->selectAllPosts($pagination->getLimit(), $this->pagination->getStart());
         return $this->view->render('getAllPosts', [
-            'posts' => $posts
+            'posts' => $posts,
+            'pagination'=>$pagination
         ]);
     }
 
     public function getOnePostAndHisComments($postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
-        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+        $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
         return $this->view->render('getOnePostAndHisComments', [
             'post' => $post,
-            'comments' => $comments
+            'comments' => $comments,
+            'pagination' => $pagination,
         ]);
     }
 
