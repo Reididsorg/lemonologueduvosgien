@@ -8,6 +8,7 @@ use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
 use BrunoGrosdidier\Blog\DAO\UserDAO;
 use BrunoGrosdidier\Blog\src\model\View;
+use BrunoGrosdidier\Blog\src\model\Pagination;
 
 abstract class Controller
 {
@@ -19,6 +20,7 @@ abstract class Controller
     protected $sentByPost;
     protected $sentBySession;
     protected $validation;
+    protected $pagination;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ abstract class Controller
         $this->commentDAO = new CommentDAO();
         $this->userDAO = new UserDAO();
         $this->view = new View();
+        $this->pagination = new Pagination();
         $this->validation = new Validation();
         $request = new Request();
         $this->sentByGet = $request->getSentByGet();

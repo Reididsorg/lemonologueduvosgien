@@ -10,7 +10,7 @@
 
         <div>
             <h1>
-                <?= htmlspecialchars($post->getPostTitle()); ?>
+                <a href="index.php?action=getOnePostAndHisComments&postId=<?= $post->getId() ?>"><?= $post->getPostTitle() ?></a>
             </h1>
             <p>
                 <?= nl2br(htmlspecialchars($post->getPostContent())); ?>
@@ -92,5 +92,29 @@
         ?>
 
     </div>
+
+    <?php
+    if($pagination->getPageNumber() > 1) {
+        ?>
+        <div id="pagination">
+            <p>
+                <?php
+                for($i = 1; $i <= $pagination->getPageNumber(); $i++) {
+                    if($pagination->getPage() == $i){
+                        ?>
+                        <?= $i; ?>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="index.php?action=getOnePostAndHisComments&postId=<?= $post->getId() ?>&page=<?= $i; ?>"><?= $i; ?></a>
+                        <?php
+                    }
+                }
+                ?>
+            </p>
+        </div>
+        <?php
+    }
+    ?>
 
 </div>

@@ -19,7 +19,20 @@ class CommentDAO extends DAO
         return $comment;
     }
 
-	public function selectAllCommentsOfOnePost($postId)
+    public function countAllComments($postId)
+    {
+        $request = 'SELECT 
+                        COUNT(*) 
+                    FROM 
+                        comment 
+                    WHERE 
+                        comment_post_id = :postId';
+        return $this->createQuery($request, [
+            'postId'=>$postId
+        ])->fetchColumn();
+    }
+
+	public function selectAllCommentsOfOnePost($postId, $limit = null, $start = null)
 	{
         $request = 'SELECT 
                         id, 
@@ -33,6 +46,10 @@ class CommentDAO extends DAO
                     WHERE 
                         comment_post_id = :postId 
                     ORDER BY comment_date DESC';
+        $sql = 'SELECT id, pseudo, content, createdAt, flag FROM comment WHERE article_id = ? ORDER BY createdAt DESC';
+        if($limit) {
+            $request .= ' LIMIT '.$limit.' OFFSET '.$start;
+        }
         $result = $this->createQuery($request, [
             'postId'=>$postId
         ]);
