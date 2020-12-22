@@ -10,7 +10,7 @@ class FrontController extends Controller
     {
         $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->postDAO->countAllPosts());
         $posts = $this->postDAO->selectAllPosts($pagination->getLimit(), $this->pagination->getStart());
-        return $this->view->render('getAllPosts', [
+        return $this->render('front/getAllPosts.html.twig', [
             'posts' => $posts,
             'pagination'=>$pagination
         ]);
@@ -21,7 +21,7 @@ class FrontController extends Controller
         $post = $this->postDAO->selectOnePost($postId);
         $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
-        return $this->view->render('getOnePostAndHisComments', [
+        return $this->render('front/getOnePostAndHisComments.html.twig', [
             'post' => $post,
             'comments' => $comments,
             'pagination' => $pagination,
@@ -43,12 +43,12 @@ class FrontController extends Controller
                 $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) Votre compte sera activé bientôt !');
                 header('Location: index.php?action=getAllPosts');
             }
-            return $this->view->render('register', [
+            return $this->render('front/register.html.twig', [
                 'userForm'=>$userForm,
                 'errors'=>$errors
             ]);
         }
-        return $this->view->render('register');
+        return $this->render('front/register.html.twig');
     }
 
     public function login(Parameter $userForm) {
@@ -63,18 +63,18 @@ class FrontController extends Controller
             }
             else {
                 $this->sentBySession->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');
-                return $this->view->render('login', [
+                return $this->render('front/login.html.twig', [
                     'userForm'=> $userForm
                 ]);
             }
         }
-        return $this->view->render('login');
+        return $this->render('front/login.html.twig');
     }
 
     public function getBlog()
     {
         $content = 'BLOG';
-        return $this->view->render('getBlog', [
+        return $this->render('front/getBlog.html.twig', [
             'content' => $content
         ]);
     }
@@ -82,7 +82,7 @@ class FrontController extends Controller
     public function getCv()
     {
         $content = 'CV';
-        return $this->view->render('getCv', [
+        return $this->render('front/getCv.html.twig', [
             'content' => $content
         ]);
     }
@@ -90,7 +90,7 @@ class FrontController extends Controller
     public function getContact()
     {
         $content = 'CONTACT';
-        return $this->view->render('getContact', [
+        return $this->render('front/getContact.html.twig', [
             'content' => $content
         ]);
     }

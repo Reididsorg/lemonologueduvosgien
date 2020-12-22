@@ -3,5 +3,8 @@
     "psr-4": {
       "BrunoGrosdidier\\Blog\\": ""
     }
+  },
+  "require": {
+    "twig/twig": "^3.1"
   }
 }

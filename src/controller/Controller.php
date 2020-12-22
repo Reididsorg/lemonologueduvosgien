@@ -7,8 +7,10 @@ use BrunoGrosdidier\Blog\src\constraint\Validation;
 use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
 use BrunoGrosdidier\Blog\DAO\UserDAO;
-use BrunoGrosdidier\Blog\src\model\View;
 use BrunoGrosdidier\Blog\src\model\Pagination;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
@@ -21,18 +23,40 @@ abstract class Controller
     protected $sentBySession;
     protected $validation;
     protected $pagination;
+    /**
+     * @var Environment
+     */
+    protected $twig;
 
     public function __construct()
     {
         $this->postDAO = new PostDAO();
         $this->commentDAO = new CommentDAO();
         $this->userDAO = new UserDAO();
-        $this->view = new View();
         $this->pagination = new Pagination();
         $this->validation = new Validation();
         $request = new Request();
         $this->sentByGet = $request->getSentByGet();
         $this->sentByPost = $request->getSentByPost();
         $this->sentBySession = $request->getSentBySession();
+        $this->getTwig();
+    }
+
+    public function getTwig()
+    {
+        $loader = new FilesystemLoader('templates');
+        $this->twig = new Environment($loader, [
+            //TODO: activate cache in production
+            //'cache' => '/path/to/compilation_cache',
+            //TODO: disable debug in production
+            'debug' => true,
+        ]);
+        $this->twig->addExtension(new DebugExtension());
+        $this->twig->addGlobal('session', $this->sentBySession);
+    }
+
+    public function render($template, $options = [])
+    {
+        echo $this->twig->render($template, $options);
     }
 }

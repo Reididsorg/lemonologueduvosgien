@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+
+    {{ include('front/flashes.html.twig') }}
+
+    <div id="wrapper">
+
+        <h1>Connexion</h1>
+
+        <div id="form-login">
+            <form method="post" action="index.php?action=login">
+                <label for="pseudo">Pseudo</label>
+                <br>
+                <input type="text" id="pseudo" name="pseudo" value="{% if userForm %}{{ userForm.pseudo }}{% endif %}">
+                <br>
+                <label for="password">Mot de passe</label>
+                <br>
+                <input type="password" id="password" name="password">
+                <br>
+                <input type="submit" value="Connexion" id="submit" name="submit">
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}
