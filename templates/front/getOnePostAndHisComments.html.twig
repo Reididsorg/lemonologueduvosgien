@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+
+    {{ include('front/flashes.html.twig') }}
+
+    <div id="wrapper">
+
+        <div id="post">
+            <div>
+                <h1>
+                    <a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a>
+                </h1>
+                <p>
+                    {{ post.postContent }}
+                </p>
+                <em>({{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
+            </div>
+            <div>
+                <p>
+                    {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as(post.postAuthor)%}
+                        <a href="index.php?action=editOnePost&postId=<?= $post->getId() ?>">Modifier</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div id="comments">
+            <h2>Commentaires</h2>
+            {% if comments|length > 0 %}
+                <ul>
+                    {% for comment in comments %}
+                        <li>
+                            <div>
+                                <strong>{{ comment.commentAuthor }}</strong>
+                                <em>({{ comment.commentDateFr }})</em>
+                            </div>
+                            <div>{{ comment.commentContent }}</div>
+                            <div>
+                                {% if session.get('roleName') is same as('admin') or session.get('pseudo') is same as(comment.commentAuthor)%}
+                                    <a href="index.php?action=editOneComment&commentId={{ comment.id }}">Modifier</a><br>
+                                {% endif %}
+
+                                {% if comment.isCommentFlag() %}
+                                    <p><em>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></em></p>
+                                {% else %}
+                                    {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as('editor') %}
+                                        <p><em><a href="index.php?action=flagOneComment&commentId={{ comment.id }}&postId={{ post.id }}">Signaler</a></em></p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <br>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun commentaire pour le moment</p>
+            {% endif %}
+
+            {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as('editor') %}
+                <h3>Ajouter un commentaire</h3>
+                <div id="form-comment">
+                    {{ include('back/formComment.html.twig') }}
+                </div>
+            {% endif %}
+
+        </div>
+
+        {{ include('pagination.html.twig', {
+            action: 'action=getOnePostAndHisComments&postId=' ~ post.id ~ '&'
+        }) }}
+
+    </div>
+
+{% endblock %}

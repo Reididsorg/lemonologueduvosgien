@@ -1,0 +1,53 @@
+{# action : createOneComment* #}
+
+{% if comments %}
+    {# Création d'un nouveau commentaire (pas de form) #}
+    {% if commentForm is not defined %}
+        {% set formTarget = 'createOneComment&postId=' ~ post.id %}
+        {% set content = '' %}
+        {% set submit = 'Ajouter' %}
+        {# Validation form #}
+    {% else %}
+        {# validation erreur #}
+        {% if errors %}
+            {% set formTarget = 'createOneComment&postId=' ~ post.id %}
+            {% set content = commentForm.content %}
+            {% set submit = 'Ajouter' %}
+            {# validation OK #}
+        {% else %}
+            {% set formTarget = 'createOneComment&postId=' ~ post.id %}
+            {% set content = '' %}
+            {% set submit = 'Ajouter' %}
+        {% endif %}
+    {% endif %}
+    {# (action : editOneComment&commentId*) #}
+{% else %}
+    {# Edition d'un commentaire après validation #}
+    {% if commentForm %}
+        {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
+        {% set content = commentForm.content %}
+        {% set submit = 'Modifier' %}
+        {# Edition d'un commentaire déjà enregistré #}
+    {% else %}
+        {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
+        {% set content = comment.commentContent %}
+        {% set submit = 'Modifier' %}
+    {% endif %}
+{% endif %}
+
+
+<form method="post" action="index.php?action={{ formTarget }}">
+    <label for="author">Auteur</label>
+    <br>
+    <input type="text" id="author" name="author" value="{{ session.get('pseudo') }}" readonly>
+    <br>
+    {% if errors.author %}{{ errors.author }}{% endif %}
+    <br>
+    <label for="content">Contenu</label>
+    <br>
+    <textarea id="content" name="content">{{ content }}</textarea>
+    <br>
+    {% if errors.content %}{{ errors.content }}{% endif %}
+    <br>
+    <input type="submit" value="{{ submit }}" id="submit" name="submit">
+</form>

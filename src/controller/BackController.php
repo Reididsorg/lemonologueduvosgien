@@ -33,7 +33,7 @@ class BackController extends Controller
             $posts = $this->postDAO->selectAllPosts();
             $flagComments = $this->commentDAO->getFlagComments();
             $users = $this->userDAO->getAllUsers();
-            return $this->view->render('admin', [
+            return $this->render('back/admin.html.twig', [
                 'posts' => $posts,
                 'flagComments'=>$flagComments,
                 'users'=>$users
@@ -44,7 +44,7 @@ class BackController extends Controller
     public function addOnePost()
     {
         if($this->checkAdmin()) {
-            return $this->view->render('addOnePost');
+            return $this->render('back/addOnePost.html.twig');
         }
     }
 
@@ -63,12 +63,12 @@ class BackController extends Controller
                         header('Location: index.php?action=getAllPosts');
                     }
                 }
-                return $this->view->render('addOnePost', [
+                return $this->render('back/addOnePost.html.twig', [
                     'postForm' => $postForm,
                     'errors' => $errors
                 ]);
             }
-            return $this->view->render('addOnePost', [
+            return $this->render('back/addOnePost.html.twig', [
                 'postForm' => $postForm
             ]);
         }
@@ -79,7 +79,7 @@ class BackController extends Controller
         if($this->checkAdmin()) {
             $post = $this->postDAO->selectOnePost($postId);
             $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-            return $this->view->render('editOnePost', [
+            return $this->render('back/editOnePost.html.twig', [
                 'post' => $post,
                 'comments' => $comments
             ]);
@@ -99,12 +99,12 @@ class BackController extends Controller
                 $post = $this->postDAO->selectOnePost($postId);
                 $post->setPostTitle($postForm->get('title'));
                 $post->setPostContent($postForm->get('content'));
-                return $this->view->render('editOnePost', [
+                return $this->render('back/editOnePost.html.twig', [
                     'post' => $post,
                     'errors' => $errors
                 ]);
             }
-            return $this->view->render('editOnePost', [
+            return $this->render('back/editOnePost.html.twig', [
                 'post' => $postForm
             ]);
         }
@@ -135,14 +135,14 @@ class BackController extends Controller
                     $post = $this->postDAO->selectOnePost($postId);
                     $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
                     $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
-                    return $this->view->render('getOnePostAndHisComments', [
+                    return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
                         'comments' => $comments
                     ]);
                 }
                 $post = $this->postDAO->selectOnePost($postId);
                 $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-                return $this->view->render('getOnePostAndHisComments', [
+                return $this->render('front/getOnePostAndHisComments.html.twig', [
                     'post' => $post,
                     'comments' => $comments,
                     'commentForm' => $commentForm,
@@ -151,7 +151,7 @@ class BackController extends Controller
             }
             $post = $this->postDAO->selectOnePost($postId);
             $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-            return $this->view->render('getOnePostAndHisComments', [
+            return $this->render('front/getOnePostAndHisComments.html.twig', [
                 'post' => $post,
                 'comments' => $comments
             ]);
@@ -160,9 +160,9 @@ class BackController extends Controller
 
     public function editOneComment($commentId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkLoggedIn()) {
             $comment = $this->commentDAO->selectOneComment($commentId);
-            return $this->view->render('editOneComment', [
+            return $this->render('back/editOneComment.html.twig', [
                 'comment' => $comment
             ]);
         }
@@ -170,7 +170,7 @@ class BackController extends Controller
 
     public function refreshOneComment($commentId, Parameter $commentForm)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkLoggedIn()) {
             $comment = $this->commentDAO->selectOneComment($commentId);
             if($commentForm->get('submit')) {
                 $errors = $this->validation->validate($commentForm, 'Comment');
@@ -179,22 +179,31 @@ class BackController extends Controller
                     $this->sentBySession->set('messageRefreshOneComment', 'Le commentaire a été modifié');
                     header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
                 }
-                return $this->view->render('editOneComment', [
-                    'comment' => $comment,
-                    'commentForm' => $commentForm,
-                    'errors' => $errors
-                ]);
+                else {
+                    return $this->render('back/editOneComment.html.twig', [
+                        'comment' => $comment,
+                        'commentForm' => $commentForm,
+                        'errors' => $errors
+                    ]);
+                }
+
             }
-            return $this->view->render('editOneComment', [
-                'comment' => $comment,
-                'commentForm' => $commentForm
-            ]);
+            else {
+                return $this->render('back/editOneComment.html.twig', [
+                   'comment' => $comment,
+                   'commentForm' => $commentForm
+               ]);
+            }
+
         }
     }
 
     public function removeOneComment($commentId, $postId)
     {
-        if($this->checkAdmin()) {
+        var_dump($commentId);
+        var_dump($postId);
+        var_dump($this->checkLoggedIn());
+        if ($this->checkLoggedIn()) {
             $this->commentDAO->deleteOneComment($commentId);
             $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
             header('Location: index.php?action=getOnePostAndHisComments&postId='.$postId);
@@ -208,7 +217,7 @@ class BackController extends Controller
             $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
             $post = $this->postDAO->selectOnePost($postId);
             $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
-            return $this->view->render('getOnePostAndHisComments', [
+            return $this->render('front/getOnePostAndHisComments.html.twig', [
                 'post' => $post,
                 'comments' => $comments
             ]);
@@ -227,7 +236,7 @@ class BackController extends Controller
     public function editProfile()
     {
         if ($this->checkLoggedIn()) {
-            return $this->view->render('editProfile');
+            return $this->render('back/editProfile.html.twig');
         }
     }
 
@@ -237,9 +246,9 @@ class BackController extends Controller
             if($passwordForm->get('submit')) {
                 $this->userDAO->updatePassword($passwordForm, $this->sentBySession->get('pseudo'));
                 $this->sentBySession->set('messageRefreshPassword', 'Le mot de passe a été mis à jour');
-                header('Location: index.php?action=profile');
+                header('Location: index.php?action=editProfile');
             }
-            return $this->view->render('refreshpassword');
+            return $this->render('back/refreshpassword.html.twig');
         }
     }
 

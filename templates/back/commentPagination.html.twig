@@ -1,0 +1,20 @@
+{% if pagination.page|number_format > 1 %}
+    <div id="comment-pagination">
+        <p>
+            <?php
+            for($i = 1; $i <= $pagination->getPageNumber(); $i++) {
+            {% for page in 1..pagination.pageNumber|number_format %}
+            if($pagination->getPage() == $i){
+            ?>
+            <?= $i; ?>
+            <?php
+                            } else {
+                                ?>
+            <a href="index.php?action=getOnePostAndHisComments&postId=<?= $post->getId() ?>&page=<?= $i; ?>"><?= $i; ?></a>
+            <?php
+                            }
+                        }
+                        ?>
+        </p>
+    </div>
+{% endif %}

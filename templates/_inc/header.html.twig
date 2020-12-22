@@ -1,0 +1,40 @@
+<header>
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="/public/images/photo.jpg" alt="" />
+        </a>
+    </div>
+
+    <nav id="nav">
+        <ul>
+            <li class="nav-item">
+                <a href="/index.php">ACCUEIL</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.php?action=getBlog">BLOG</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.php?action=getCv">CV</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.php?action=getContact">CONTACT</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div>
+        {% if session.get('pseudo') == 'admin' %}
+            <p>Bonjour <strong>{{ session.get('pseudo') }}</strong></p>
+            <a href="index.php?action=logout">Déconnexion</a>
+            <a href="index.php?action=editProfile">Profil</a>
+            {% if session.get('roleName') is same as('admin') %}
+                <a href="index.php?action=admin">Administration</a>
+            {% endif %}
+        {% else %}
+            <a href="index.php?action=login">Connexion</a>
+            <a href="index.php?action=register">Inscription</a>
+        {% endif %}
+    </div>
+
+</header>

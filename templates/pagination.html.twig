@@ -1,0 +1,14 @@
+{% if pagination.pageNumber|number_format > 1 %}
+    <div id="post-pagination">
+        <p>
+            {% for page in 1..pagination.pageNumber|number_format %}
+                {% if pagination.page|number_format is same as (page|number_format) %}
+                    {{ page }}
+                {% else %}
+                    <a href="index.php?{{ action }}page={{ page }}">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+{% endif %}
+
