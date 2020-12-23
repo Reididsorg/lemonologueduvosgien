@@ -56,12 +56,7 @@ class BackController extends Controller
                 if(!$errors) {
                     $this->postDAO->insertOnePost($postForm, $this->sentBySession->get('id'));
                     $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
-                    if($this->sentBySession->get('roleName') === 'admin') {
-                        header('Location: index.php?action=admin');
-                    }
-                    if($this->sentBySession->get('roleName') === 'editor') {
-                        header('Location: index.php?action=getAllPosts');
-                    }
+                    header('Location: index.php?action=admin');
                 }
                 return $this->render('back/addOnePost.html.twig', [
                     'postForm' => $postForm,
@@ -116,12 +111,7 @@ class BackController extends Controller
             $this->commentDAO->deleteAllCommentsOfOnePost($postId);
             $this->postDAO->deleteOnePost($postId);
             $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
-            if($this->sentBySession->get('roleName') === 'admin') {
-                header('Location: index.php?action=admin');
-            }
-            if($this->sentBySession->get('roleName') === 'editor') {
-                header('Location: index.php?action=getAllPosts');
-            }
+            header('Location: index.php?action=admin');
         }
     }
 
@@ -133,27 +123,33 @@ class BackController extends Controller
                 if(!$errors) {
                     $this->commentDAO->insertOneComment($postId, $commentForm);
                     $post = $this->postDAO->selectOnePost($postId);
-                    $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+                    $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
                     $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
                     return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
-                        'comments' => $comments
+                        'comments' => $comments,
+                        'pagination' => $pagination
                     ]);
                 }
                 $post = $this->postDAO->selectOnePost($postId);
-                $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+                $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+                $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
                 return $this->render('front/getOnePostAndHisComments.html.twig', [
                     'post' => $post,
                     'comments' => $comments,
+                    'pagination' => $pagination,
                     'commentForm' => $commentForm,
                     'errors' => $errors
                 ]);
             }
             $post = $this->postDAO->selectOnePost($postId);
-            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+            $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
             return $this->render('front/getOnePostAndHisComments.html.twig', [
                 'post' => $post,
-                'comments' => $comments
+                'comments' => $comments,
+                'pagination' => $pagination
             ]);
         }
     }
@@ -194,7 +190,6 @@ class BackController extends Controller
                    'commentForm' => $commentForm
                ]);
             }
-
         }
     }
 

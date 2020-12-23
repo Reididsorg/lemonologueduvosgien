@@ -24,7 +24,7 @@
     </nav>
 
     <div>
-        {% if session.get('pseudo') == 'admin' %}
+        {% if session.get('pseudo') %}
             <p>Bonjour <strong>{{ session.get('pseudo') }}</strong></p>
             <a href="index.php?action=logout">Déconnexion</a>
             <a href="index.php?action=editProfile">Profil</a>
