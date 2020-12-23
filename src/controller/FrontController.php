@@ -8,7 +8,7 @@ class FrontController extends Controller
 {
     public function getAllPosts()
     {
-        $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->postDAO->countAllPosts());
+        $pagination = $this->pagination->paginate(2, $this->sentByGet->get('page'), $this->postDAO->countAllPosts());
         $posts = $this->postDAO->selectAllPosts($pagination->getLimit(), $this->pagination->getStart());
         return $this->render('front/getAllPosts.html.twig', [
             'posts' => $posts,
@@ -19,7 +19,7 @@ class FrontController extends Controller
     public function getOnePostAndHisComments($postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
-        $pagination = $this->pagination->paginate(5, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+        $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
         $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
         return $this->render('front/getOnePostAndHisComments.html.twig', [
             'post' => $post,
@@ -59,7 +59,13 @@ class FrontController extends Controller
                 $this->sentBySession->set('id', $result['result']['id']);
                 $this->sentBySession->set('roleName', $result['result']['roleName']);
                 $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
-                header('Location: index.php?action=getAllPosts');
+                // Redirection in terms of role name (admin or not)
+                if($result['result']['roleName'] === 'admin') {
+                    header('Location: index.php?action=admin');
+                }
+                else {
+                    header('Location: index.php?action=getAllPosts');
+                }
             }
             else {
                 $this->sentBySession->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');

@@ -1,40 +1,39 @@
 {# action : createOneComment* #}
-
 {% if comments %}
-    {# Création d'un nouveau commentaire (pas de form) #}
+    {# Création of new comment (no form) #}
     {% if commentForm is not defined %}
         {% set formTarget = 'createOneComment&postId=' ~ post.id %}
         {% set content = '' %}
         {% set submit = 'Ajouter' %}
-        {# Validation form #}
+    {# Validation form #}
     {% else %}
-        {# validation erreur #}
+        {# Error #}
         {% if errors %}
             {% set formTarget = 'createOneComment&postId=' ~ post.id %}
             {% set content = commentForm.content %}
             {% set submit = 'Ajouter' %}
-            {# validation OK #}
+        {# OK #}
         {% else %}
             {% set formTarget = 'createOneComment&postId=' ~ post.id %}
             {% set content = '' %}
             {% set submit = 'Ajouter' %}
         {% endif %}
     {% endif %}
-    {# (action : editOneComment&commentId*) #}
+{# (action : editOneComment&commentId*) #}
 {% else %}
-    {# Edition d'un commentaire après validation #}
+    {{ dump(commentForm) }}
+    {# Edit comment not yet saved #}
     {% if commentForm %}
         {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
         {% set content = commentForm.content %}
-        {% set submit = 'Modifier' %}
-        {# Edition d'un commentaire déjà enregistré #}
+        {% set submit = 'Modifier1' %}
+    {# Edit comment already saved #}
     {% else %}
         {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
         {% set content = comment.commentContent %}
-        {% set submit = 'Modifier' %}
+        {% set submit = 'Modifier2' %}
     {% endif %}
 {% endif %}
-
 
 <form method="post" action="index.php?action={{ formTarget }}">
     <label for="author">Auteur</label>

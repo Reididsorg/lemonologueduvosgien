@@ -24,12 +24,6 @@
                 </div>
             {% endfor %}
 
-            {% if session.get('roleName') == 'admin' %}
-                <p>
-                    <a href="index.php?action=createOnePost">Ajouter un article</a>
-                </p>
-            {% endif %}
-
         </div>
 
         {{ include('pagination.html.twig') }}
