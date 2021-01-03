@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\DAO;
+namespace BrunoGrosdidier\Blog\src\DAO;
 
 use PDO;
 use Exception;

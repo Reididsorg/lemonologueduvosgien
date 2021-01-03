@@ -1,7 +1,8 @@
 {
   "autoload": {
     "psr-4": {
-      "BrunoGrosdidier\\Blog\\": ""
+      "BrunoGrosdidier\\Blog\\config\\": "config/",
+      "BrunoGrosdidier\\Blog\\src\\": "src/"
     }
   },
   "require": {
