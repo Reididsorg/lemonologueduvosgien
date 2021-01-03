@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\src\controller;
+namespace BrunoGrosdidier\Blog\src\Controller;
 
 class ErrorController extends Controller
 {

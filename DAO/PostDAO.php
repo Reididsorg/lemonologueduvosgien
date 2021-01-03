@@ -3,7 +3,7 @@
 namespace BrunoGrosdidier\Blog\DAO;
 
 use BrunoGrosdidier\Blog\config\Parameter;
-use BrunoGrosdidier\Blog\src\model\Post;
+use BrunoGrosdidier\Blog\src\Model\Post;
 
 class PostDAO extends DAO
 {

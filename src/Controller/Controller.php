@@ -1,13 +1,13 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\src\controller;
+namespace BrunoGrosdidier\Blog\src\Controller;
 
 use BrunoGrosdidier\Blog\config\Request;
-use BrunoGrosdidier\Blog\src\constraint\Validation;
+use BrunoGrosdidier\Blog\src\Constraint\Validation;
 use BrunoGrosdidier\Blog\DAO\PostDAO;
 use BrunoGrosdidier\Blog\DAO\CommentDAO;
 use BrunoGrosdidier\Blog\DAO\UserDAO;
-use BrunoGrosdidier\Blog\src\model\Pagination;
+use BrunoGrosdidier\Blog\src\Model\Pagination;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;

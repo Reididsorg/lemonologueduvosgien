@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\src\model;
+namespace BrunoGrosdidier\Blog\src\Model;
 
 class Post
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\src\constraint;
+namespace BrunoGrosdidier\Blog\src\Constraint;
 
 class Validation
 {
