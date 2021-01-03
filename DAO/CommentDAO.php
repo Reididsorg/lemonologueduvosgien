@@ -3,7 +3,7 @@
 namespace BrunoGrosdidier\Blog\DAO;
 
 use BrunoGrosdidier\Blog\config\Parameter;
-use BrunoGrosdidier\Blog\src\model\Comment;
+use BrunoGrosdidier\Blog\src\Model\Comment;
 
 class CommentDAO extends DAO
 {

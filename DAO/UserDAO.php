@@ -3,7 +3,7 @@
 namespace BrunoGrosdidier\Blog\DAO;
 
 use BrunoGrosdidier\Blog\config\Parameter;
-use BrunoGrosdidier\Blog\src\model\User;
+use BrunoGrosdidier\Blog\src\Model\User;
 
 class UserDAO extends DAO
 {

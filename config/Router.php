@@ -2,9 +2,9 @@
 
 namespace BrunoGrosdidier\Blog\config;
 
-use BrunoGrosdidier\Blog\src\controller\FrontController;
-use BrunoGrosdidier\Blog\src\controller\BackController;
-use BrunoGrosdidier\Blog\src\controller\ErrorController;
+use BrunoGrosdidier\Blog\src\Controller\FrontController;
+use BrunoGrosdidier\Blog\src\Controller\BackController;
+use BrunoGrosdidier\Blog\src\Controller\ErrorController;
 use Exception;
 
 Class Router
