@@ -1,6 +1,6 @@
 <?php
 
-namespace BrunoGrosdidier\Blog\DAO;
+namespace BrunoGrosdidier\Blog\src\DAO;
 
 use BrunoGrosdidier\Blog\config\Parameter;
 use BrunoGrosdidier\Blog\src\Model\User;

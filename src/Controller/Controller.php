@@ -4,9 +4,9 @@ namespace BrunoGrosdidier\Blog\src\Controller;
 
 use BrunoGrosdidier\Blog\config\Request;
 use BrunoGrosdidier\Blog\src\Constraint\Validation;
-use BrunoGrosdidier\Blog\DAO\PostDAO;
-use BrunoGrosdidier\Blog\DAO\CommentDAO;
-use BrunoGrosdidier\Blog\DAO\UserDAO;
+use BrunoGrosdidier\Blog\src\DAO\PostDAO;
+use BrunoGrosdidier\Blog\src\DAO\CommentDAO;
+use BrunoGrosdidier\Blog\src\DAO\UserDAO;
 use BrunoGrosdidier\Blog\src\Model\Pagination;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
