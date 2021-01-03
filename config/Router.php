@@ -53,9 +53,6 @@ Class Router
                     case 'removeOnePost':
                         $this->backController->removeOnePost($this->request->getSentByGet()->get('postId'));
                         break;
-                    case 'addOnePost':
-                        $this->backController->addOnePost();
-                        break;
                     case 'createOnePost':
                         $this->backController->createOnePost($this->request->getSentByPost());
                         break;
@@ -101,8 +98,8 @@ Class Router
                     case 'removeSpecificUser':
                         $this->backController->removeSpecificUser($this->request->getSentByGet()->get('userId'));
                         break;
-                    case 'admin':
-                        $this->backController->admin();
+                    case 'getAdmin':
+                        $this->backController->getAdmin();
                         break;
                     default:
                         $this->errorController->errorNotFound();
