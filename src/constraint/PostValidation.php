@@ -66,5 +66,4 @@ class PostValidation extends Validation
         }
         return null;
     }
-
 }

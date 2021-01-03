@@ -27,7 +27,7 @@ class BackController extends Controller
         }
     }
 
-    public function admin ()
+    public function getAdmin ()
     {
         if ($this->checkAdmin()) {
             $posts = $this->postDAO->selectAllPosts();
@@ -41,13 +41,6 @@ class BackController extends Controller
         }
     }
 
-    public function addOnePost()
-    {
-        if($this->checkAdmin()) {
-            return $this->render('back/addOnePost.html.twig');
-        }
-    }
-
     public function createOnePost(Parameter $postForm)
     {
         if($this->checkAdmin()) {
@@ -56,14 +49,14 @@ class BackController extends Controller
                 if(!$errors) {
                     $this->postDAO->insertOnePost($postForm, $this->sentBySession->get('id'));
                     $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
-                    header('Location: index.php?action=admin');
+                    header('Location: index.php?action=getAdmin');
                 }
-                return $this->render('back/addOnePost.html.twig', [
+                return $this->render('back/createOnePost.html.twig', [
                     'postForm' => $postForm,
                     'errors' => $errors
                 ]);
             }
-            return $this->render('back/addOnePost.html.twig', [
+            return $this->render('back/createOnePost.html.twig', [
                 'postForm' => $postForm
             ]);
         }
@@ -89,7 +82,7 @@ class BackController extends Controller
                 if(!$errors) {
                     $this->postDAO->updateOnePost($postId, $postForm, $this->sentBySession->get('id'));
                     $this->sentBySession->set('messageRefreshOnePost', 'Le billet a été modifié');
-                    header('Location: index.php?action=admin');
+                    header('Location: index.php?action=getAdmin');
                 }
                 $post = $this->postDAO->selectOnePost($postId);
                 $post->setPostTitle($postForm->get('title'));
@@ -111,7 +104,7 @@ class BackController extends Controller
             $this->commentDAO->deleteAllCommentsOfOnePost($postId);
             $this->postDAO->deleteOnePost($postId);
             $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
-            header('Location: index.php?action=admin');
+            header('Location: index.php?action=getAdmin');
         }
     }
 
@@ -195,9 +188,6 @@ class BackController extends Controller
 
     public function removeOneComment($commentId, $postId)
     {
-        var_dump($commentId);
-        var_dump($postId);
-        var_dump($this->checkLoggedIn());
         if ($this->checkLoggedIn()) {
             $this->commentDAO->deleteOneComment($commentId);
             $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
@@ -224,7 +214,7 @@ class BackController extends Controller
         if($this->checkAdmin()) {
             $this->commentDAO->unflagOneComment($commentId);
             $this->sentBySession->set('messageUnflagOneComment', 'Le commentaire a bien été désignalé');
-            header('Location: index.php?action=admin');
+            header('Location: index.php?action=getAdmin');
         }
     }
 
@@ -273,7 +263,7 @@ class BackController extends Controller
         if($this->checkAdmin()) {
             $this->userDAO->activateSpecificUser($userId);
             $this->sentBySession->set('messageActivateSpecificUser', 'L\'utilisateur a bien été activé avec le rôle EDITOR');
-            header('Location: index.php?action=admin');
+            header('Location: index.php?action=getAdmin');
         }
     }
 
@@ -282,7 +272,7 @@ class BackController extends Controller
         if($this->checkAdmin()) {
             $this->userDAO->deleteSpecificUser($userId);
             $this->sentBySession->set('messageRemoveSpecificUser', 'L\'utilisateur a bien été supprimé');
-            header('Location: index.php?action=admin');
+            header('Location: index.php?action=getAdmin');
         }
     }
 }

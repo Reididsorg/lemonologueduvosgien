@@ -2,8 +2,6 @@
 
 namespace BrunoGrosdidier\Blog\src\controller;
 
-use BrunoGrosdidier\Blog\src\model\xxxxxxxxxxxxxxView;
-
 class ErrorController extends Controller
 {
     public function errorNotFound()

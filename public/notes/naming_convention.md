@@ -11,8 +11,7 @@
 ## CONTROLLER
 > Nom des méthodes avec préfixes en :
 
-+ add* (pages d'ajout)
-+ create* (MODEL : insert*)
++ create* (pages d'ajout, MODEL : insert*)
 + get* (MODEL : select*)
 + edit* (pages d'édition)
 + refresh* (MODEL : update*)
@@ -21,8 +20,7 @@
 ## VIEW
 > Nom des vues avec préfixe en :
 
-+ add* (pages d'ajout)
-+ create* (MODEL : insert*)
++ create* (pages d'ajout, MODEL : insert*)
 + get* (MODEL : select*)
 + edit* (pages d'édition)
 + refresh* (MODEL : update*)

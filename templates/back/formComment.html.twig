@@ -1,37 +1,28 @@
-{# action : createOneComment* #}
-{% if comments %}
-    {# Création of new comment (no form) #}
-    {% if commentForm is not defined %}
-        {% set formTarget = 'createOneComment&postId=' ~ post.id %}
-        {% set content = '' %}
-        {% set submit = 'Ajouter' %}
-    {# Validation form #}
-    {% else %}
-        {# Error #}
-        {% if errors %}
-            {% set formTarget = 'createOneComment&postId=' ~ post.id %}
-            {% set content = commentForm.content %}
-            {% set submit = 'Ajouter' %}
-        {# OK #}
-        {% else %}
-            {% set formTarget = 'createOneComment&postId=' ~ post.id %}
-            {% set content = '' %}
-            {% set submit = 'Ajouter' %}
-        {% endif %}
-    {% endif %}
 {# (action : editOneComment&commentId*) #}
-{% else %}
-    {{ dump(commentForm) }}
-    {# Edit comment not yet saved #}
-    {% if commentForm %}
+{% if comment %}
+    {# Errors #}
+    {% if errors %}
         {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
-        {% set content = commentForm.content %}
-        {% set submit = 'Modifier1' %}
-    {# Edit comment already saved #}
+        {% set content = commentForm.get('content') %}
+        {% set submit = 'Modifier' %}
+    {# No errors #}
     {% else %}
         {% set formTarget = 'refreshOneComment&commentId=' ~ comment.id %}
         {% set content = comment.commentContent %}
-        {% set submit = 'Modifier2' %}
+        {% set submit = 'Modifier' %}
+    {% endif %}
+{# action : createOneComment* #}
+{% else %}
+    {# Error #}
+    {% if errors %}
+        {% set formTarget = 'createOneComment&postId=' ~ post.id %}
+        {% set content = commentForm.get('content') %}
+        {% set submit = 'Ajouter' %}
+    {# No errors #}
+    {% else %}
+        {% set formTarget = 'createOneComment&postId=' ~ post.id %}
+        {% set content = '' %}
+        {% set submit = 'Ajouter' %}
     {% endif %}
 {% endif %}
 

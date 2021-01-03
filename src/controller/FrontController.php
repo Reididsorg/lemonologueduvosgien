@@ -61,7 +61,7 @@ class FrontController extends Controller
                 $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
                 // Redirection in terms of role name (admin or not)
                 if($result['result']['roleName'] === 'admin') {
-                    header('Location: index.php?action=admin');
+                    header('Location: index.php?action=getAdmin');
                 }
                 else {
                     header('Location: index.php?action=getAllPosts');
