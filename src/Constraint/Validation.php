@@ -24,6 +24,12 @@ class Validation
             return $userValidation->check($data);
         }
 
+        // 'Contact' désigne un message de contact
+        if($name === 'Contact') {
+            $contactValidation = new ContactValidation();
+            return $contactValidation->check($data);
+        }
+
         return null;
     }
 }

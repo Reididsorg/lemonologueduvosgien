@@ -27,4 +27,13 @@ class Constraint
         }
         return null;
     }
+
+    public function isValidEmailAdress($name, $value)
+    {
+        if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        } else {
+            return 'Le champ '.$name.' n\'est pas une adresse email valide';
+        }
+    }
 }

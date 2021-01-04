@@ -5,6 +5,7 @@ if ($_SERVER['SCRIPT_FILENAME'] == 'C:/wamp64/www/lemonologueduvosgien/public/in
 if ($_SERVER['SCRIPT_FILENAME'] == '/Applications/MAMP/htdocs/lemonologueduvosgien/public/index.php') {
 	require_once('../config/devMac.php');
 }
+require_once('../config/devMail.php');
 require_once('../vendor/autoload.php');
 
 session_start();

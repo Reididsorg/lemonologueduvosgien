@@ -104,6 +104,9 @@ Class Router
                     case 'getAdmin':
                         $this->backController->getAdmin();
                         break;
+                    case 'submitContactForm':
+                        $this->frontController->submitContactForm($this->request->getSentByPost());
+                        break;
                     default:
                         $this->errorController->errorNotFound();
                 }

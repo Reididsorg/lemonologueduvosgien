@@ -2,12 +2,63 @@
 {% block title %}Contact{% endblock %}
 {% block content %}
 
+    {{ include('front/flashes.html.twig') }}
+
+    {# session.get('pseudo') #}
+    {% if session.get('pseudo') %}
+        {% set expediteur = session.get('pseudo') %}
+        {% set email = session.get('email') %}
+        {% set readType = 'readonly' %}
+        {# Error #}
+        {% if errors %}
+            {% set message = contactForm.get('message') %}
+        {# No errors #}
+        {% else %}
+            {% set message = '' %}
+        {% endif %}
+    {# No session.get('pseudo') #}
+    {% else %}
+        {% set readType = '' %}
+        {# Error #}
+        {% if errors %}
+            {% set expediteur = contactForm.get('expediteur') %}
+            {% set email = contactForm.get('email') %}
+            {% set message = contactForm.get('message') %}
+        {# No errors #}
+        {% else %}
+            {% set expeditor = '' %}
+            {% set message = '' %}
+        {% endif %}
+    {% endif %}
+
     <div id="wrapper">
 
         <h1>Contact</h1>
 
         <div id="contact">
+            <form method="post" action="index.php?action=submitContactForm">
+                <label for="expediteur">Expéditeur</label>
+                <br>
+                <input type="text" id="expeditor" name="expediteur" value="{{ expediteur }}" {{ readType }}>
+                <br>
+                {% if errors.expediteur %}{{ errors.expediteur }}{% endif %}
+                <br>
 
+                <label for="email">Email</label>
+                <br>
+                <input type="text" id="email" name="email" value="{{ email }}" {{ readType }}>
+                <br>
+                {% if errors.email %}{{ errors.email }}{% endif %}
+                <br>
+
+                <label for="message">Message</label>
+                <br>
+                <textarea id="message" name="message">{{ message }}</textarea>
+                <br>
+                {% if errors.message %}{{ errors.message }}{% endif %}
+                <br>
+                <input type="submit" value="Envoyer" id="submit" name="submit">
+            </form>
         </div>
 
     </div>
