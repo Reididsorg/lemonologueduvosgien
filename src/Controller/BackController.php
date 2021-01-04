@@ -116,7 +116,7 @@ class BackController extends Controller
             if($commentForm->get('submit')) {
                 $errors = $this->validation->validate($commentForm, 'Comment');
                 if(!$errors) {
-                    if($this->checkAdmin()) {
+                    if($this->sentBySession->get('roleName') === 'admin') {
                         $commentIsNew = 0; //No need to set comment as new if superdmin is the author
                     }
                     else {
@@ -133,25 +133,29 @@ class BackController extends Controller
                         'pagination' => $pagination
                     ]);
                 }
+                else {
+                    $post = $this->postDAO->selectOnePost($postId);
+                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
+                    $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                    return $this->render('front/getOnePostAndHisComments.html.twig', [
+                        'post' => $post,
+                        'comments' => $comments,
+                        'pagination' => $pagination,
+                        'commentForm' => $commentForm,
+                        'errors' => $errors
+                    ]);
+                }
+            }
+            else {
                 $post = $this->postDAO->selectOnePost($postId);
                 $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
                 $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
                 return $this->render('front/getOnePostAndHisComments.html.twig', [
                     'post' => $post,
                     'comments' => $comments,
-                    'pagination' => $pagination,
-                    'commentForm' => $commentForm,
-                    'errors' => $errors
+                    'pagination' => $pagination
                 ]);
             }
-            $post = $this->postDAO->selectOnePost($postId);
-            $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
-            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
-            return $this->render('front/getOnePostAndHisComments.html.twig', [
-                'post' => $post,
-                'comments' => $comments,
-                'pagination' => $pagination
-            ]);
         }
     }
 
