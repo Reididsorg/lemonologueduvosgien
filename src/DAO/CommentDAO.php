@@ -10,12 +10,27 @@ class CommentDAO extends DAO
     private function buildObject($row)
     {
         $comment = new Comment();
-        $comment->setId($row['id']);
-        $comment->setCommentAuthor($row['comment_author']);
-        $comment->setCommentContent($row['comment_content']);
-        $comment->setCommentDateFr($row['comment_date_fr']);
-        $comment->setCommentPostId($row['comment_post_id']);
-        $comment->setCommentFlag($row['comment_flag']);
+        if(isset($row['id'])){
+            $comment->setId($row['id']);
+        }
+        if(isset($row['comment_author'])){
+            $comment->setCommentAuthor($row['comment_author']);
+        }
+        if(isset($row['comment_content'])){
+            $comment->setCommentContent($row['comment_content']);
+        }
+        if(isset($row['comment_date_fr'])){
+            $comment->setCommentDateFr($row['comment_date_fr']);
+        }
+        if(isset($row['comment_post_id'])){
+            $comment->setCommentPostId($row['comment_post_id']);
+        }
+        if(isset($row['comment_new'])){
+            $comment->setCommentNew($row['comment_new']);
+        }
+        if(isset($row['comment_flag'])){
+            $comment->setCommentFlag($row['comment_flag']);
+        }
         return $comment;
     }
 
@@ -83,25 +98,28 @@ class CommentDAO extends DAO
         return $this->buildObject($comment);
 	}
 
-    public function insertOneComment($postId, Parameter $post)
+    public function insertOneComment($postId, Parameter $post, $commentIsNew)
     {
         $request = 'INSERT INTO comment 
                         (comment_author, 
                          comment_content, 
                          comment_date,
                          comment_post_id,
-                         comment_flag)
+                         comment_flag,
+                         comment_new)
                     VALUES
                         (:comment_author,
                          :comment_content,
                          NOW(),
                          :post_id,
-                         :comment_flag)';
+                         :comment_flag,
+                         :comment_new)';
         $this->createQuery($request, [
             'comment_author'=>$post->get('author'),
             'comment_content'=>$post->get('content'),
             'post_id'=>$postId,
             'comment_flag'=>0,
+            'comment_new'=>$commentIsNew
         ]);
     }
 
@@ -137,28 +155,42 @@ class CommentDAO extends DAO
         ]);
     }
 
-    public function flagOneComment($commentId)
+    public function getNewComments()
     {
-        $request = 'UPDATE 
+        $request = 'SELECT 
+                        id, 
+                        comment_author, 
+                        comment_content, 
+                        DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS comment_date_fr, 
+                        comment_post_id,
+                        comment_new
+                    FROM 
                         comment 
-                    SET 
-                        comment_flag = :comment_flag
-                    WHERE id = :id';
-        $this->createQuery($request, [
-            'comment_flag'=>1,
-            'id'=>$commentId
+                    WHERE 
+                        comment_new = :commentNew 
+                    ORDER BY 
+                         comment_date DESC';
+        $result = $this->createQuery($request, [
+            'commentNew'=>1
         ]);
+        $comments = [];
+        foreach ($result as $row) {
+            $commentId = $row['id'];
+            $comments[$commentId] = $this->buildObject($row);
+        }
+        $result->closeCursor();
+        return $comments;
     }
 
-    public function unflagOneComment($commentId)
+    public function validateOneComment($commentId)
     {
         $request = 'UPDATE 
                         comment 
                     SET 
-                        comment_flag = :comment_flag
+                        comment_new = :comment_new
                     WHERE id = :id';
         $this->createQuery($request, [
-            'comment_flag'=>0,
+            'comment_new'=>0,
             'id'=>$commentId
         ]);
     }
@@ -189,4 +221,31 @@ class CommentDAO extends DAO
         $result->closeCursor();
         return $comments;
     }
+
+    public function flagOneComment($commentId)
+    {
+        $request = 'UPDATE 
+                        comment 
+                    SET 
+                        comment_flag = :comment_flag
+                    WHERE id = :id';
+        $this->createQuery($request, [
+            'comment_flag'=>1,
+            'id'=>$commentId
+        ]);
+    }
+
+    public function unflagOneComment($commentId)
+    {
+        $request = 'UPDATE 
+                        comment 
+                    SET 
+                        comment_flag = :comment_flag
+                    WHERE id = :id';
+        $this->createQuery($request, [
+            'comment_flag'=>0,
+            'id'=>$commentId
+        ]);
+    }
+
 }

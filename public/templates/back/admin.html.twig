@@ -35,6 +35,33 @@
                 {% endfor %}
             </table>
             <br>
+            <h2>Nouveaux commentaires</h2>
+            {% if newComments is empty %}
+                <em>Pas de nouveaux commentaires.</em>
+            {% else %}
+                <table>
+                    <tr>
+                        <td>Id</td>
+                        <td>Pseudo</td>
+                        <td>Message</td>
+                        <td>Date</td>
+                        <td>Actions</td>
+                    </tr>
+                    {% for newComment in newComments %}
+                        <tr>
+                            <td>{{ newComment.id }}</td>
+                            <td>{{ newComment.commentAuthor }}</td>
+                            <td>{{ newComment.content|slice(0, 150) }}</td>
+                            <td>Créé le : {{ newComment.commentDateFr }}</td>
+                            <td>
+                                <a href="index.php?action=validateOneComment&commentId={{ newComment.id }}">Valider</a>
+                                <a href="index.php?action=removeOneComment&commentId={{ newComment.id }}&postId={{ newComment.commentPostId }}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <br>
             <h2>Commentaires signalés</h2>
             <table>
                 <tr>
