@@ -30,9 +30,14 @@ class Comment
     private $commentPostId;
 
     /**
-     * @var bool
+     * @var int
      */
     private $commentFlag;
+
+    /**
+     * @var int
+     */
+    private $commentNew;
 
 
 
@@ -129,11 +134,27 @@ class Comment
     }
 
     /**
-     * @param bool $flag
+     * @param int $commentFlag
      */
     public function setcommentFlag($commentFlag)
     {
         $this->commentFlag = $commentFlag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommentNew()
+    {
+        return $this->commentNew;
+    }
+
+    /**
+     * @param int $commentNew
+     */
+    public function setcommentNew($commentNew)
+    {
+        $this->commentNew = $commentNew;
     }
 
 }

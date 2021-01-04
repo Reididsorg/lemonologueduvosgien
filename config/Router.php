@@ -74,6 +74,9 @@ Class Router
                     case 'unflagOneComment':
                         $this->backController->unflagOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
+                    case 'validateOneComment':
+                        $this->backController->validateOneComment($this->request->getSentByGet()->get('commentId'));
+                        break;
                     case 'register':
                         $this->frontController->register($this->request->getSentByPost());
                         break;

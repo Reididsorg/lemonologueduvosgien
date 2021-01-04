@@ -31,10 +31,12 @@ class BackController extends Controller
     {
         if ($this->checkAdmin()) {
             $posts = $this->postDAO->selectAllPosts();
+            $newComments = $this->commentDAO->getNewComments();
             $flagComments = $this->commentDAO->getFlagComments();
             $users = $this->userDAO->getAllUsers();
             return $this->render('back/admin.html.twig', [
                 'posts' => $posts,
+                'newComments'=>$newComments,
                 'flagComments'=>$flagComments,
                 'users'=>$users
             ]);
@@ -114,7 +116,13 @@ class BackController extends Controller
             if($commentForm->get('submit')) {
                 $errors = $this->validation->validate($commentForm, 'Comment');
                 if(!$errors) {
-                    $this->commentDAO->insertOneComment($postId, $commentForm);
+                    if($this->checkAdmin()) {
+                        $commentIsNew = 0; //No need to set comment as new if superdmin is the author
+                    }
+                    else {
+                        $commentIsNew = 1; //Set as new for other authors
+                    }
+                    $this->commentDAO->insertOneComment($postId, $commentForm, $commentIsNew);
                     $post = $this->postDAO->selectOnePost($postId);
                     $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
                     $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
@@ -214,6 +222,15 @@ class BackController extends Controller
         if($this->checkAdmin()) {
             $this->commentDAO->unflagOneComment($commentId);
             $this->sentBySession->set('messageUnflagOneComment', 'Le commentaire a bien été désignalé');
+            header('Location: index.php?action=getAdmin');
+        }
+    }
+
+    public function validateOneComment($commentId)
+    {
+        if($this->checkAdmin()) {
+            $this->commentDAO->validateOneComment($commentId);
+            $this->sentBySession->set('messageUnflagOneComment', 'Le commentaire a bien été validé');
             header('Location: index.php?action=getAdmin');
         }
     }
