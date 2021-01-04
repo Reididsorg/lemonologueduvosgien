@@ -49,7 +49,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>Aucun commentaire pour le moment</p>
+                <em>Aucun commentaire pour le moment.</em>
             {% endif %}
 
             {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as('editor') %}
