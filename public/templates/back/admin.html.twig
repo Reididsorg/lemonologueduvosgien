@@ -9,35 +9,39 @@
         <h1>Administration</h1>
 
         <div id="admin">
-            <h2>Articles</h2>
+            <h2>Billets de blog</h2>
             <p><a href="index.php?action=createOnePost">Ajouter un billet de blog</a></p>
-            <table>
-                <tr>
-                    <td>Id</td>
-                    <td>Titre</td>
-                    <td>Contenu</td>
-                    <td>Auteur</td>
-                    <td>Date</td>
-                    <td>Actions</td>
-                </tr>
-                {% for post in posts %}
+            {% if posts is empty %}
+                <em>Pas de billets de blog.</em>
+            {% else %}
+                <table>
                     <tr>
-                        <td>{{ post.id }}</td>
-                        <td><a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a></td>
-                        <td>{{ post.postContent }}</td>
-                        <td>{{ post.postAuthor }}</td>
-                        <td>Créé le : {{ post.postDateFr }}</td>
-                        <td>
-                            <a href="index.php?action=editOnePost&postId={{ post.id }}">Modifier</a>
-                            <a href="index.php?action=removeOnePost&postId={{ post.id }}">Supprimer</a>
-                        </td>
+                        <td>Id</td>
+                        <td>Titre</td>
+                        <td>Contenu</td>
+                        <td>Auteur</td>
+                        <td>Date</td>
+                        <td>Actions</td>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for post in posts %}
+                        <tr>
+                            <td>{{ post.id }}</td>
+                            <td><a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a></td>
+                            <td>{{ post.postContent }}</td>
+                            <td>{{ post.postAuthor }}</td>
+                            <td>Créé le : {{ post.postDateFr }}</td>
+                            <td>
+                                <a href="index.php?action=editOnePost&postId={{ post.id }}">Modifier</a>
+                                <a href="index.php?action=removeOnePost&postId={{ post.id }}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
             <br>
             <h2>Nouveaux commentaires</h2>
             {% if newComments is empty %}
-                <em>Pas de nouveaux commentaires.</em>
+                <em>Pas de nouveaux commentaire.</em>
             {% else %}
                 <table>
                     <tr>
@@ -63,52 +67,60 @@
             {% endif %}
             <br>
             <h2>Commentaires signalés</h2>
-            <table>
-                <tr>
-                    <td>Id</td>
-                    <td>Pseudo</td>
-                    <td>Message</td>
-                    <td>Date</td>
-                    <td>Actions</td>
-                </tr>
-                {% for flagComment in flagComments %}
+            {% if flagComments is empty %}
+                <em>Pas de commentaire signalé.</em>
+            {% else %}
+                <table>
                     <tr>
-                        <td>{{ flagComment.id }}</td>
-                        <td>{{ flagComment.commentAuthor }}</td>
-                        <td>{{ flagComment.content|slice(0, 150) }}</td>
-                        <td>Créé le : {{ flagComment.commentDateFr }}</td>
-                        <td>
-                            <a href="index.php?action=unflagOneComment&commentId={{ flagComment.id }}">Désignaler</a>
-                            <a href="index.php?action=removeOneComment&commentId={{ flagComment.id }}&postId={{ flagComment.commentPostId }}">Supprimer</a>
-                        </td>
+                        <td>Id</td>
+                        <td>Pseudo</td>
+                        <td>Message</td>
+                        <td>Date</td>
+                        <td>Actions</td>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for flagComment in flagComments %}
+                        <tr>
+                            <td>{{ flagComment.id }}</td>
+                            <td>{{ flagComment.commentAuthor }}</td>
+                            <td>{{ flagComment.content|slice(0, 150) }}</td>
+                            <td>Créé le : {{ flagComment.commentDateFr }}</td>
+                            <td>
+                                <a href="index.php?action=unflagOneComment&commentId={{ flagComment.id }}">Désignaler</a>
+                                <a href="index.php?action=removeOneComment&commentId={{ flagComment.id }}&postId={{ flagComment.commentPostId }}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
             <br>
             <h2>Utilisateurs</h2>
-            <table>
-                <tr>
-                    <td>Id</td>
-                    <td>Pseudo</td>
-                    <td>Date</td>
-                    <td>Rôle</td>
-                    <td>Actions</td>
-                </tr>
-                {% for user in users %}
+            {% if users is empty %}
+                <em>Aucun utilisateur.</em>
+            {% else %}
+                <table>
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.userPseudo }}</td>
-                        <td>Créé le : {{ user.userCreatedAtFr }}</td>
-                        <td>{{ user.roleName }}</td>
-                        <td>
-                            {% if user.getRoleName is same as('new') %}
-                                <a href="index.php?action=activateSpecificUser&userId={{ user.id }}">Activer</a>
-                            {% endif %}
-                            <a href="index.php?action=removeSpecificUser&userId={{ user.id }}">Supprimer</a>
-                        </td>
+                        <td>Id</td>
+                        <td>Pseudo</td>
+                        <td>Date</td>
+                        <td>Rôle</td>
+                        <td>Actions</td>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.userPseudo }}</td>
+                            <td>Créé le : {{ user.userCreatedAtFr }}</td>
+                            <td>{{ user.roleName }}</td>
+                            <td>
+                                {% if user.getRoleName is same as('new') %}
+                                    <a href="index.php?action=activateSpecificUser&userId={{ user.id }}">Activer</a>
+                                {% endif %}
+                                <a href="index.php?action=removeSpecificUser&userId={{ user.id }}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
             <br>
         </div>
 
