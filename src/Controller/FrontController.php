@@ -4,6 +4,8 @@ namespace BrunoGrosdidier\Blog\src\Controller;
 
 use BrunoGrosdidier\Blog\config\Parameter;
 
+use BrunoGrosdidier\Blog\vendor\swiftmailer\swiftmailer\lib\classes\Swift\SmtpTransport;
+
 class FrontController extends Controller
 {
     public function getAllPosts()
@@ -32,7 +34,6 @@ class FrontController extends Controller
     {
         // Default value of user role : 3 (new)
         $userForm->set('roleId', 3);
-
         if($userForm->get('submit')) {
             $errors = $this->validation->validate($userForm, 'User');
             if($this->userDAO->checkOneUser($userForm, 'User')) {
@@ -99,5 +100,55 @@ class FrontController extends Controller
         return $this->render('front/getContact.html.twig', [
             'content' => $content
         ]);
+    }
+
+    public function submitContactForm(Parameter $contactForm)
+    {
+        if($contactForm->get('submit')) {
+            $errors = $this->validation->validate($contactForm, 'Contact');
+            if(!$errors){
+
+                // Envoyer le message par email
+                // Create the Transport
+                //$transport = (new Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
+                $transport = (new \Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
+                    ->setUsername(EMAIL_USERNAME)
+                    ->setPassword(EMAIL_PASSWORD)
+                    ->setEncryption(EMAIL_ENCRYPTION) //For Gmail
+                ;
+
+                // Create the Mailer using your created Transport
+                //$mailer = new Swift_Mailer($transport);
+                $mailer = (new \Swift_Mailer($transport));
+
+                // Create a message
+                //$message = (new Swift_Message('Message du monologueduvosgien'))
+                $message = (new \Swift_Message(EMAIL_SUBJECT))
+                    ->setFrom([$contactForm->get('email') => $contactForm->get('expediteur')])
+                    ->setTo([EMAIL_DEST_1, EMAIL_DEST_2 => EMAIL_DEST_NAME])
+                    ->setBody($contactForm->get('message'))
+                ;
+
+                // Send the message
+                $result = $mailer->send($message);
+
+                if($result === 1) {
+                    $this->sentBySession->set('messageContact', 'Votre message a bien été envoyé :)');
+                    return $this->render('front/getContact.html.twig');
+                }
+                else {
+                    $this->sentBySession->set('messageContact', 'Problème avec l\'envoi du message :(');
+                    return $this->render('front/getContact.html.twig');
+                }
+
+            }
+            else {
+                return $this->render('front/getContact.html.twig', [
+                    'contactForm'=>$contactForm,
+                    'errors'=>$errors
+                ]);
+            }
+        }
+        return $this->render('front/getContact.html.twig');
     }
 }
