@@ -1,0 +1,10 @@
+<?php
+const EMAIL_HOST = '';
+const EMAIL_PORT = 587;
+const EMAIL_USERNAME = '';
+const EMAIL_PASSWORD = '';
+const EMAIL_ENCRYPTION = '';
+const EMAIL_DEST_1 = '';
+const EMAIL_DEST_2 = '';
+const EMAIL_DEST_NAME = '';
+const EMAIL_SUBJECT = '';
