@@ -1,6 +1,12 @@
 <header>
 
-    <div class="logo">
+    <div id="logo">
+        <a href="index.html">
+            LE MONOLOGUE DU VOSGIEN
+        </a>
+    </div>
+
+    <div id="photo">
         <a href="index.html">
             <img src="images/photo.jpg" alt="" />
         </a>
@@ -23,7 +29,7 @@
         </ul>
     </nav>
 
-    <div>
+    <div id="loginMenu">
         {% if session.get('pseudo') %}
             <p>Bonjour <strong>{{ session.get('pseudo') }}</strong></p>
             <a href="index.php?action=logout">Déconnexion</a>

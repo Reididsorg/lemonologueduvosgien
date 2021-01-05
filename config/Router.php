@@ -27,10 +27,9 @@ Class Router
 	    try {
 	        $action = $this->request->getSentByGet()->get('action');
 			if (isset($action)) {
-
 			    switch ($action) {
                     case 'getBlog':
-                        $this->frontController->getBlog();
+                        $this->frontController->getAllPosts();
                         break;
                     case 'getCv':
                         $this->frontController->getCv();
@@ -38,8 +37,8 @@ Class Router
                     case 'getContact':
                         $this->frontController->getContact();
                         break;
-                    case 'getAllPosts':
-                        $this->frontController->getAllPosts();
+                    case 'submitContactForm':
+                        $this->frontController->submitContactForm($this->request->getSentByPost());
                         break;
                     case 'getOnePostAndHisComments':
                         $this->frontController->getOnePostAndHisComments($this->request->getSentByGet()->get('postId'));
@@ -104,16 +103,12 @@ Class Router
                     case 'getAdmin':
                         $this->backController->getAdmin();
                         break;
-                    case 'submitContactForm':
-                        $this->frontController->submitContactForm($this->request->getSentByPost());
-                        break;
                     default:
                         $this->errorController->errorNotFound();
                 }
-
 			}
 			else {
-				$this->frontController->getAllPosts();				
+				$this->frontController->getHome();
 			}
 		}
 		catch(Exception $e) {

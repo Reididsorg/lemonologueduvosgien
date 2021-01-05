@@ -8,6 +8,30 @@ use BrunoGrosdidier\Blog\vendor\swiftmailer\swiftmailer\lib\classes\Swift\SmtpTr
 
 class FrontController extends Controller
 {
+    public function getHome()
+    {
+        $content = 'Bienvenue sur l\'espace de Bruno Grosdidier !';
+        return $this->render('front/getHome.html.twig', [
+            'content' => $content
+        ]);
+    }
+
+    public function getCv()
+    {
+        $content = 'CV';
+        return $this->render('front/getCv.html.twig', [
+            'content' => $content
+        ]);
+    }
+
+    public function getContact()
+    {
+        $content = 'CONTACT';
+        return $this->render('front/getContact.html.twig', [
+            'content' => $content
+        ]);
+    }
+
     public function getAllPosts()
     {
         $pagination = $this->pagination->paginate(2, $this->sentByGet->get('page'), $this->postDAO->countAllPosts());
@@ -52,7 +76,7 @@ class FrontController extends Controller
                 if($sendEmail === 1) {
                     $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
                     Un courriel de confirmation vient de vous être envoyé !');
-                    header('Location: index.php?action=getAllPosts');
+                    header('Location: index.php');
                 }
                 else {
                     $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
@@ -84,7 +108,7 @@ class FrontController extends Controller
                     header('Location: index.php?action=getAdmin');
                 }
                 else {
-                    header('Location: index.php?action=getAllPosts');
+                    header('Location: index.php');
                 }
             }
             else {
@@ -95,30 +119,6 @@ class FrontController extends Controller
             }
         }
         return $this->render('front/login.html.twig');
-    }
-
-    public function getBlog()
-    {
-        $content = 'BLOG';
-        return $this->render('front/getBlog.html.twig', [
-            'content' => $content
-        ]);
-    }
-
-    public function getCv()
-    {
-        $content = 'CV';
-        return $this->render('front/getCv.html.twig', [
-            'content' => $content
-        ]);
-    }
-
-    public function getContact()
-    {
-        $content = 'CONTACT';
-        return $this->render('front/getContact.html.twig', [
-            'content' => $content
-        ]);
     }
 
     public function submitContactForm(Parameter $contactForm)

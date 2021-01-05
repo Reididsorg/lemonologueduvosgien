@@ -264,7 +264,7 @@ class BackController extends Controller
             $this->sentBySession->stop();
             $this->sentBySession->start();
             $this->sentBySession->set('messageLogout', 'A bientôt !');
-            header('Location: index.php?action=getAllPosts');
+            header('Location: index.php');
         }
     }
 
@@ -275,7 +275,7 @@ class BackController extends Controller
             $this->sentBySession->stop();
             $this->sentBySession->start();
             $this->sentBySession->set('messageRemoveAccount', 'Votre compte a bien été supprimé');
-            header('Location: index.php?action=getAllPosts');
+            header('Location: index.php');
         }
     }
 
