@@ -20,17 +20,20 @@ class UserDAO extends DAO
     public function insertOneUser(Parameter $userForm)
     {
         $request = 'INSERT INTO user 
-                        (user_pseudo, 
+                        (user_pseudo,
+                         user_email,
                          user_password, 
                          user_created_at,
                          role_id) 
                     VALUES 
-                        (:pseudo, 
+                        (:pseudo,
+                         :email,
                          :password, 
                          NOW(),
                          :roleId)';
         $this->createQuery($request, [
             'pseudo'=>$userForm->get('pseudo'),
+            'email'=>$userForm->get('email'),
             'password'=>password_hash($userForm->get('password'), PASSWORD_BCRYPT),
             'roleId'=>$userForm->get('roleId')
         ]);

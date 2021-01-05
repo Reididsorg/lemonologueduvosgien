@@ -41,15 +41,34 @@ class FrontController extends Controller
             }
             if(!$errors){
                 $this->userDAO->insertOneUser($userForm);
-                $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) Votre compte sera activé bientôt !');
-                header('Location: index.php?action=getAllPosts');
+                // Send confirmation by email
+                $fromSubject = 'Bienvenue au Monologue du Vosgien';
+                $fromEmail = EMAIL_USERNAME;
+                $fromName = EMAIL_SUBJECT;
+                $fromMessage = 'Bonjour,
+                Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée.
+                Vous recevrez bientôt un message confirmant l\'activation de votre compte.';
+                $sendEmail = $this->sendEmail($fromSubject, $fromEmail, $fromName, $fromMessage);
+                if($sendEmail === 1) {
+                    $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
+                    Un courriel de confirmation vient de vous être envoyé !');
+                    header('Location: index.php?action=getAllPosts');
+                }
+                else {
+                    $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
+                    return $this->render('front/register.html.twig');
+                }
             }
-            return $this->render('front/register.html.twig', [
-                'userForm'=>$userForm,
-                'errors'=>$errors
-            ]);
+            else {
+                return $this->render('front/register.html.twig', [
+                    'userForm'=>$userForm,
+                    'errors'=>$errors
+                ]);
+            }
         }
-        return $this->render('front/register.html.twig');
+        else {
+            return $this->render('front/register.html.twig');
+        }
     }
 
     public function login(Parameter $userForm) {
@@ -107,40 +126,20 @@ class FrontController extends Controller
         if($contactForm->get('submit')) {
             $errors = $this->validation->validate($contactForm, 'Contact');
             if(!$errors){
-
-                // Envoyer le message par email
-                // Create the Transport
-                //$transport = (new Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
-                $transport = (new \Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
-                    ->setUsername(EMAIL_USERNAME)
-                    ->setPassword(EMAIL_PASSWORD)
-                    ->setEncryption(EMAIL_ENCRYPTION) //For Gmail
-                ;
-
-                // Create the Mailer using your created Transport
-                //$mailer = new Swift_Mailer($transport);
-                $mailer = (new \Swift_Mailer($transport));
-
-                // Create a message
-                //$message = (new Swift_Message('Message du monologueduvosgien'))
-                $message = (new \Swift_Message(EMAIL_SUBJECT))
-                    ->setFrom([$contactForm->get('email') => $contactForm->get('expediteur') . ' ['.$contactForm->get('email') . ']'])
-                    ->setTo([EMAIL_DEST_1, EMAIL_DEST_2 => EMAIL_DEST_NAME])
-                    ->setBody($contactForm->get('message'))
-                ;
-
-                // Send the message
-                $result = $mailer->send($message);
-
-                if($result === 1) {
-                    $this->sentBySession->set('messageContact', 'Votre message a bien été envoyé :)');
+                // Send message by email
+                $fromSubject = EMAIL_SUBJECT . ' : Nouveau message de contact';
+                $fromEmail = $contactForm->get('email');
+                $fromName = $contactForm->get('expediteur');
+                $fromMessage = $contactForm->get('message');
+                $sendEmail = $this->sendEmail($fromSubject, $fromEmail, $fromName, $fromMessage);
+                if($sendEmail === 1) {
+                    $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
                     return $this->render('front/getContact.html.twig');
                 }
                 else {
-                    $this->sentBySession->set('messageContact', 'Problème avec l\'envoi du message :(');
+                    $this->sentBySession->set('messageSendEmail', 'Problème avec l\'envoi du message :(');
                     return $this->render('front/getContact.html.twig');
                 }
-
             }
             else {
                 return $this->render('front/getContact.html.twig', [
