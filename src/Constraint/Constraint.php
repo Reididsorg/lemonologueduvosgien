@@ -4,6 +4,13 @@ namespace BrunoGrosdidier\Blog\src\Constraint;
 
 class Constraint
 {
+    public function secureInput($value) {
+        $value = trim($value);
+        $value = stripslashes($value);
+        $value = htmlspecialchars($value);
+        return $value;
+    }
+
     public function notBlank($name, $value)
     {
         if(empty($value)) {
