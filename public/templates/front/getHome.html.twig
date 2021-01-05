@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title%}Accueil{% endblock %}
+
+{% block content %}
+
+    {{ include('front/flashes.html.twig') }}
+
+    <div id="wrapper">
+
+        <h1>ACCUEIL</h1>
+
+        <div id="home">
+            {{ content }}
+        </div>
+
+    </div>
+
+{% endblock %}
