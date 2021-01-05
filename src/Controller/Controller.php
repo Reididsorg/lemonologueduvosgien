@@ -59,4 +59,32 @@ abstract class Controller
     {
         echo $this->twig->render($template, $options);
     }
+
+    public function sendEmail($fromSubject, $fromEmail, $fromName, $fromMessage)
+    {
+        // Create the Transport
+        //$transport = (new Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
+        $transport = (new \Swift_SmtpTransport(EMAIL_HOST, EMAIL_PORT))
+            ->setUsername(EMAIL_USERNAME)
+            ->setPassword(EMAIL_PASSWORD)
+            ->setEncryption(EMAIL_ENCRYPTION) //For Gmail
+        ;
+
+        // Create the Mailer using your created Transport
+        //$mailer = new Swift_Mailer($transport);
+        $mailer = (new \Swift_Mailer($transport));
+
+        // Create a message
+        //$message = (new Swift_Message('Message du monologueduvosgien'))
+        $message = (new \Swift_Message($fromSubject))
+            ->setFrom([$fromEmail => $fromName . ' ['.$fromEmail . ']'])
+            ->setTo([EMAIL_DEST_1, EMAIL_DEST_2 => EMAIL_DEST_NAME])
+            ->setBody($fromMessage)
+        ;
+
+        // Send the message
+        $result = $mailer->send($message);
+
+        return $result;
+    }
 }

@@ -4,6 +4,8 @@
 
 {% block content %}
 
+    {{ include('front/flashes.html.twig') }}
+
     <div id="wrapper">
 
         <h1>Inscription</h1>
@@ -12,9 +14,15 @@
             <form method="post" action="index.php?action=register">
                 <label for="pseudo">Pseudo</label>
                 <br>
-                <input type="text" id="pseudo" name="pseudo" value="{% if userForm %}{{ userForm.pseudo }}{% endif %}">
+                <input type="text" id="pseudo" name="pseudo" value="{% if userForm %}{{ userForm.get('pseudo') }}{% endif %}">
                 <br>
                 {% if errors.pseudo %}<p>{{ errors.pseudo }}</p>{% endif %}
+                <br>
+                <label for="pseudo">Email</label>
+                <br>
+                <input type="text" id="email" name="email" value="{% if userForm %}{{ userForm.get('email') }}{% endif %}">
+                <br>
+                {% if errors.email %}<p>{{ errors.email }}</p>{% endif %}
                 <br>
                 <label for="password">Mot de passe</label>
                 <br>
