@@ -124,7 +124,7 @@ class FrontController extends Controller
                 // Create a message
                 //$message = (new Swift_Message('Message du monologueduvosgien'))
                 $message = (new \Swift_Message(EMAIL_SUBJECT))
-                    ->setFrom([$contactForm->get('email') => $contactForm->get('expediteur')])
+                    ->setFrom([$contactForm->get('email') => $contactForm->get('expediteur') . ' ['.$contactForm->get('email') . ']'])
                     ->setTo([EMAIL_DEST_1, EMAIL_DEST_2 => EMAIL_DEST_NAME])
                     ->setBody($contactForm->get('message'))
                 ;
