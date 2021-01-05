@@ -17,6 +17,7 @@ class ContactValidation extends Validation
     public function check(Parameter $data)
     {
         foreach ($data->all() as $key => $value) {
+            $value = $this->constraint->secureInput($value);
             $this->checkField($key, $value);
         }
         return $this->errors;

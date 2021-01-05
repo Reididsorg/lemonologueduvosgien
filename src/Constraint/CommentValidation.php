@@ -17,6 +17,7 @@ class CommentValidation extends Validation
     public function check(Parameter $post)
     {
         foreach ($post->all() as $key => $value) {
+            $value = $this->constraint->secureInput($value);
             $this->checkField($key, $value);
         }
         return $this->errors;
