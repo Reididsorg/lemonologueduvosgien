@@ -12,6 +12,7 @@ class UserDAO extends DAO
         $user = new User();
         $user->setId($row['id']);
         $user->setUserPseudo($row['user_pseudo']);
+        $user->setUserEmail($row['user_email']);
         $user->setUserCreatedAtFr($row['user_created_at_fr']);
         $user->setRoleName($row['role_name']);
         return $user;
@@ -61,6 +62,7 @@ class UserDAO extends DAO
         $request = 'SELECT 
                     user.id,
                     user_pseudo,
+                    user_email,
                     user.user_password,
                     role.role_name AS roleName
                 FROM 
@@ -124,6 +126,7 @@ class UserDAO extends DAO
         $request = 'SELECT 
                     user.id, 
                     user.user_pseudo,
+                    user.user_email,
                     DATE_FORMAT(user.user_created_at, \'%d/%m/%Y à %Hh%i\') AS user_created_at_fr,
                     role.role_name 
                 FROM 

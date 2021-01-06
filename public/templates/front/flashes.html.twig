@@ -1,14 +1,62 @@
-<div class="flashMessage">
-    {{ session.show('messageRegister') }}
-    {{ session.show('messageLogin') }}
-    {{ session.show('messageLogout') }}
-    {{ session.show('messageRemoveAccount') }}
-    {{ session.show('messageCreateOnePost') }}
-    {{ session.show('messageFlagOneComment') }}
-    {{ session.show('messageCheckLoggedIn') }}
-    {{ session.show('error_login') }}
-    {{ session.show('messageCreateOneComment') }}
-    {{ session.show('messageRefreshOneComment') }}
-    {{ session.show('messageRemoveOneComment') }}
-    {{ session.show('messageSendEmail') }}
-</div>
+{% if session.get('messageRegister') %}
+    <div class="alert bootstrap alert-warning
+">
+        {{ session.show('messageRegister') }}
+    </div>
+{% endif %}
+{% if session.get('messageLogin') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageLogin') }}
+    </div>
+{% endif %}
+{% if session.get('messageLogout') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageLogout') }}
+    </div>
+{% endif %}
+{% if session.get('messageRemoveAccount') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRemoveAccount') }}
+    </div>
+{% endif %}
+{% if session.get('messageCreateOnePost') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageCreateOnePost') }}
+    </div>
+{% endif %}
+
+{% if session.get('messageFlagOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageFlagOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageCheckLoggedIn') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageCheckLoggedIn') }}
+    </div>
+{% endif %}
+{% if session.get('error_login') %}
+    <div class="alert alert-warning">
+        {{ session.show('error_login') }}
+    </div>
+{% endif %}
+{% if session.get('messageCreateOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageCreateOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageRefreshOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRefreshOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageRemoveOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRemoveOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageSendEmail') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageSendEmail') }}
+    </div>
+{% endif %}

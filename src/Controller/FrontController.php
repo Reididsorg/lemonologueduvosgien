@@ -102,6 +102,7 @@ class FrontController extends Controller
                 $this->sentBySession->set('messageLogin', 'Content de vous revoir '.$result['result']['user_pseudo'].'!');
                 $this->sentBySession->set('id', $result['result']['id']);
                 $this->sentBySession->set('roleName', $result['result']['roleName']);
+                $this->sentBySession->set('email', $result['result']['user_email']);
                 $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
                 // Redirection in terms of role name (admin or not)
                 if($result['result']['roleName'] === 'admin') {

@@ -5,24 +5,18 @@
     {{ include('front/flashes.html.twig') }}
 
     <div id="wrapper">
-
         <h1>Modification du commentaire</h1>
         <p><em>Dernière modification : {{ comment.commentDateFr }}</em></p>
-
         <div id="edit-comment">
-
             <div id="form-comment">
                 {{ include('back/formComment.html.twig') }}
             </div>
-
         </div>
-
         <div id="delete-comment">
             <p>
-                <a href="index.php?action=removeOneComment&commentId={{ comment.id }}&postId={{ comment.commentPostId }}">Supprimer ce commentaire</a>
+                <a class="btn btn-danger" href="index.php?action=removeOneComment&commentId={{ comment.id }}&postId={{ comment.commentPostId }}">Supprimer ce commentaire</a>
             </p>
         </div>
-
     </div>
 
 {% endblock %}

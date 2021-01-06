@@ -3,23 +3,19 @@
 {% block content %}
 
     <div id="wrapper">
-
         <h1>Modification du billet de blog</h1>
         <p><em>(Dernière modification : {{ post.postDateFr }},  par <strong>{{ post.postAuthor }}</strong>)</em></p>
-
         <div id="form-post">
             <?php include ('formPost.php'); ?>
             {{ include('back/formPost.html.twig') }}
         </div>
-
         {% if session.get('roleName') == 'editor' %}
             <div id="delete-post">
                 <p>
-                    <a href="index.php?action=removeOnePost&postId={{ post.id }}">Supprimer ce billet</a>
+                    <a class="btn btn-danger" href="index.php?action=removeOnePost&postId={{ post.id }}">Supprimer ce billet</a>
                 </p>
             </div>
         {% endif %}
-
     </div>
 
 {% endblock %}

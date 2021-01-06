@@ -5,16 +5,13 @@
     {{ include('back/flashes.html.twig') }}
 
     <div id="wrapper">
-
         <h1>Mon profil</h1>
-
         <div id="profile">
             <h2>Pseudo : {{ session.get('pseudo') }}</h2>
             <p>Identifiant unique : {{ session.get('id') }}</p>
-            <a href="index.php?action=refreshPassword">Modifier mon mot de passe</a>
-            <a href="index.php?action=removeAccount">Supprimer mon compte</a>
+            <a class="btn btn-warning" href="index.php?action=refreshPassword">Modifier mon mot de passe</a>
+            <a class="btn btn-warning" href="index.php?action=removeAccount">Supprimer mon compte</a>
         </div>
-
     </div>
 
 {% endblock %}

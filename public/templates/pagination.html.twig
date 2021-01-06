@@ -1,14 +1,20 @@
 {% if pagination.pageNumber|number_format > 1 %}
-    <div id="post-pagination">
-        <p>
+    <nav aria-label="Pagination">
+        <ul class="pagination pagination-sm justify-content-center">
             {% for page in 1..pagination.pageNumber|number_format %}
                 {% if pagination.page|number_format is same as (page|number_format) %}
-                    {{ page }}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">
+                            {{ page }}
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
                 {% else %}
-                    <a href="index.php?{{ action }}page={{ page }}">{{ page }}</a>
+                    <li class="page-item">
+                        <a class="page-link" href="index.php?{{ action }}page={{ page }}">{{ page }}</a>
+                    </li>
                 {% endif %}
             {% endfor %}
-        </p>
-    </div>
+        </ul>
+    </nav>
 {% endif %}
-
