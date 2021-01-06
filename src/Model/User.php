@@ -17,6 +17,11 @@ class User
     /**
      * @var string
      */
+    private $userEmail;
+
+    /**
+     * @var string
+     */
     private $userPassword;
 
     /**
@@ -70,6 +75,21 @@ class User
         $this->userPseudo = $userPseudo;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserEmail()
+    {
+        return $this->userEmail;
+    }
+
+    /**
+     * @param string $userEmail
+     */
+    public function setUserEmail($userEmail)
+    {
+        $this->userEmail = $userEmail;
+    }
 
     /**
      * @return string

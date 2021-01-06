@@ -12,7 +12,7 @@
 
         <div id="posts">
             {% if posts is empty %}
-                <em>Aucun billet de blog pour le moment.</em>
+            <p class="alert alert-warning">Aucun billet de blog pour le moment.</p>
             {% else %}
                 {% for post in posts %}
                     <div>
@@ -20,16 +20,21 @@
                             <a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a>
                         </h2>
                         <p>
-                            {{ post.postContent }}
+                            {{ post.postContent|slice(0, 400) }}
                         </p>
-                        <em>({{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
+                        <div class="flex">
+                            <a class="btn btn-secondary" href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">Lire la suite</a>
+                            <p>(Le {{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></p>
+                        </div>
                     </div>
                 {% endfor %}
             {% endif %}
 
         </div>
 
-        {{ include('pagination.html.twig') }}
+        {{ include('pagination.html.twig', {
+            action: 'action=getBlog&'
+        }) }}
 
     </div>
 

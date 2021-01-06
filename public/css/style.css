@@ -1,0 +1,24 @@
+#js-form-hide-buttons {
+    color: #fff;
+}
+.form-check {
+    padding-top: 10px;
+}
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+textarea.form-control {
+    height: 200px;
+}
+@media (min-width: 992px) {
+    .form-check {
+        padding-top: 0;
+    }
+}
+@media (min-width: 1200px) {
+    .form-check {
+        margin-right: 10px;
+    }
+}

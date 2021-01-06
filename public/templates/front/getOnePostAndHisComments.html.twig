@@ -13,10 +13,8 @@
                 <h1>
                     <a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a>
                 </h1>
-                <p>
-                    {{ post.postContent }}
-                </p>
-                <em>({{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
+                <p>{{ post.postContent }}</p>
+                <em>(Le {{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
             </div>
         </div>
 
@@ -30,17 +28,16 @@
                                 <strong>{{ comment.commentAuthor }}</strong>
                                 <em>({{ comment.commentDateFr }})</em>
                             </div>
-                            <div>{{ comment.commentContent }}</div>
+                            <p>{{ comment.commentContent }}</p>
                             <div>
                                 {% if session.get('roleName') is same as('admin') or session.get('pseudo') is same as(comment.commentAuthor)%}
-                                    <a href="index.php?action=editOneComment&commentId={{ comment.id }}">Modifier</a><br>
+                                    <p><a class="btn btn-warning" href="index.php?action=editOneComment&commentId={{ comment.id }}">Modifier</a></p>
                                 {% endif %}
-
                                 {% if comment.isCommentFlag() %}
-                                    <em>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></em>
+                                    <p>Ce commentaire a été signalé <img src="public/images/flag.png" alt="commentaire signalé" width="20" height="20"></p>
                                 {% else %}
                                     {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as('editor') %}
-                                        <em><a href="index.php?action=flagOneComment&commentId={{ comment.id }}&postId={{ post.id }}">Signaler</a></em>
+                                        <p><a class="btn btn-warning" href="index.php?action=flagOneComment&commentId={{ comment.id }}&postId={{ post.id }}">Signaler</a></p>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -49,8 +46,12 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <em>Aucun commentaire pour le moment.</em>
+                <p class="alert alert-warning">Aucun commentaire pour le moment.</p>
             {% endif %}
+
+            {{ include('pagination.html.twig', {
+                action: 'action=getOnePostAndHisComments&postId=' ~ post.id ~ '&'
+            }) }}
 
             {% if session.get('roleName') is same as('admin') or session.get('roleName') is same as('editor') %}
                 <h3>Ajouter un commentaire</h3>
@@ -60,10 +61,6 @@
             {% endif %}
 
         </div>
-
-        {{ include('pagination.html.twig', {
-            action: 'action=getOnePostAndHisComments&postId=' ~ post.id ~ '&'
-        }) }}
 
     </div>
 

@@ -1,11 +1,45 @@
-<div class="flashMessage">
-    {{ session.show('messageCreateOnePost') }}
-    {{ session.show('messageRefreshOnePost') }}
-    {{ session.show('messageRemoveOnePost') }}
-    {{ session.show('messageRemoveOneComment') }}
-    {{ session.show('messageUnflagOneComment') }}
-    {{ session.show('messageRemoveSpecificUser') }}
-    {{ session.show('messageActivateSpecificUser') }}
-    {{ session.show('messageCheckAdmin') }}
-    {{ session.show('messageRefreshPassword') }}
-</div>
+{% if session.get('messageCreateOnePost') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageCreateOnePost') }}
+    </div>
+{% endif %}
+{% if session.get('messageRefreshOnePost') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRefreshOnePost') }}
+    </div>
+{% endif %}
+{% if session.get('messageRemoveOnePost') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRemoveOnePost') }}
+    </div>
+{% endif %}
+{% if session.get('messageRemoveOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRemoveOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageUnflagOneComment') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageUnflagOneComment') }}
+    </div>
+{% endif %}
+{% if session.get('messageRemoveSpecificUser') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRemoveSpecificUser') }}
+    </div>
+{% endif %}
+{% if session.get('messageActivateSpecificUser') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageActivateSpecificUser') }}
+    </div>
+{% endif %}
+{% if session.get('messageCheckAdmin') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageCheckAdmin') }}
+    </div>
+{% endif %}
+{% if session.get('messageRefreshPassword') %}
+    <div class="alert alert-warning">
+        {{ session.show('messageRefreshPassword') }}
+    </div>
+{% endif %}
