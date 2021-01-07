@@ -7,7 +7,7 @@ if ($_SERVER['SCRIPT_FILENAME'] == '/Applications/MAMP/htdocs/lemonologueduvosgi
 }
 require_once('../vendor/autoload.php');
 require_once('../config/devMail.php');
-require_once('../config/devRecaptcha.php.dist');
+require_once('../config/devRecaptcha.php');
 
 session_start();
 

@@ -149,6 +149,10 @@ class FrontController extends Controller
                         return $this->render('front/getContact.html.twig');
                     }
                 }
+                else {
+                    $this->sentBySession->set('messageSendEmail', 'Problème avec la vérification du recaptcha :(');
+                    return $this->render('front/getContact.html.twig');
+                }
             }
             else {
                 return $this->render('front/getContact.html.twig', [
