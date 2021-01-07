@@ -1,3 +1,0 @@
-<?php
-
-const SECRET_KEY = '6Lc7XCQaAAAAAP-C_o9c6Hatsp4OPQOdGXTXGN80';
