@@ -34,20 +34,23 @@ class CommentDAO extends DAO
         return $comment;
     }
 
-    public function countAllComments($postId)
+    public function countAllValidCommentsOfOnePost($postId)
     {
         $request = 'SELECT 
                         COUNT(*) 
                     FROM 
                         comment 
                     WHERE 
-                        comment_post_id = :postId';
+                        comment_post_id = :postId
+                    AND
+                        comment_new = :commentNew';
         return $this->createQuery($request, [
-            'postId'=>$postId
+            'postId'=>$postId,
+            'commentNew'=>0,
         ])->fetchColumn();
     }
 
-	public function selectAllCommentsOfOnePost($postId, $limit = null, $start = null)
+	public function selectAllValidCommentsOfOnePost($postId, $limit = null, $start = null)
 	{
         $request = 'SELECT 
                         id, 
@@ -55,18 +58,21 @@ class CommentDAO extends DAO
                         comment_content, 
                         DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%i\') AS comment_date_fr, 
                         comment_post_id,
-                        comment_flag
+                        comment_flag,
+                        comment_new
                     FROM 
                         comment 
                     WHERE 
-                        comment_post_id = :postId 
+                        comment_post_id = :postId
+                    AND
+                        comment_new = :commentNew
                     ORDER BY comment_date DESC';
-        $sql = 'SELECT id, pseudo, content, createdAt, flag FROM comment WHERE article_id = ? ORDER BY createdAt DESC';
         if($limit) {
             $request .= ' LIMIT '.$limit.' OFFSET '.$start;
         }
         $result = $this->createQuery($request, [
-            'postId'=>$postId
+            'postId'=>$postId,
+            'commentNew'=>0
         ]);
         $comments = [];
         foreach($result as $row){

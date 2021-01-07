@@ -46,23 +46,23 @@ class CommentValidation extends Validation
     private function checkAuthor($name, $value)
     {
         if($this->constraint->notBlank($name, $value)) {
-            return $this->constraint->notBlank('auteur', $value);
+            return $this->constraint->notBlank('Auteur', $value);
         }
         if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('auteur', $value, 2);
+            return $this->constraint->minLength('Auteur', $value, 2);
         }
         if($this->constraint->maxLength($name, $value, 255)) {
-            return $this->constraint->maxLength('auteur', $value, 255);
+            return $this->constraint->maxLength('Auteur', $value, 255);
         }
     }
 
     private function checkContent($name, $value)
     {
         if($this->constraint->notBlank($name, $value)) {
-            return $this->constraint->notBlank('contenu', $value);
+            return $this->constraint->notBlank('Contenu', $value);
         }
         if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('contenu', $value, 2);
+            return $this->constraint->minLength('Contenu', $value, 2);
         }
     }
 }

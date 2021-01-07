@@ -4,13 +4,35 @@
 
     {{ include('back/flashes.html.twig') }}
 
-    <div id="wrapper">
+    <div class="wrapper">
         <h1>Mon profil</h1>
         <div id="profile">
-            <h2>Pseudo : {{ session.get('pseudo') }}</h2>
-            <p>Identifiant unique : {{ session.get('id') }}</p>
+            <h2>{{ session.get('pseudo') }}</h2>
+            {% if session.get('roleName') is same as 'new' %}
+                <p>
+                    Vous êtes un nouvel utilisateur. Bienvenue {{ session.get('pseudo') }} ! :)<br>
+                    Votre compte sera très bientôt activé afin de vous permettre de publier des commentaires.<br>
+                    Vous serez averti par email dès que ce sera bon !
+                    Merci ;)
+                </p>
+            {% endif %}
+            <a class="btn btn-warning" href="index.php?action=logout">Me déconnecter</a>
             <a class="btn btn-warning" href="index.php?action=refreshPassword">Modifier mon mot de passe</a>
-            <a class="btn btn-warning" href="index.php?action=removeAccount">Supprimer mon compte</a>
+            <a class="btn btn-danger" data-toggle="modal" data-target="#removeAccountModal" href="#">Supprimer mon compte</a>
+            <div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body d-flex justify-content-center">
+                            Voulez-vous vraiment supprimer votre compte ?<br>
+                            Cette action est irreversible.
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                            <a href="index.php?action=removeAccount" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer mon compte</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

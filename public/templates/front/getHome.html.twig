@@ -4,10 +4,11 @@
 
 {% block content %}
 
-    {{ include('front/flashes.html.twig') }}
-
-    <div id="wrapper">
+    <div class="wrapper">
         <h1>ACCUEIL</h1>
+
+        {{ include('front/flashes.html.twig') }}
+
         <div id="home">
             <p class="text-center">{{ content }}</p>
         </div>

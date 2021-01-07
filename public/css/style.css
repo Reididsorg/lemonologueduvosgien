@@ -22,3 +22,11 @@ textarea.form-control {
         margin-right: 10px;
     }
 }
+.flag-comment {
+    color: #C82333;
+    font-weight: bold;
+}
+
+.wrapper {
+    margin-bottom: 20px;
+}

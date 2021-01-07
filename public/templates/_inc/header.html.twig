@@ -18,15 +18,9 @@
                 <a class="nav-link" href="index.php?action=getContact">CONTACT</a>
             </li>
             {% if session.get('pseudo') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=logout">DECONNEXION</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=editProfile">PROFIL</a>
-                </li>
                 {% if session.get('roleName') is same as('admin') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?action=getAdmin">ADMNINISTRATION</a>
+                        <a id="nav-admin" class="nav-link" href="index.php?action=getAdmin">ADMIN</a>
                     </li>
                 {% endif %}
             {% else %}
@@ -35,6 +29,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?action=login">CONNEXION</a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if session.get('pseudo') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=editProfile" data-toggle="tooltip" data-placement="bottom" title="Mon profil">Bonjour <strong>{{ session.get('pseudo') }}</strong></a>
                 </li>
             {% endif %}
         </ul>

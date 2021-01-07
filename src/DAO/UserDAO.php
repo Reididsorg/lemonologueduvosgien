@@ -159,4 +159,28 @@ class UserDAO extends DAO
             'userId'=>$userId
         ]);
     }
+
+    public function getOneUserInfos($userId)
+    {
+        $request = 'SELECT 
+                    user.id,
+                    user_pseudo,
+                    user_email,
+                    DATE_FORMAT(user.user_created_at, \'%d/%m/%Y à %Hh%i\') AS user_created_at_fr,
+                    role.role_name
+                FROM 
+                    user
+                LEFT JOIN role
+                    ON role.id = user.role_id
+                WHERE 
+                   user.id = :userId';
+        $data = $this->createQuery($request, [
+            'userId'=>$userId
+        ]);
+        $userInfos = $data->fetch();
+        $data->closeCursor();
+        return $this->buildObject($userInfos);
+
+    }
+
 }

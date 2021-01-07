@@ -45,8 +45,8 @@ class FrontController extends Controller
     public function getOnePostAndHisComments($postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
-        $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
-        $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+        $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
+        $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
         return $this->render('front/getOnePostAndHisComments.html.twig', [
             'post' => $post,
             'comments' => $comments,
@@ -65,14 +65,17 @@ class FrontController extends Controller
             }
             if(!$errors){
                 $this->userDAO->insertOneUser($userForm);
-                // Send confirmation by email
-                $fromSubject = 'Bienvenue au Monologue du Vosgien';
-                $fromEmail = EMAIL_USERNAME;
-                $fromName = EMAIL_SUBJECT;
-                $fromMessage = 'Bonjour,
-                Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée.
-                Vous recevrez bientôt un message confirmant l\'activation de votre compte.';
-                $sendEmail = $this->sendEmail($fromSubject, $fromEmail, $fromName, $fromMessage);
+                // Send confirmation to user by email
+                $userEmail = $userForm->get('email');
+                $userName = $userForm->get('pseudo');
+                $subjectToUser = 'Bienvenue au Monologue du Vosgien';
+                $messageToUser = 'Bonjour '.ucfirst($userForm->get('pseudo')).' !
+                <p>Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée ! :)<br>
+                Vous recevrez bientôt un message confirmant l\'activation de votre compte.<br>
+                Vous pourrez alors publier des commentaires sur le site.<br>
+                A bientôt !</p>
+                <p>Bruno</p>';
+                $sendEmail = $this->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
                 if($sendEmail === 1) {
                     $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
                     Un courriel de confirmation vient de vous être envoyé !');
@@ -127,12 +130,14 @@ class FrontController extends Controller
         if($contactForm->get('submit')) {
             $errors = $this->validation->validate($contactForm, 'Contact');
             if(!$errors){
-                // Send message by email
-                $fromSubject = EMAIL_SUBJECT . ' : Nouveau message de contact';
-                $fromEmail = $contactForm->get('email');
-                $fromName = $contactForm->get('expediteur');
-                $fromMessage = $contactForm->get('message');
-                $sendEmail = $this->sendEmail($fromSubject, $fromEmail, $fromName, $fromMessage);
+                // Send message to me by email
+                $subjectToMe = 'Nouveau message de contact';
+                $messageToMe = '<p><strong>De : </strong><br>'.$contactForm->get('expediteur').'</p>
+                <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
+                <p><strong>Message : </strong><br>
+                '.nl2br($contactForm->get('message')).'</p>';
+
+                $sendEmail = $this->sendEmailToMe($subjectToMe, $messageToMe);
                 if($sendEmail === 1) {
                     $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
                     return $this->render('front/getContact.html.twig');
