@@ -294,7 +294,7 @@ class BackController extends Controller
                 Vous pouvez désormais publier des commentaires.<br>
                 A bientôt !</p>
                 Bruno';
-            $sendEmail = $this->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
+            $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
             if($sendEmail === 1) {
                 $this->sentBySession->set('messageActivateSpecificUser', 'L\'utilisateur a bien été activé avec le rôle EDITOR. Un email vient de lui être envoyé :)');
                 header('Location: index.php?action=getAdmin');
