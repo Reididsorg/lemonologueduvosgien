@@ -75,7 +75,7 @@ class FrontController extends Controller
                 Vous pourrez alors publier des commentaires sur le site.<br>
                 A bientôt !</p>
                 <p>Bruno</p>';
-                $sendEmail = $this->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
+                $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
                 if($sendEmail === 1) {
                     $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
                     Un courriel de confirmation vient de vous être envoyé !');
@@ -139,7 +139,7 @@ class FrontController extends Controller
                 <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
                 <p><strong>Message : </strong><br>
                 '.nl2br($contactForm->get('message')).'</p>';
-                    $sendEmail = $this->sendEmailToMe($subjectToMe, $messageToMe);
+                    $sendEmail = $this->sendEmail->sendEmailToMe($subjectToMe, $messageToMe);
                     if($sendEmail === 1) {
                         $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
                         return $this->render('front/getContact.html.twig');
