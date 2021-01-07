@@ -130,21 +130,24 @@ class FrontController extends Controller
         if($contactForm->get('submit')) {
             $errors = $this->validation->validate($contactForm, 'Contact');
             if(!$errors){
-                // Send message to me by email
-                $subjectToMe = 'Nouveau message de contact';
-                $messageToMe = '<p><strong>De : </strong><br>'.$contactForm->get('expediteur').'</p>
+                // Verify Recaptcha
+                $verifyRecaptcha = $this->recaptcha->verifyRecaptcha($contactForm->get('recaptcha-response'));
+                if($verifyRecaptcha === 'success') {
+                    // Send message to me by email
+                    $subjectToMe = 'Nouveau message de contact';
+                    $messageToMe = '<p><strong>De : </strong><br>'.$contactForm->get('expediteur').'</p>
                 <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
                 <p><strong>Message : </strong><br>
                 '.nl2br($contactForm->get('message')).'</p>';
-
-                $sendEmail = $this->sendEmailToMe($subjectToMe, $messageToMe);
-                if($sendEmail === 1) {
-                    $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
-                    return $this->render('front/getContact.html.twig');
-                }
-                else {
-                    $this->sentBySession->set('messageSendEmail', 'Problème avec l\'envoi du message :(');
-                    return $this->render('front/getContact.html.twig');
+                    $sendEmail = $this->sendEmailToMe($subjectToMe, $messageToMe);
+                    if($sendEmail === 1) {
+                        $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
+                        return $this->render('front/getContact.html.twig');
+                    }
+                    else {
+                        $this->sentBySession->set('messageSendEmail', 'Problème avec l\'envoi du message :(');
+                        return $this->render('front/getContact.html.twig');
+                    }
                 }
             }
             else {

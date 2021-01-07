@@ -8,6 +8,7 @@ use BrunoGrosdidier\Blog\src\DAO\PostDAO;
 use BrunoGrosdidier\Blog\src\DAO\CommentDAO;
 use BrunoGrosdidier\Blog\src\DAO\UserDAO;
 use BrunoGrosdidier\Blog\src\Model\Pagination;
+use BrunoGrosdidier\Blog\src\Service\Recaptcha;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -23,6 +24,7 @@ abstract class Controller
     protected $sentBySession;
     protected $validation;
     protected $pagination;
+    protected $recaptcha;
     /**
      * @var Environment
      */
@@ -34,6 +36,7 @@ abstract class Controller
         $this->commentDAO = new CommentDAO();
         $this->userDAO = new UserDAO();
         $this->pagination = new Pagination();
+        $this->recaptcha = new Recaptcha();
         $this->validation = new Validation();
         $request = new Request();
         $this->sentByGet = $request->getSentByGet();

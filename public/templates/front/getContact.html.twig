@@ -55,9 +55,20 @@
                         <div class="alert alert-danger">{{ errors.message }}</div>
                     {% endif %}
                 </div>
+                <!-- Recaptcha field -->
+                <input type="hidden" id="recaptchaResponse" name="recaptcha-response">
                 <input class="btn btn-success" type="submit" value="Envoyer" id="submit" name="submit">
             </form>
         </div>
     </div>
-
+    <!-- Recaptcha call -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lc7XCQaAAAAAN9pYATVTLIEM3T8Pjb8qwvjk4xA"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lc7XCQaAAAAAN9pYATVTLIEM3T8Pjb8qwvjk4xA', {action: 'submit'}).then(function(token) {
+                // Add your logic to submit to your backend server here.
+                document.getElementById('recaptchaResponse').value = token
+            });
+        });
+    </script>
 {% endblock %}
