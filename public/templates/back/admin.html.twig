@@ -2,7 +2,7 @@
 {% block title %}Administration{% endblock %}
 {% block content %}
 
-    <div id="wrapper">
+    <div class="wrapper">
         <h1>Administration</h1>
         <div id="admin">
             {{ include('back/flashes.html.twig') }}
@@ -62,7 +62,8 @@
                             <tr>
                                 <td>Id</td>
                                 <td>Pseudo</td>
-                                <td>Message</td>
+                                <td>Commentaire</td>
+                                <td>Id billet</td>
                                 <td>Date</td>
                                 <td>Actions</td>
                             </tr>
@@ -70,7 +71,8 @@
                                 <tr>
                                     <td>{{ newComment.id }}</td>
                                     <td>{{ newComment.commentAuthor }}</td>
-                                    <td>{{ newComment.content|slice(0, 150) }}</td>
+                                    <td>{{ newComment.commentContent|slice(0, 150) }}</td>
+                                    <td>{{ newComment.commentPostId }}</td>
                                     <td>Créé le : {{ newComment.commentDateFr }}</td>
                                     <td>
                                         <a href="index.php?action=validateOneComment&commentId={{ newComment.id }}">Valider</a>

@@ -50,13 +50,13 @@ class ContactValidation extends Validation
     private function checkEmailExpeditor($name, $value)
     {
         if($this->constraint->notBlank($name, $value)) {
-            return $this->constraint->notBlank('expediteur', $value);
+            return $this->constraint->notBlank('Expéditeur', $value);
         }
         if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('expediteur', $value, 2);
+            return $this->constraint->minLength('Expéditeur', $value, 2);
         }
         if($this->constraint->maxLength($name, $value, 255)) {
-            return $this->constraint->maxLength('expediteur', $value, 255);
+            return $this->constraint->maxLength('Expéditeur', $value, 255);
         }
         return null;
     }
@@ -64,16 +64,16 @@ class ContactValidation extends Validation
     private function checkEmailAdress($name, $value)
     {
         if($this->constraint->notBlank($name, $value)) {
-            return $this->constraint->notBlank('email', $value);
+            return $this->constraint->notBlank('Email', $value);
         }
         if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('email', $value, 2);
+            return $this->constraint->minLength('Email', $value, 2);
         }
         if($this->constraint->maxLength($name, $value, 255)) {
-            return $this->constraint->maxLength('email', $value, 255);
+            return $this->constraint->maxLength('Email', $value, 255);
         }
         if($this->constraint->isValidEmailAdress($name, $value)) {
-            return $this->constraint->isValidEmailAdress('email', $value);
+            return $this->constraint->isValidEmailAdress('Email', $value);
         }
         return null;
     }
@@ -81,10 +81,10 @@ class ContactValidation extends Validation
     private function checkEmailMessage($name, $value)
     {
         if($this->constraint->notBlank($name, $value)) {
-            return $this->constraint->notBlank('message', $value);
+            return $this->constraint->notBlank('Message', $value);
         }
         if($this->constraint->minLength($name, $value, 2)) {
-            return $this->constraint->minLength('message', $value, 2);
+            return $this->constraint->minLength('Message', $value, 2);
         }
         return null;
     }

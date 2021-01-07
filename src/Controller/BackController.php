@@ -68,7 +68,7 @@ class BackController extends Controller
     {
         if($this->checkAdmin()) {
             $post = $this->postDAO->selectOnePost($postId);
-            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+            $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId);
             return $this->render('back/editOnePost.html.twig', [
                 'post' => $post,
                 'comments' => $comments
@@ -124,9 +124,9 @@ class BackController extends Controller
                     }
                     $this->commentDAO->insertOneComment($postId, $commentForm, $commentIsNew);
                     $post = $this->postDAO->selectOnePost($postId);
-                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
-                    $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
-                    $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été créé');
+                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
+                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                    $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été enregistré :) Il sera publié après validation.');
                     return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
                         'comments' => $comments,
@@ -135,8 +135,8 @@ class BackController extends Controller
                 }
                 else {
                     $post = $this->postDAO->selectOnePost($postId);
-                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
-                    $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
+                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
                     return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
                         'comments' => $comments,
@@ -148,8 +148,8 @@ class BackController extends Controller
             }
             else {
                 $post = $this->postDAO->selectOnePost($postId);
-                $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllComments($postId));
-                $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
+                $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
                 return $this->render('front/getOnePostAndHisComments.html.twig', [
                     'post' => $post,
                     'comments' => $comments,
@@ -213,7 +213,7 @@ class BackController extends Controller
             $this->commentDAO->flagOneComment($commentId);
             $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
             $post = $this->postDAO->selectOnePost($postId);
-            $comments = $this->commentDAO->selectAllCommentsOfOnePost($postId);
+            $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId);
             return $this->render('front/getOnePostAndHisComments.html.twig', [
                 'post' => $post,
                 'comments' => $comments
@@ -283,8 +283,26 @@ class BackController extends Controller
     {
         if($this->checkAdmin()) {
             $this->userDAO->activateSpecificUser($userId);
-            $this->sentBySession->set('messageActivateSpecificUser', 'L\'utilisateur a bien été activé avec le rôle EDITOR');
-            header('Location: index.php?action=getAdmin');
+            // Get user infos
+            $userInfos = $this->userDAO->getOneUserInfos($userId);
+            // Send confirmation to user by email
+            $userEmail = $userInfos->getUserEmail();
+            $userName = $userInfos->getUserPseudo();
+            $subjectToUser = 'Votre compte est activé :)';
+            $messageToUser = 'Bonjour '.$userInfos->getUserPseudo().' !
+                <p>Votre compte sur le site LEMONOLOGUEDUVOSGIEN a été activé ! :)<br>
+                Vous pouvez désormais publier des commentaires.<br>
+                A bientôt !</p>
+                Bruno';
+            $sendEmail = $this->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
+            if($sendEmail === 1) {
+                $this->sentBySession->set('messageActivateSpecificUser', 'L\'utilisateur a bien été activé avec le rôle EDITOR. Un email vient de lui être envoyé :)');
+                header('Location: index.php?action=getAdmin');
+            }
+            else {
+                $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
+                return $this->render('back/admin.html.twig');
+            }
         }
     }
 
