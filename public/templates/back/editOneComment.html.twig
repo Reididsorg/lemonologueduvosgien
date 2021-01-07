@@ -13,9 +13,21 @@
             </div>
         </div>
         <div id="delete-comment">
-            <p>
-                <a class="btn btn-danger" href="index.php?action=removeOneComment&commentId={{ comment.id }}&postId={{ comment.commentPostId }}">Supprimer ce commentaire</a>
-            </p>
+            <a class="btn btn-danger" data-toggle="modal" data-target="#removeCommentModal" href="#">Supprimer ce commentaire</a>
+            <div class="modal fade" id="removeCommentModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body d-flex justify-content-center">
+                            Voulez-vous vraiment supprimer le commentaire ?<br>
+                            Cette action est irreversible.
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                            <a href="index.php?action=removeOneComment&commentId={{ comment.id }}&postId={{ comment.commentPostId }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce commentaire !</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
