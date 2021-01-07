@@ -64,25 +64,33 @@ class FrontController extends Controller
                 $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
             }
             if(!$errors){
-                $this->userDAO->insertOneUser($userForm);
-                // Send confirmation to user by email
-                $userEmail = $userForm->get('email');
-                $userName = $userForm->get('pseudo');
-                $subjectToUser = 'Bienvenue au Monologue du Vosgien';
-                $messageToUser = 'Bonjour '.ucfirst($userForm->get('pseudo')).' !
-                <p>Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée ! :)<br>
-                Vous recevrez bientôt un message confirmant l\'activation de votre compte.<br>
-                Vous pourrez alors publier des commentaires sur le site.<br>
-                A bientôt !</p>
-                <p>Bruno</p>';
-                $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
-                if($sendEmail === 1) {
-                    $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
+                // Verify Recaptcha
+                $verifyRecaptcha = $this->recaptcha->verifyRecaptcha($userForm->get('recaptcha-response'));
+                if($verifyRecaptcha === 'success') {
+                    $this->userDAO->insertOneUser($userForm);
+                    // Send confirmation to user by email
+                    $userEmail = $userForm->get('email');
+                    $userName = $userForm->get('pseudo');
+                    $subjectToUser = 'Bienvenue au Monologue du Vosgien';
+                    $messageToUser = 'Bonjour '.ucfirst($userForm->get('pseudo')).' !
+                    <p>Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée ! :)<br>
+                    Vous recevrez bientôt un message confirmant l\'activation de votre compte.<br>
+                    Vous pourrez alors publier des commentaires sur le site.<br>
+                    A bientôt !</p>
+                    <p>Bruno</p>';
+                    $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
+                    if($sendEmail === 1) {
+                        $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
                     Un courriel de confirmation vient de vous être envoyé !');
-                    header('Location: index.php');
+                        header('Location: index.php');
+                    }
+                    else {
+                        $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
+                        return $this->render('front/register.html.twig');
+                    }
                 }
                 else {
-                    $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
+                    $this->sentBySession->set('messageRegister', 'Problème avec la vérification du recaptcha :(');
                     return $this->render('front/register.html.twig');
                 }
             }
@@ -136,9 +144,9 @@ class FrontController extends Controller
                     // Send message to me by email
                     $subjectToMe = 'Nouveau message de contact';
                     $messageToMe = '<p><strong>De : </strong><br>'.$contactForm->get('expediteur').'</p>
-                <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
-                <p><strong>Message : </strong><br>
-                '.nl2br($contactForm->get('message')).'</p>';
+                    <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
+                    <p><strong>Message : </strong><br>
+                    '.nl2br($contactForm->get('message')).'</p>';
                     $sendEmail = $this->sendEmail->sendEmailToMe($subjectToMe, $messageToMe);
                     if($sendEmail === 1) {
                         $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
