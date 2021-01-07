@@ -9,7 +9,7 @@ class Recaptcha
     public function verifyRecaptcha($recaptchaFormResponse)
     {
         // Recaptcha URL
-        $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret=6Lc7XCQaAAAAAP-C_o9c6Hatsp4OPQOdGXTXGN80&response={$recaptchaFormResponse}";
+        $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret=".SECRET_KEY."&response={$recaptchaFormResponse}";
 
         // Check if curl is installed
         if(function_exists('curl_version')){
