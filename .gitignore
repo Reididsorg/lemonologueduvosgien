@@ -3,3 +3,4 @@ vendor
 config/devMac.php
 config/devPc.php
 config/devMail.php
+config/devRecaptcha.php
