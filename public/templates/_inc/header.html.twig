@@ -1,43 +1,45 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="index.php">LE MONOLOGUE DU VOSGIEN</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="index.php">ACCUEIL <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.php?action=getBlog">BLOG</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.php?action=getCv">CV</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.php?action=getContact">CONTACT</a>
-            </li>
-            {% if session.get('pseudo') %}
-                {% if session.get('roleName') is same as('admin') %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.php">LE MONOLOGUE DU VOSGIEN</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">ACCUEIL <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=getBlog">BLOG</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=getCv">CV</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=getContact">CONTACT</a>
+                </li>
+                {% if session.get('pseudo') %}
+                    {% if session.get('roleName') is same as('admin') %}
+                        <li class="nav-item">
+                            <a id="nav-admin" class="nav-link" href="index.php?action=getAdmin">ADMIN</a>
+                        </li>
+                    {% endif %}
+                {% else %}
                     <li class="nav-item">
-                        <a id="nav-admin" class="nav-link" href="index.php?action=getAdmin">ADMIN</a>
+                        <a class="nav-link" href="index.php?action=register">INSCRIPTION</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=login">CONNEXION</a>
                     </li>
                 {% endif %}
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=register">INSCRIPTION</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=login">CONNEXION</a>
-                </li>
-            {% endif %}
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            {% if session.get('pseudo') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=editProfile" data-toggle="tooltip" data-placement="bottom" title="Mon profil">Bonjour <strong>{{ session.get('pseudo') }}</strong></a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if session.get('pseudo') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=editProfile" data-toggle="tooltip" data-placement="bottom" title="Mon profil">Bonjour <strong>{{ session.get('pseudo') }}</strong></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

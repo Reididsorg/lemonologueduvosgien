@@ -4,3 +4,6 @@ config/devMac.php
 config/devPc.php
 config/devMail.php
 config/devRecaptcha.php
+public/documents/cv-bruno-grosdidier-2021.pdf
+public/images/paysage-vosges.jpg
+public/images/photo.jpg

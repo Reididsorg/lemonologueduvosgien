@@ -16,10 +16,16 @@
                     Merci ;)
                 </p>
             {% endif %}
-            <a class="btn btn-warning" href="index.php?action=logout">Me déconnecter</a>
-            <a class="btn btn-warning" href="index.php?action=refreshPassword">Modifier mon mot de passe</a>
-            <a class="btn btn-danger" data-toggle="modal" data-target="#removeAccountModal" href="#">Supprimer mon compte</a>
-            <div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog">
+            <h3>Déconnexion</h3>
+            <p>
+                <a class="btn btn-warning" href="index.php?action=logout">Me déconnecter</a>
+            </p>
+
+            <h3>Gestion de mon profil</h3>
+            <p>
+                <a class="btn btn-warning" href="index.php?action=refreshPassword">Modifier mon mot de passe</a>
+                <a class="btn btn-danger" data-toggle="modal" data-target="#removeAccountModal" href="#">Supprimer mon compte</a>
+                <div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body d-flex justify-content-center">
@@ -33,6 +39,7 @@
                     </div>
                 </div>
             </div>
+            </p>
         </div>
     </div>
 
