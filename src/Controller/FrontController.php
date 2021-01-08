@@ -5,12 +5,13 @@ namespace BrunoGrosdidier\Blog\src\Controller;
 use BrunoGrosdidier\Blog\config\Parameter;
 
 use BrunoGrosdidier\Blog\vendor\swiftmailer\swiftmailer\lib\classes\Swift\SmtpTransport;
+use JetBrains\PhpStorm\ArrayShape;
 
 class FrontController extends Controller
 {
     public function getHome()
     {
-        $content = 'Bienvenue sur l\'espace de Bruno Grosdidier !';
+        $content = 'Bonjour !';
         return $this->render('front/getHome.html.twig', [
             'content' => $content
         ]);
