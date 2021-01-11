@@ -18,8 +18,8 @@ class PostDAO extends DAO
         return $post;
     }
 
-	public function selectOnePost($postId)
-	{
+    public function selectOnePost($postId)
+    {
         $request = 'SELECT 
                         post.id, 
                         post.post_title, 
@@ -33,12 +33,12 @@ class PostDAO extends DAO
                     WHERE 
                         post.id = :id';
         $result = $this->createQuery($request, [
-            'id'=>$postId
+            'id' => $postId
         ]);
         $post = $result->fetch();
         $result->closeCursor();
         return $this->buildObject($post);
-	}
+    }
 
     public function countAllPosts()
     {
@@ -50,7 +50,7 @@ class PostDAO extends DAO
     }
 
     public function selectAllPosts($limit = null, $start = null)
-	{
+    {
         $request = 'SELECT 
                         post.id, 
                         post.post_title, 
@@ -63,18 +63,18 @@ class PostDAO extends DAO
                         ON user.id = post.user_id
                     ORDER BY 
                         post_date DESC';
-        if($limit) {
-            $request .= ' LIMIT '.$limit.' OFFSET '.$start;
+        if ($limit) {
+            $request .= ' LIMIT ' . $limit . ' OFFSET ' . $start;
         }
         $result = $this->createQuery($request);
         $posts = [];
-        foreach($result as $row){
+        foreach ($result as $row) {
             $postId = $row['id'];
             $posts[$postId] = $this->buildObject($row);
         }
         $result->closeCursor();
         return $posts;
-	}
+    }
 
     public function insertOnePost(Parameter $post, $userId)
     {
@@ -89,9 +89,9 @@ class PostDAO extends DAO
                          NOW(),
                          :userId)';
         $this->createQuery($request, [
-            'title'=>$post->get('title'),
-            'content'=>$post->get('content'),
-            'userId'=>$userId
+            'title' => $post->get('title'),
+            'content' => $post->get('content'),
+            'userId' => $userId
         ]);
     }
 
@@ -107,18 +107,18 @@ class PostDAO extends DAO
                     WHERE 
                         id = :id';
         $this->createQuery($request, [
-            'post_title'=>$post->get('title'),
-            'post_content'=>$post->get('content'),
-            'userId'=>$userId,
-            'id'=>$postId
+            'post_title' => $post->get('title'),
+            'post_content' => $post->get('content'),
+            'userId' => $userId,
+            'id' => $postId
         ]);
     }
 
-	public function deleteOnePost($postId)
-	{
+    public function deleteOnePost($postId)
+    {
         $request = 'DELETE FROM post WHERE id = :id';
         $this->createQuery($request, [
-            'id'=>$postId
+            'id' => $postId
         ]);
-	}
+    }
 }

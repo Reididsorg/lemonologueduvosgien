@@ -25,22 +25,21 @@ class UserValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'pseudo') {
+        if ($name === 'pseudo') {
             $error = $this->checkPseudo($name, $value);
             $this->addError($name, $error);
-        }
-        elseif ($name === 'email') {
+        } elseif ($name === 'email') {
             $error = $this->checkEmailAdress($name, $value);
             $this->addError($name, $error);
-        }
-        elseif ($name === 'password') {
+        } elseif ($name === 'password') {
             $error = $this->checkPassword($name, $value);
             $this->addError($name, $error);
         }
     }
 
-    private function addError($name, $error) {
-        if($error) {
+    private function addError($name, $error)
+    {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -49,29 +48,29 @@ class UserValidation extends Validation
 
     private function checkPseudo($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Pseudo', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Pseudo', $value, 2);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Pseudo', $value, 255);
         }
     }
 
     private function checkEmailAdress($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Email', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Email', $value, 2);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Email', $value, 255);
         }
-        if($this->constraint->isValidEmailAdress($name, $value)) {
+        if ($this->constraint->isValidEmailAdress($name, $value)) {
             return $this->constraint->isValidEmailAdress('Email', $value);
         }
         return null;
@@ -79,13 +78,13 @@ class UserValidation extends Validation
 
     private function checkPassword($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Mot de passe', $value);
         }
-        if($this->constraint->minLength($name, $value, 5)) {
+        if ($this->constraint->minLength($name, $value, 5)) {
             return $this->constraint->minLength('Mot de passe', $value, 5);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Mot de passe', $value, 255);
         }
     }

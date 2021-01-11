@@ -33,10 +33,10 @@ class UserDAO extends DAO
                          NOW(),
                          :roleId)';
         $this->createQuery($request, [
-            'pseudo'=>$userForm->get('pseudo'),
-            'email'=>$userForm->get('email'),
-            'password'=>password_hash($userForm->get('password'), PASSWORD_BCRYPT),
-            'roleId'=>$userForm->get('roleId')
+            'pseudo' => $userForm->get('pseudo'),
+            'email' => $userForm->get('email'),
+            'password' => password_hash($userForm->get('password'), PASSWORD_BCRYPT),
+            'roleId' => $userForm->get('roleId')
         ]);
     }
 
@@ -49,10 +49,10 @@ class UserDAO extends DAO
                     WHERE 
                         user_pseudo = :pseudo';
         $result = $this->createQuery($request, [
-            'pseudo'=>$user->get('pseudo')
+            'pseudo' => $user->get('pseudo')
         ]);
         $isUnique = $result->fetchColumn();
-        if($isUnique) {
+        if ($isUnique) {
             return '<p>Le pseudo existe déjà</p>';
         }
     }
@@ -72,7 +72,7 @@ class UserDAO extends DAO
                 WHERE 
                     user.user_pseudo = :pseudo';
         $data = $this->createQuery($request, [
-            'pseudo'=>$user->get('pseudo')
+            'pseudo' => $user->get('pseudo')
         ]);
         $result = $data->fetch();
         if ($result) {
@@ -94,8 +94,8 @@ class UserDAO extends DAO
                     WHERE
                         user_pseudo = :pseudo';
         $this->createQuery($request, [
-            'password'=>password_hash($user->get('password'), PASSWORD_BCRYPT),
-            'pseudo'=>$pseudo
+            'password' => password_hash($user->get('password'), PASSWORD_BCRYPT),
+            'pseudo' => $pseudo
         ]);
     }
 
@@ -106,7 +106,7 @@ class UserDAO extends DAO
                     WHERE
                         user_pseudo = :pseudo';
         $this->createQuery($request, [
-            'pseudo'=>$pseudo
+            'pseudo' => $pseudo
         ]);
     }
 
@@ -117,7 +117,7 @@ class UserDAO extends DAO
                     WHERE
                         id = :userId';
         $this->createQuery($request, [
-            'userId'=>$userId
+            'userId' => $userId
         ]);
     }
 
@@ -136,7 +136,7 @@ class UserDAO extends DAO
                 ORDER BY user.id DESC';
         $result = $this->createQuery($request);
         $users = [];
-        foreach ($result as $row){
+        foreach ($result as $row) {
             $userId = $row['id'];
             $users[$userId] = $this->buildObject($row);
         }
@@ -155,8 +155,8 @@ class UserDAO extends DAO
                     ';
         // roleId = 2 (Editor)
         $this->createQuery($request, [
-            'roleId'=>2,
-            'userId'=>$userId
+            'roleId' => 2,
+            'userId' => $userId
         ]);
     }
 
@@ -175,12 +175,10 @@ class UserDAO extends DAO
                 WHERE 
                    user.id = :userId';
         $data = $this->createQuery($request, [
-            'userId'=>$userId
+            'userId' => $userId
         ]);
         $userInfos = $data->fetch();
         $data->closeCursor();
         return $this->buildObject($userInfos);
-
     }
-
 }

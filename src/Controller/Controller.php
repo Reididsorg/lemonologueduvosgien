@@ -50,7 +50,7 @@ abstract class Controller
 
     public function getTwig()
     {
-        $loader = new FilesystemLoader(__DIR__.'/../../templates');
+        $loader = new FilesystemLoader(__DIR__ . '/../../templates');
         $this->twig = new Environment($loader, [
             //TODO: activate cache in production
             //'cache' => '/path/to/compilation_cache',

@@ -156,5 +156,4 @@ class Comment
     {
         $this->commentNew = $commentNew;
     }
-
 }

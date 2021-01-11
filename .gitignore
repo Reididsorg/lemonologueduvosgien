@@ -7,3 +7,5 @@ config/devRecaptcha.php
 public/documents/cv-bruno-grosdidier-2021.pdf
 public/images/paysage-vosges.jpg
 public/images/photo.jpg
+phpcs.xml.dist
+.phpcs-cache

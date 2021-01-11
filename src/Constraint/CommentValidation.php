@@ -25,18 +25,18 @@ class CommentValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'author') {
+        if ($name === 'author') {
             $error = $this->checkAuthor($name, $value);
             $this->addError($name, $error);
-        }
-        elseif ($name === 'content') {
+        } elseif ($name === 'content') {
             $error = $this->checkContent($name, $value);
             $this->addError($name, $error);
         }
     }
 
-    private function addError($name, $error) {
-        if($error) {
+    private function addError($name, $error)
+    {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -45,23 +45,23 @@ class CommentValidation extends Validation
 
     private function checkAuthor($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Auteur', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Auteur', $value, 2);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Auteur', $value, 255);
         }
     }
 
     private function checkContent($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Contenu', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Contenu', $value, 2);
         }
     }

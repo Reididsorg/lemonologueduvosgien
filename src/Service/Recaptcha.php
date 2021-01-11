@@ -9,10 +9,12 @@ class Recaptcha
     public function verifyRecaptcha($recaptchaFormResponse)
     {
         // Recaptcha URL
-        $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret=".SECRET_KEY."&response={$recaptchaFormResponse}";
+        $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret="
+                        . SECRET_KEY
+                        . "&response={$recaptchaFormResponse}";
 
         // Check if curl is installed
-        if(function_exists('curl_version')){
+        if (function_exists('curl_version')) {
             $curl = curl_init($recaptchaUrl);
             curl_setopt($curl, CURLOPT_HEADER, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -25,22 +27,19 @@ class Recaptcha
                 //var_dump(curl_error($curl)); // debug
             }
             curl_close($curl);
-        }
-        else{
+        } else {
             // Use of file_get_contents
             $response = file_get_contents($recaptchaUrl);
         }
 
         // Check if response
-        if(empty($response) || is_null($response)){
+        if (empty($response) || is_null($response)) {
             return 'error';
-        }
-        else {
+        } else {
             $data = json_decode($response);
             if ($data->success) {
                 return 'success';
-            }
-            else {
+            } else {
                 return 'error';
             }
         }
