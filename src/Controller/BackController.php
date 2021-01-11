@@ -8,7 +8,7 @@ class BackController extends Controller
 {
     private function checkLoggedIn()
     {
-        if(!$this->sentBySession->get('pseudo')) {
+        if (!$this->sentBySession->get('pseudo')) {
             $this->sentBySession->set('messageCheckLoggedIn', 'Vous devez vous connecter');
             header('Location: index.php?action=login');
         } else {
@@ -19,15 +19,18 @@ class BackController extends Controller
     private function checkAdmin()
     {
         $this->checkLoggedIn();
-        if(!($this->sentBySession->get('roleName') === 'admin')) {
-            $this->sentBySession->set('messageCheckAdmin', 'Vous n\'avez pas le droit d\'accéder à cette page');
+        if (!($this->sentBySession->get('roleName') === 'admin')) {
+            $this->sentBySession->set(
+                'messageCheckAdmin',
+                'Vous n\'avez pas le droit d\'accéder à cette page'
+            );
             header('Location: index.php?action=editProfile');
         } else {
             return true;
         }
     }
 
-    public function getAdmin ()
+    public function getAdmin()
     {
         if ($this->checkAdmin()) {
             $posts = $this->postDAO->selectAllPosts();
@@ -36,19 +39,19 @@ class BackController extends Controller
             $users = $this->userDAO->getAllUsers();
             return $this->render('back/admin.html.twig', [
                 'posts' => $posts,
-                'newComments'=>$newComments,
-                'flagComments'=>$flagComments,
-                'users'=>$users
+                'newComments' => $newComments,
+                'flagComments' => $flagComments,
+                'users' => $users
             ]);
         }
     }
 
     public function createOnePost(Parameter $postForm)
     {
-        if($this->checkAdmin()) {
-            if($postForm->get('submit')) {
+        if ($this->checkAdmin()) {
+            if ($postForm->get('submit')) {
                 $errors = $this->validation->validate($postForm, 'Post');
-                if(!$errors) {
+                if (!$errors) {
                     $this->postDAO->insertOnePost($postForm, $this->sentBySession->get('id'));
                     $this->sentBySession->set('messageCreateOnePost', 'Le billet a été créé');
                     header('Location: index.php?action=getAdmin');
@@ -66,7 +69,7 @@ class BackController extends Controller
 
     public function editOnePost($postId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $post = $this->postDAO->selectOnePost($postId);
             $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId);
             return $this->render('back/editOnePost.html.twig', [
@@ -78,10 +81,10 @@ class BackController extends Controller
 
     public function refreshOnePost($postId, Parameter $postForm)
     {
-        if($this->checkAdmin()) {
-            if($postForm->get('submit')) {
+        if ($this->checkAdmin()) {
+            if ($postForm->get('submit')) {
                 $errors = $this->validation->validate($postForm, 'Post');
-                if(!$errors) {
+                if (!$errors) {
                     $this->postDAO->updateOnePost($postId, $postForm, $this->sentBySession->get('id'));
                     $this->sentBySession->set('messageRefreshOnePost', 'Le billet a été modifié');
                     header('Location: index.php?action=getAdmin');
@@ -102,7 +105,7 @@ class BackController extends Controller
 
     public function removeOnePost($postId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $this->commentDAO->deleteAllCommentsOfOnePost($postId);
             $this->postDAO->deleteOnePost($postId);
             $this->sentBySession->set('messageRemoveOnePost', 'Le billet a été supprimé');
@@ -112,31 +115,48 @@ class BackController extends Controller
 
     public function createOneComment($postId, Parameter $commentForm)
     {
-        if($this->checkLoggedIn()) {
-            if($commentForm->get('submit')) {
+        if ($this->checkLoggedIn()) {
+            if ($commentForm->get('submit')) {
                 $errors = $this->validation->validate($commentForm, 'Comment');
-                if(!$errors) {
-                    if($this->sentBySession->get('roleName') === 'admin') {
+                if (!$errors) {
+                    if ($this->sentBySession->get('roleName') === 'admin') {
                         $commentIsNew = 0; //No need to set comment as new if superdmin is the author
-                    }
-                    else {
+                    } else {
                         $commentIsNew = 1; //Set as new for other authors
                     }
                     $this->commentDAO->insertOneComment($postId, $commentForm, $commentIsNew);
                     $post = $this->postDAO->selectOnePost($postId);
-                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
-                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
-                    $this->sentBySession->set('messageCreateOneComment', 'Le commentaire a été enregistré :) Il sera publié après validation.');
+                    $pagination = $this->pagination->paginate(
+                        3,
+                        $this->sentByGet->get('page'),
+                        $this->commentDAO->countAllValidCommentsOfOnePost($postId)
+                    );
+                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost(
+                        $postId,
+                        $pagination->getLimit(),
+                        $pagination->getStart()
+                    );
+                    $this->sentBySession->set(
+                        'messageCreateOneComment',
+                        'Le commentaire a été enregistré :) Il sera publié après validation.'
+                    );
                     return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
                         'comments' => $comments,
                         'pagination' => $pagination
                     ]);
-                }
-                else {
+                } else {
                     $post = $this->postDAO->selectOnePost($postId);
-                    $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
-                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                    $pagination = $this->pagination->paginate(
+                        3,
+                        $this->sentByGet->get('page'),
+                        $this->commentDAO->countAllValidCommentsOfOnePost($postId)
+                    );
+                    $comments = $this->commentDAO->selectAllValidCommentsOfOnePost(
+                        $postId,
+                        $pagination->getLimit(),
+                        $pagination->getStart()
+                    );
                     return $this->render('front/getOnePostAndHisComments.html.twig', [
                         'post' => $post,
                         'comments' => $comments,
@@ -145,11 +165,18 @@ class BackController extends Controller
                         'errors' => $errors
                     ]);
                 }
-            }
-            else {
+            } else {
                 $post = $this->postDAO->selectOnePost($postId);
-                $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
-                $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+                $pagination = $this->pagination->paginate(
+                    3,
+                    $this->sentByGet->get('page'),
+                    $this->commentDAO->countAllValidCommentsOfOnePost($postId)
+                );
+                $comments = $this->commentDAO->selectAllValidCommentsOfOnePost(
+                    $postId,
+                    $pagination->getLimit(),
+                    $pagination->getStart()
+                );
                 return $this->render('front/getOnePostAndHisComments.html.twig', [
                     'post' => $post,
                     'comments' => $comments,
@@ -173,27 +200,25 @@ class BackController extends Controller
     {
         if ($this->checkLoggedIn()) {
             $comment = $this->commentDAO->selectOneComment($commentId);
-            if($commentForm->get('submit')) {
+            if ($commentForm->get('submit')) {
                 $errors = $this->validation->validate($commentForm, 'Comment');
                 if (!$errors) {
                     $this->commentDAO->updateOneComment($commentId, $commentForm);
                     $this->sentBySession->set('messageRefreshOneComment', 'Le commentaire a été modifié');
-                    header('Location: index.php?action=getOnePostAndHisComments&postId=' . $comment->getCommentPostId());
-                }
-                else {
+                    header('Location: index.php?action=getOnePostAndHisComments&postId='
+                            . $comment->getCommentPostId());
+                } else {
                     return $this->render('back/editOneComment.html.twig', [
                         'comment' => $comment,
                         'commentForm' => $commentForm,
                         'errors' => $errors
                     ]);
                 }
-
-            }
-            else {
+            } else {
                 return $this->render('back/editOneComment.html.twig', [
                    'comment' => $comment,
                    'commentForm' => $commentForm
-               ]);
+                ]);
             }
         }
     }
@@ -203,13 +228,13 @@ class BackController extends Controller
         if ($this->checkLoggedIn()) {
             $this->commentDAO->deleteOneComment($commentId);
             $this->sentBySession->set('messageRemoveOneComment', 'Le commentaire a été supprimé');
-            header('Location: index.php?action=getOnePostAndHisComments&postId='.$postId);
+            header('Location: index.php?action=getOnePostAndHisComments&postId=' . $postId);
         }
     }
 
     public function flagOneComment($commentId, $postId)
     {
-        if($this->checkLoggedIn()) {
+        if ($this->checkLoggedIn()) {
             $this->commentDAO->flagOneComment($commentId);
             $this->sentBySession->set('messageFlagOneComment', 'Le commentaire a bien été signalé');
             $post = $this->postDAO->selectOnePost($postId);
@@ -223,7 +248,7 @@ class BackController extends Controller
 
     public function unflagOneComment($commentId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $this->commentDAO->unflagOneComment($commentId);
             $this->sentBySession->set('messageUnflagOneComment', 'Le commentaire a bien été désignalé');
             header('Location: index.php?action=getAdmin');
@@ -232,7 +257,7 @@ class BackController extends Controller
 
     public function validateOneComment($commentId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $this->commentDAO->validateOneComment($commentId);
             $this->sentBySession->set('messageUnflagOneComment', 'Le commentaire a bien été validé');
             header('Location: index.php?action=getAdmin');
@@ -249,7 +274,7 @@ class BackController extends Controller
     public function refreshPassword(Parameter $passwordForm)
     {
         if ($this->checkLoggedIn()) {
-            if($passwordForm->get('submit')) {
+            if ($passwordForm->get('submit')) {
                 $this->userDAO->updatePassword($passwordForm, $this->sentBySession->get('pseudo'));
                 $this->sentBySession->set('messageRefreshPassword', 'Le mot de passe a été mis à jour');
                 header('Location: index.php?action=editProfile');
@@ -281,7 +306,7 @@ class BackController extends Controller
 
     public function activateSpecificUser($userId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $this->userDAO->activateSpecificUser($userId);
             // Get user infos
             $userInfos = $this->userDAO->getOneUserInfos($userId);
@@ -289,17 +314,19 @@ class BackController extends Controller
             $userEmail = $userInfos->getUserEmail();
             $userName = $userInfos->getUserPseudo();
             $subjectToUser = 'Votre compte est activé :)';
-            $messageToUser = 'Bonjour '.$userInfos->getUserPseudo().' !
+            $messageToUser = 'Bonjour ' . $userInfos->getUserPseudo() . ' !
                 <p>Votre compte sur le site LEMONOLOGUEDUVOSGIEN a été activé ! :)<br>
                 Vous pouvez désormais publier des commentaires.<br>
                 A bientôt !</p>
                 Bruno';
             $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
-            if($sendEmail === 1) {
-                $this->sentBySession->set('messageActivateSpecificUser', 'L\'utilisateur a bien été activé avec le rôle EDITOR. Un email vient de lui être envoyé :)');
+            if ($sendEmail === 1) {
+                $this->sentBySession->set(
+                    'messageActivateSpecificUser',
+                    'L\'utilisateur a bien été activé avec le rôle EDITOR. Un email vient de lui être envoyé :)'
+                );
                 header('Location: index.php?action=getAdmin');
-            }
-            else {
+            } else {
                 $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
                 return $this->render('back/admin.html.twig');
             }
@@ -308,7 +335,7 @@ class BackController extends Controller
 
     public function removeSpecificUser($userId)
     {
-        if($this->checkAdmin()) {
+        if ($this->checkAdmin()) {
             $this->userDAO->deleteSpecificUser($userId);
             $this->sentBySession->set('messageRemoveSpecificUser', 'L\'utilisateur a bien été supprimé');
             header('Location: index.php?action=getAdmin');

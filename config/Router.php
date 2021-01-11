@@ -7,12 +7,12 @@ use BrunoGrosdidier\Blog\src\Controller\BackController;
 use BrunoGrosdidier\Blog\src\Controller\ErrorController;
 use Exception;
 
-Class Router
+class Router
 {
-	private $frontController;
+    private $frontController;
     private $backController;
-	private $errorController;
-	private $request;
+    private $errorController;
+    private $request;
 
     public function __construct()
     {
@@ -22,12 +22,12 @@ Class Router
         $this->request = new Request();
     }
 
-	public function run()
-	{
-	    try {
-	        $action = $this->request->getSentByGet()->get('action');
-			if (isset($action)) {
-			    switch ($action) {
+    public function run()
+    {
+        try {
+            $action = $this->request->getSentByGet()->get('action');
+            if (isset($action)) {
+                switch ($action) {
                     case 'getBlog':
                         $this->frontController->getAllPosts();
                         break;
@@ -47,7 +47,10 @@ Class Router
                         $this->backController->editOnePost($this->request->getSentByGet()->get('postId'));
                         break;
                     case 'refreshOnePost':
-                        $this->backController->refreshOnePost($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
+                        $this->backController->refreshOnePost(
+                            $this->request->getSentByGet()->get('postId'),
+                            $this->request->getSentByPost()
+                        );
                         break;
                     case 'removeOnePost':
                         $this->backController->removeOnePost($this->request->getSentByGet()->get('postId'));
@@ -56,19 +59,31 @@ Class Router
                         $this->backController->createOnePost($this->request->getSentByPost());
                         break;
                     case 'createOneComment':
-                        $this->backController->createOneComment($this->request->getSentByGet()->get('postId'), $this->request->getSentByPost());
+                        $this->backController->createOneComment(
+                            $this->request->getSentByGet()->get('postId'),
+                            $this->request->getSentByPost()
+                        );
                         break;
                     case 'editOneComment':
                         $this->backController->editOneComment($this->request->getSentByGet()->get('commentId'));
                         break;
                     case 'refreshOneComment':
-                        $this->backController->refreshOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByPost());
+                        $this->backController->refreshOneComment(
+                            $this->request->getSentByGet()->get('commentId'),
+                            $this->request->getSentByPost()
+                        );
                         break;
                     case 'removeOneComment':
-                        $this->backController->removeOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByGet()->get('postId'));
+                        $this->backController->removeOneComment(
+                            $this->request->getSentByGet()->get('commentId'),
+                            $this->request->getSentByGet()->get('postId')
+                        );
                         break;
                     case 'flagOneComment':
-                        $this->backController->flagOneComment($this->request->getSentByGet()->get('commentId'), $this->request->getSentByGet()->get('postId'));
+                        $this->backController->flagOneComment(
+                            $this->request->getSentByGet()->get('commentId'),
+                            $this->request->getSentByGet()->get('postId')
+                        );
                         break;
                     case 'unflagOneComment':
                         $this->backController->unflagOneComment($this->request->getSentByGet()->get('commentId'));
@@ -106,14 +121,12 @@ Class Router
                     default:
                         $this->errorController->errorNotFound();
                 }
-			}
-			else {
-				$this->frontController->getHome();
-			}
-		}
-		catch(Exception $e) {
-			echo 'Erreur : ' . $e->getMessage();
+            } else {
+                $this->frontController->getHome();
+            }
+        } catch (Exception $e) {
+            echo 'Erreur : ' . $e->getMessage();
             $this->errorController->errorServer();
-		}
-	}
+        }
+    }
 }

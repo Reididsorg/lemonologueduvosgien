@@ -13,5 +13,5 @@ class ErrorController extends Controller
     {
         //return $this->view->render('error_500');
         return $this->render('error/error_500.html.twig');
-    }	
+    }
 }

@@ -12,7 +12,7 @@ abstract class DAO
     private function checkConnection()
     {
         //Vérifie si la connexion est nulle et fait appel à getConnection()
-        if(is_null($this->connection)) {
+        if (is_null($this->connection)) {
             return $this->getConnection();
         }
         //Si la connexion existe, elle est renvoyée, inutile de refaire une connexion
@@ -22,23 +22,20 @@ abstract class DAO
     private function getConnection()
     {
         //Tentative de connexion à la base de données
-        try{
+        try {
             $this->connection = new PDO(DB_HOST, DB_USER, DB_PASS);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             //On renvoie la connexion
             return $this->connection;
-        }
-        //On lève une erreur si la connexion échoue
-        catch(Exception $errorConnection)
-        {
-        	die ('Erreur de connection :'.$errorConnection->getMessage());
+        } catch (Exception $errorConnection) {
+            //On lève une erreur si la connexion échoue
+            die('Erreur de connection :' . $errorConnection->getMessage());
         }
     }
 
     protected function createQuery($sql, $parameters = null)
     {
-        if($parameters)
-        {
+        if ($parameters) {
             $result = $this->checkConnection()->prepare($sql);
             $result->execute($parameters);
             return $result;

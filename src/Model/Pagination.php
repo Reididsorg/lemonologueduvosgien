@@ -52,7 +52,7 @@ class Pagination
 
     public function setPage($page)
     {
-        if($page < 1) {
+        if ($page < 1) {
             $this->page = 1;
         } else {
             $this->page = $page;
@@ -66,7 +66,7 @@ class Pagination
 
     private function setPageNumber($total, $limit)
     {
-        $this->pageNumber = ceil($total/$limit);
+        $this->pageNumber = ceil($total / $limit);
     }
 
     public function setStart($page, $limit)

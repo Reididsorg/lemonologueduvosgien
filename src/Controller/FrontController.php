@@ -3,7 +3,6 @@
 namespace BrunoGrosdidier\Blog\src\Controller;
 
 use BrunoGrosdidier\Blog\config\Parameter;
-
 use BrunoGrosdidier\Blog\vendor\swiftmailer\swiftmailer\lib\classes\Swift\SmtpTransport;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -39,15 +38,23 @@ class FrontController extends Controller
         $posts = $this->postDAO->selectAllPosts($pagination->getLimit(), $this->pagination->getStart());
         return $this->render('front/getAllPosts.html.twig', [
             'posts' => $posts,
-            'pagination'=>$pagination
+            'pagination' => $pagination
         ]);
     }
 
     public function getOnePostAndHisComments($postId)
     {
         $post = $this->postDAO->selectOnePost($postId);
-        $pagination = $this->pagination->paginate(3, $this->sentByGet->get('page'), $this->commentDAO->countAllValidCommentsOfOnePost($postId));
-        $comments = $this->commentDAO->selectAllValidCommentsOfOnePost($postId, $pagination->getLimit(), $pagination->getStart());
+        $pagination = $this->pagination->paginate(
+            3,
+            $this->sentByGet->get('page'),
+            $this->commentDAO->countAllValidCommentsOfOnePost($postId)
+        );
+        $comments = $this->commentDAO->selectAllValidCommentsOfOnePost(
+            $postId,
+            $pagination->getLimit(),
+            $pagination->getStart()
+        );
         return $this->render('front/getOnePostAndHisComments.html.twig', [
             'post' => $post,
             'comments' => $comments,
@@ -59,75 +66,78 @@ class FrontController extends Controller
     {
         // Default value of user role : 3 (new)
         $userForm->set('roleId', 3);
-        if($userForm->get('submit')) {
+        if ($userForm->get('submit')) {
             $errors = $this->validation->validate($userForm, 'User');
-            if($this->userDAO->checkOneUser($userForm, 'User')) {
+            if ($this->userDAO->checkOneUser($userForm, 'User')) {
                 $errors['pseudo'] = $this->userDAO->checkOneUser($userForm);
             }
-            if(!$errors){
+            if (!$errors) {
                 // Verify Recaptcha
                 $verifyRecaptcha = $this->recaptcha->verifyRecaptcha($userForm->get('recaptcha-response'));
-                if($verifyRecaptcha === 'success') {
+                if ($verifyRecaptcha === 'success') {
                     $this->userDAO->insertOneUser($userForm);
                     // Send confirmation to user by email
                     $userEmail = $userForm->get('email');
                     $userName = $userForm->get('pseudo');
                     $subjectToUser = 'Bienvenue au Monologue du Vosgien';
-                    $messageToUser = 'Bonjour '.ucfirst($userForm->get('pseudo')).' !
+                    $messageToUser = 'Bonjour ' . ucfirst($userForm->get('pseudo')) . ' !
                     <p>Votre inscription au MONOLOGUE DU VOSGIEN a été enregistrée ! :)<br>
                     Vous recevrez bientôt un message confirmant l\'activation de votre compte.<br>
                     Vous pourrez alors publier des commentaires sur le site.<br>
                     A bientôt !</p>
                     <p>Bruno</p>';
-                    $sendEmail = $this->sendEmail->sendEmailToUser($userEmail, $userName, $subjectToUser, $messageToUser);
-                    if($sendEmail === 1) {
+                    $sendEmail = $this->sendEmail->sendEmailToUser(
+                        $userEmail,
+                        $userName,
+                        $subjectToUser,
+                        $messageToUser
+                    );
+                    if ($sendEmail === 1) {
                         $this->sentBySession->set('messageRegister', 'Votre inscription a bien été effectuée :) 
                     Un courriel de confirmation vient de vous être envoyé !');
                         header('Location: index.php');
-                    }
-                    else {
+                    } else {
                         $this->sentBySession->set('messageRegister', 'Problème avec l\'envoi du message :(');
                         return $this->render('front/register.html.twig');
                     }
-                }
-                else {
+                } else {
                     $this->sentBySession->set('messageRegister', 'Problème avec la vérification du recaptcha :(');
                     return $this->render('front/register.html.twig');
                 }
-            }
-            else {
+            } else {
                 return $this->render('front/register.html.twig', [
-                    'userForm'=>$userForm,
-                    'errors'=>$errors
+                    'userForm' => $userForm,
+                    'errors' => $errors
                 ]);
             }
-        }
-        else {
+        } else {
             return $this->render('front/register.html.twig');
         }
     }
 
-    public function login(Parameter $userForm) {
-        if($userForm->get('submit')) {
+    public function login(Parameter $userForm)
+    {
+        if ($userForm->get('submit')) {
             $result = $this->userDAO->login($userForm);
-            if($result && $result['isPasswordValid']) {
-                $this->sentBySession->set('messageLogin', 'Content de vous revoir '.$result['result']['user_pseudo'].'!');
+            if ($result && $result['isPasswordValid']) {
+                $this->sentBySession->set(
+                    'messageLogin',
+                    'Content de vous revoir ' . $result['result']['user_pseudo'] . '!'
+                );
                 $this->sentBySession->set('id', $result['result']['id']);
                 $this->sentBySession->set('roleName', $result['result']['roleName']);
                 $this->sentBySession->set('email', $result['result']['user_email']);
                 $this->sentBySession->set('pseudo', $userForm->get('pseudo'));
                 // Redirection in terms of role name (admin or not)
-                if($result['result']['roleName'] === 'admin') {
+                if ($result['result']['roleName'] === 'admin') {
                     header('Location: index.php?action=getAdmin');
-                }
-                else {
+                } else {
                     header('Location: index.php');
                 }
-            }
-            else {
+            } else {
                 $this->sentBySession->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');
                 return $this->render('front/login.html.twig', [
-                    'userForm'=> $userForm
+                    'userForm' => $userForm
                 ]);
             }
         }
@@ -136,37 +146,34 @@ class FrontController extends Controller
 
     public function submitContactForm(Parameter $contactForm)
     {
-        if($contactForm->get('submit')) {
+        if ($contactForm->get('submit')) {
             $errors = $this->validation->validate($contactForm, 'Contact');
-            if(!$errors){
+            if (!$errors) {
                 // Verify Recaptcha
                 $verifyRecaptcha = $this->recaptcha->verifyRecaptcha($contactForm->get('recaptcha-response'));
-                if($verifyRecaptcha === 'success') {
+                if ($verifyRecaptcha === 'success') {
                     // Send message to me by email
                     $subjectToMe = 'Nouveau message de contact';
-                    $messageToMe = '<p><strong>De : </strong><br>'.$contactForm->get('expediteur').'</p>
-                    <p><strong>Email : </strong><br>'.$contactForm->get('email').'</p>
+                    $messageToMe = '<p><strong>De : </strong><br>' . $contactForm->get('expediteur') . '</p>
+                    <p><strong>Email : </strong><br>' . $contactForm->get('email') . '</p>
                     <p><strong>Message : </strong><br>
-                    '.nl2br($contactForm->get('message')).'</p>';
+                    ' . nl2br($contactForm->get('message')) . '</p>';
                     $sendEmail = $this->sendEmail->sendEmailToMe($subjectToMe, $messageToMe);
-                    if($sendEmail === 1) {
+                    if ($sendEmail === 1) {
                         $this->sentBySession->set('messageSendEmail', 'Votre message a bien été envoyé :)');
                         return $this->render('front/getContact.html.twig');
-                    }
-                    else {
+                    } else {
                         $this->sentBySession->set('messageSendEmail', 'Problème avec l\'envoi du message :(');
                         return $this->render('front/getContact.html.twig');
                     }
-                }
-                else {
+                } else {
                     $this->sentBySession->set('messageSendEmail', 'Problème avec la vérification du recaptcha :(');
                     return $this->render('front/getContact.html.twig');
                 }
-            }
-            else {
+            } else {
                 return $this->render('front/getContact.html.twig', [
-                    'contactForm'=>$contactForm,
-                    'errors'=>$errors
+                    'contactForm' => $contactForm,
+                    'errors' => $errors
                 ]);
             }
         }

@@ -25,22 +25,21 @@ class ContactValidation extends Validation
 
     private function checkField($name, $value)
     {
-        if($name === 'expediteur') {
+        if ($name === 'expediteur') {
             $error = $this->checkEmailExpeditor($name, $value);
             $this->addError($name, $error);
-        }
-        elseif ($name === 'email') {
+        } elseif ($name === 'email') {
             $error = $this->checkEmailAdress($name, $value);
             $this->addError($name, $error);
-        }
-        elseif ($name === 'message') {
+        } elseif ($name === 'message') {
             $error = $this->checkEmailMessage($name, $value);
             $this->addError($name, $error);
         }
     }
 
-    private function addError($name, $error) {
-        if($error) {
+    private function addError($name, $error)
+    {
+        if ($error) {
             $this->errors += [
                 $name => $error
             ];
@@ -49,13 +48,13 @@ class ContactValidation extends Validation
 
     private function checkEmailExpeditor($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Expéditeur', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Expéditeur', $value, 2);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Expéditeur', $value, 255);
         }
         return null;
@@ -63,16 +62,16 @@ class ContactValidation extends Validation
 
     private function checkEmailAdress($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Email', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Email', $value, 2);
         }
-        if($this->constraint->maxLength($name, $value, 255)) {
+        if ($this->constraint->maxLength($name, $value, 255)) {
             return $this->constraint->maxLength('Email', $value, 255);
         }
-        if($this->constraint->isValidEmailAdress($name, $value)) {
+        if ($this->constraint->isValidEmailAdress($name, $value)) {
             return $this->constraint->isValidEmailAdress('Email', $value);
         }
         return null;
@@ -80,10 +79,10 @@ class ContactValidation extends Validation
 
     private function checkEmailMessage($name, $value)
     {
-        if($this->constraint->notBlank($name, $value)) {
+        if ($this->constraint->notBlank($name, $value)) {
             return $this->constraint->notBlank('Message', $value);
         }
-        if($this->constraint->minLength($name, $value, 2)) {
+        if ($this->constraint->minLength($name, $value, 2)) {
             return $this->constraint->minLength('Message', $value, 2);
         }
         return null;

@@ -4,7 +4,8 @@ namespace BrunoGrosdidier\Blog\src\Constraint;
 
 class Constraint
 {
-    public function secureInput($value) {
+    public function secureInput($value)
+    {
         $value = trim($value);
         $value = stripslashes($value);
         $value = htmlspecialchars($value);
@@ -13,24 +14,24 @@ class Constraint
 
     public function notBlank($name, $value)
     {
-        if(empty($value)) {
-            return 'Le champ '.$name.' saisi est vide';
+        if (empty($value)) {
+            return 'Le champ ' . $name . ' saisi est vide';
         }
         return null;
     }
 
     public function minLength($name, $value, $minSize)
     {
-        if(strlen($value) < $minSize) {
-            return 'Le champ '.$name.' doit contenir au moins '.$minSize.' caractères';
+        if (strlen($value) < $minSize) {
+            return 'Le champ ' . $name . ' doit contenir au moins ' . $minSize . ' caractères';
         }
         return null;
     }
 
     public function maxLength($name, $value, $maxSize)
     {
-        if(strlen($value) > $maxSize) {
-            return 'Le champ '.$name.' doit contenir au maximum '.$maxSize.' caractères';
+        if (strlen($value) > $maxSize) {
+            return 'Le champ ' . $name . ' doit contenir au maximum ' . $maxSize . ' caractères';
         }
         return null;
     }
@@ -40,7 +41,7 @@ class Constraint
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return null;
         } else {
-            return 'Le champ '.$name.' n\'est pas une adresse email valide';
+            return 'Le champ ' . $name . ' n\'est pas une adresse email valide';
         }
     }
 }
