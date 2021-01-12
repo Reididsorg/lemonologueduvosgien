@@ -4,8 +4,6 @@ namespace BrunoGrosdidier\Blog\src\Service;
 
 class Recaptcha
 {
-    private $recaptchaFormResponse;
-
     public function verifyRecaptcha($recaptchaFormResponse)
     {
         // Recaptcha URL
