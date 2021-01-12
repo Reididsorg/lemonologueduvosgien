@@ -63,6 +63,6 @@ abstract class Controller
 
     public function render($template, $options = [])
     {
-        echo $this->twig->render($template, $options);
+        echo htmlspecialchars($this->twig->render($template, $options));
     }
 }

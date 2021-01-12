@@ -12,7 +12,7 @@ abstract class DAO
     private function checkConnection()
     {
         //Vérifie si la connexion est nulle et fait appel à getConnection()
-        if (is_null($this->connection)) {
+        if ($this->connection === null) {
             return $this->getConnection();
         }
         //Si la connexion existe, elle est renvoyée, inutile de refaire une connexion

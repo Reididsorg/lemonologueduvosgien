@@ -1,11 +1,13 @@
 <?php
 
-if ($_SERVER['SCRIPT_FILENAME'] == 'C:/wamp64/www/lemonologueduvosgien/public/index.php') {
-    require_once('../config/devPc.php');
-}
+if (isset($_SERVER['SCRIPT_FILENAME'])) {
+    if ($_SERVER['SCRIPT_FILENAME'] == 'C:/wamp64/www/lemonologueduvosgien/public/index.php') {
+        require_once('../config/devPc.php');
+    }
 
-if ($_SERVER['SCRIPT_FILENAME'] == '/Applications/MAMP/htdocs/lemonologueduvosgien/public/index.php') {
-    require_once('../config/devMac.php');
+    if ($_SERVER['SCRIPT_FILENAME'] == '/Applications/MAMP/htdocs/lemonologueduvosgien/public/index.php') {
+        require_once('../config/devMac.php');
+    }
 }
 
 require_once('../vendor/autoload.php');
