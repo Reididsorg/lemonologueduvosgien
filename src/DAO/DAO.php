@@ -29,7 +29,8 @@ abstract class DAO
             return $this->connection;
         } catch (Exception $errorConnection) {
             //On lève une erreur si la connexion échoue
-            die('Erreur de connection :' . $errorConnection->getMessage());
+            //die('Erreur de connection :' . $errorConnection->getMessage());
+            throw new Exception('Erreur de connection :' . $errorConnection->getMessage());
         }
     }
 
