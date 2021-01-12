@@ -1,95 +1,98 @@
 body {
-    font-family: "Lato", Arial, Helvetica, sans-serif;
+	font-family: "Lato", Arial, Helvetica, sans-serif;
 }
 h1 {
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 
 h1 a {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .wrapper {
-    padding: 10px 0 10px 0;
+	padding: 10px 0 10px 0;
 }
 
 #js-form-hide-buttons {
-    color: #fff;
+	color: #fff;
 }
+
 .form-check {
-    padding-top: 10px;
+	padding-top: 10px;
 }
 .flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
+
 textarea.form-control {
-    height: 200px;
+	height: 200px;
 }
+
 @media (min-width: 992px) {
-    .form-check {
-        padding-top: 0;
-    }
+	.form-check {
+		padding-top: 0;
+	}
 }
+
 @media (min-width: 1200px) {
-    .form-check {
-        margin-right: 10px;
-    }
+	.form-check {
+		margin-right: 10px;
+	}
 }
 .flag-comment {
-    color: #C82333;
-    font-weight: bold;
+	color: #C82333;
+	font-weight: bold;
 }
 
 #delete-comment {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 form {
-    padding: 0 20px 20px 20px;
+	padding: 0 20px 20px 20px;
 }
 
 #cv {
-    background-color: #525659;
-    margin-bottom: -10px;
+	background-color: #525659;
+	margin-bottom: -10px;
 }
 
 iframe {
-  background-color: #ffffff;
+	background-color: #ffffff;
 }
 
 footer {
-    width: 100%;
+	width: 100%;
 }
 
 #footer-social {
-   padding-bottom: 0;
+	padding-bottom: 0;
 }
 
 #footer-social ul {
-    margin: 0 auto;
+	margin: 0 auto;
 }
 
 #footer-text {
-    margin: 0 auto;
-    text-align: center;
-    padding: 0 0 10px 0;
-    color: #ffffff;
+	margin: 0 auto;
+	text-align: center;
+	padding: 0 0 10px 0;
+	color: #ffffff;
 }
 
 #illustration img {
-    width: 100%;
+	width: 100%;
 }
 
 #presentation {
-    /*display: flex;*/
-    padding: 20px 0 10px 0;
+	padding: 20px 0 10px 0;
 }
 
 #presentation p {
-    padding: 20px 0 0 0;
-    margin-bottom: 0;
-    font-size: 1.2rem;
-    font-weight: bold;
+	padding: 20px 0 0 0;
+	margin-bottom: 0;
+	font-size: 1.2rem;
+	font-weight: bold;
 }
