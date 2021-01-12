@@ -3,7 +3,7 @@
 ## MODEL
 > Nom des méthodes avec préfixes en :
 
-+insert*
++ insert*
 + select*
 + update*
 + delete*
