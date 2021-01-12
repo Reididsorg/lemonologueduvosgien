@@ -21,6 +21,7 @@ h1 a {
 .form-check {
   padding-top: 10px;
 }
+
 .flex {
   display: flex;
   justify-content: space-between;
@@ -44,7 +45,7 @@ textarea.form-control {
 }
 
 .flag-comment {
-  color: #C82333;
+  color: #c82333;
   font-weight: bold;
 }
 
@@ -62,7 +63,7 @@ form {
 }
 
 iframe {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 footer {
@@ -81,7 +82,7 @@ footer {
   margin: 0 auto;
   text-align: center;
   padding: 0 0 10px 0;
-  color: #ffffff;
+  color: #fff;
 }
 
 #illustration img {
