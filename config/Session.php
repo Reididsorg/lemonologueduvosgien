@@ -15,10 +15,10 @@ class Session
     {
         $_SESSION[$name] = $value;
     }
-//filter_input(INPUT_POST, $name) instead of $_SESSION[$name]
+
     public function get($name)
     {
-        if (null !== (filter_input(INPUT_POST, $name))) {
+        if (isset($_SESSION[$name])) {
             return $_SESSION[$name];
         }
         return null;
