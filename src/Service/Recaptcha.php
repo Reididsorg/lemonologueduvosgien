@@ -25,13 +25,13 @@ class Recaptcha
                 //var_dump(curl_error($curl)); // debug
             }
             curl_close($curl);
-        } else {
-            // Use of file_get_contents
-            $response = file_get_contents($recaptchaUrl);
+        }
+        else {
+            return 'error';
         }
 
         // Check if response
-        if (empty($response) || is_null($response)) {
+        if (empty($response) || $response === null) {
             return 'error';
         } else {
             $data = json_decode($response);
