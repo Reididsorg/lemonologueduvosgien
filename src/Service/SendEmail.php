@@ -4,13 +4,6 @@ namespace BrunoGrosdidier\Blog\src\Service;
 
 class SendEmail
 {
-    private $subjectToMe;
-    private $messageToMe;
-    private $userEmail;
-    private $userName;
-    private $subjectToUser;
-    private $messageToUser;
-
     public function sendEmailToMe($subjectToMe, $messageToMe)
     {
         // Create the Transport (Exp)
