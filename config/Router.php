@@ -125,7 +125,7 @@ class Router
                 $this->frontController->getHome();
             }
         } catch (Exception $e) {
-            echo htmlspecialchars('Erreur : ' . $e->getMessage());
+            echo 'Erreur : ' . $e->getMessage();
             $this->errorController->errorServer();
         }
     }
