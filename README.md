@@ -29,6 +29,3 @@ There's 3 roles for users :
 
 # Codacy Badge
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/16b666209eff45b3b3e46c027f275e1f "Codacy")](https://app.codacy.com/gh/Reididsorg/lemonologueduvosgien/dashboard)
- 
-:)  
-   
