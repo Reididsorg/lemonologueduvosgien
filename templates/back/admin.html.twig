@@ -34,43 +34,49 @@
                     {% if posts is empty %}
                         <p class="alert alert-warning">Pas de billets de blog.</p>
                     {% else %}
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Id</td>
-                                <td>Titre</td>
-                                <td>Contenu</td>
-                                <td>Auteur</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                            {% for post in posts %}
-                                <tr>
-                                    <td>{{ post.id }}</td>
-                                    <td><a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a></td>
-                                    <td>{{ post.postContent|slice(0, 150) }}</td>
-                                    <td>{{ post.postAuthor }}</td>
-                                    <td>Créé le : {{ post.postDateFr }}</td>
-                                    <td>
-                                        <a href="index.php?action=editOnePost&postId={{ post.id }}">Modifier</a>
-                                        <br>
-                                        <a data-toggle="modal" data-target="#removePost" href="#">Supprimer</a>
-                                        <div class="modal fade" id="removePost" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-body d-flex justify-content-center">
-                                                        Voulez-vous vraiment supprimer ce billet de blog ?
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center">
-                                                        <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
-                                                        <a href="index.php?action=removeOnePost&postId={{ post.id }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce billet de blog !</a>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Titre</td>
+                                        <th scope="col">Contenu</td>
+                                        <th scope="col">Auteur</td>
+                                        <th scope="col">Date</td>
+                                        <th scope="col">Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for post in posts %}
+                                        <tr>
+                                            <td>{{ post.id }}</td>
+                                            <td><a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a></td>
+                                            <td>{{ post.postContent|slice(0, 150) }}</td>
+                                            <td>{{ post.postAuthor }}</td>
+                                            <td>Créé le : {{ post.postDateFr }}</td>
+                                            <td>
+                                                <a href="index.php?action=editOnePost&postId={{ post.id }}">Modifier</a>
+                                                <br>
+                                                <a data-toggle="modal" data-target="#removePost" href="#">Supprimer</a>
+                                                <div class="modal fade" id="removePost" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body d-flex justify-content-center">
+                                                                Voulez-vous vraiment supprimer ce billet de blog ?
+                                                            </div>
+                                                            <div class="modal-footer d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                                                                <a href="index.php?action=removeOnePost&postId={{ post.id }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce billet de blog !</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endif %}
                 </div>
                 <div class="tab-pane fade show active" id="newComment" role="tabpanel" aria-labelledby="newComment-tab">
@@ -78,43 +84,49 @@
                     {% if newComments is empty %}
                         <p class="alert alert-warning">Pas de nouveaux commentaire.</p>
                     {% else %}
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Id</td>
-                                <td>Pseudo</td>
-                                <td>Commentaire</td>
-                                <td>Id billet</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                            {% for newComment in newComments %}
-                                <tr>
-                                    <td>{{ newComment.id }}</td>
-                                    <td>{{ newComment.commentAuthor }}</td>
-                                    <td>{{ newComment.commentContent|slice(0, 150) }}</td>
-                                    <td>{{ newComment.commentPostId }}</td>
-                                    <td>Créé le : {{ newComment.commentDateFr }}</td>
-                                    <td>
-                                        <a href="index.php?action=validateOneComment&commentId={{ newComment.id }}">Valider</a>
-                                        <br>
-                                        <a data-toggle="modal" data-target="#removeCommentModal" href="#">Supprimer</a>
-                                        <div class="modal fade" id="removeCommentModal" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-body d-flex justify-content-center">
-                                                        Voulez-vous vraiment supprimer ce commentaire ?
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center">
-                                                        <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
-                                                        <a href="index.php?action=removeOneComment&commentId={{ newComment.id }}&postId={{ newComment.commentPostId }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce commmentaire !</a>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id</td>
+                                        <th scope="col">Pseudo</td>
+                                        <th scope="col">Commentaire</td>
+                                        <th scope="col">Id billet</td>
+                                        <th scope="col">Date</td>
+                                        <th scope="col">Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for newComment in newComments %}
+                                    <tr>
+                                        <td>{{ newComment.id }}</td>
+                                        <td>{{ newComment.commentAuthor }}</td>
+                                        <td>{{ newComment.commentContent|slice(0, 150) }}</td>
+                                        <td>{{ newComment.commentPostId }}</td>
+                                        <td>Créé le : {{ newComment.commentDateFr }}</td>
+                                        <td>
+                                            <a href="index.php?action=validateOneComment&commentId={{ newComment.id }}">Valider</a>
+                                            <br>
+                                            <a data-toggle="modal" data-target="#removeCommentModal" href="#">Supprimer</a>
+                                            <div class="modal fade" id="removeCommentModal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body d-flex justify-content-center">
+                                                            Voulez-vous vraiment supprimer ce commentaire ?
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-center">
+                                                            <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                                                            <a href="index.php?action=removeOneComment&commentId={{ newComment.id }}&postId={{ newComment.commentPostId }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce commmentaire !</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endif %}
                 </div>
                 <div class="tab-pane fade show active" id="flagComment" role="tabpanel" aria-labelledby="flagComment-tab">
@@ -122,41 +134,47 @@
                     {% if flagComments is empty %}
                         <p class="alert alert-warning">Pas de commentaire signalé.</p>
                     {% else %}
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Id</td>
-                                <td>Pseudo</td>
-                                <td>Message</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                            {% for flagComment in flagComments %}
-                                <tr>
-                                    <td>{{ flagComment.id }}</td>
-                                    <td>{{ flagComment.commentAuthor }}</td>
-                                    <td>{{ flagComment.commentContent|slice(0, 150) }}</td>
-                                    <td>Créé le : {{ flagComment.commentDateFr }}</td>
-                                    <td>
-                                        <a href="index.php?action=unflagOneComment&commentId={{ flagComment.id }}">Désignaler</a>
-                                        <br>
-                                        <a data-toggle="modal" data-target="#removeFlagCommentModal" href="#">Supprimer</a>
-                                        <div class="modal fade" id="removeFlagCommentModal" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-body d-flex justify-content-center">
-                                                        Voulez-vous vraiment supprimer ce commentaire signalé ?
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center">
-                                                        <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
-                                                        <a href="index.php?action=removeOneComment&commentId={{ flagComment.id }}&postId={{ flagComment.commentPostId }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce commmentaire signalé !</a>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id</td>
+                                        <th scope="col">Pseudo</td>
+                                        <th scope="col">Message</td>
+                                        <th scope="col">Date</td>
+                                        <th scope="col">Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for flagComment in flagComments %}
+                                    <tr>
+                                        <td>{{ flagComment.id }}</td>
+                                        <td>{{ flagComment.commentAuthor }}</td>
+                                        <td>{{ flagComment.commentContent|slice(0, 150) }}</td>
+                                        <td>Créé le : {{ flagComment.commentDateFr }}</td>
+                                        <td>
+                                            <a href="index.php?action=unflagOneComment&commentId={{ flagComment.id }}">Désignaler</a>
+                                            <br>
+                                            <a data-toggle="modal" data-target="#removeFlagCommentModal" href="#">Supprimer</a>
+                                            <div class="modal fade" id="removeFlagCommentModal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body d-flex justify-content-center">
+                                                            Voulez-vous vraiment supprimer ce commentaire signalé ?
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-center">
+                                                            <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                                                            <a href="index.php?action=removeOneComment&commentId={{ flagComment.id }}&postId={{ flagComment.commentPostId }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce commmentaire signalé !</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endif %}
                 </div>
                 <div class="tab-pane fade show active" id="user" role="tabpanel" aria-labelledby="user-tab">
@@ -164,45 +182,51 @@
                     {% if users is empty %}
                         <p class="alert alert-warning">Aucun utilisateur.</p>
                     {% else %}
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Id</td>
-                                <td>Pseudo</td>
-                                <td>Date</td>
-                                <td>Rôle</td>
-                                <td>Actions</td>
-                            </tr>
-                            {% for user in users %}
-                                <tr>
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.userPseudo }}</td>
-                                    <td>Créé le : {{ user.userCreatedAtFr }}</td>
-                                    <td>{{ user.roleName }}</td>
-                                    <td>
-                                        {% if user.getRoleName is same as('new') %}
-                                            <a href="index.php?action=activateSpecificUser&userId={{ user.id }}">Activer</a>
-                                            <br>
-                                        {% endif %}
-                                        {% if user.roleName is not same as('admin') %}
-                                            <a data-toggle="modal" data-target="#removeAccountModal" href="#">Supprimer</a>
-                                        {% endif %}
-                                        <div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-body d-flex justify-content-center">
-                                                        Voulez-vous vraiment supprimer ce compte ?<br>
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center">
-                                                        <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
-                                                        <a href="index.php?action=removeSpecificUser&userId={{ user.id }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce compte !</a>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Id</td>
+                                        <th scope="col">Pseudo</td>
+                                        <th scope="col">Date</td>
+                                        <th scope="col">Rôle</td>
+                                        <th scope="col">Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.userPseudo }}</td>
+                                        <td>Créé le : {{ user.userCreatedAtFr }}</td>
+                                        <td>{{ user.roleName }}</td>
+                                        <td>
+                                            {% if user.getRoleName is same as('new') %}
+                                                <a href="index.php?action=activateSpecificUser&userId={{ user.id }}">Activer</a>
+                                                <br>
+                                            {% endif %}
+                                            {% if user.roleName is not same as('admin') %}
+                                                <a data-toggle="modal" data-target="#removeAccountModal" href="#">Supprimer</a>
+                                            {% endif %}
+                                            <div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body d-flex justify-content-center">
+                                                            Voulez-vous vraiment supprimer ce compte ?<br>
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-center">
+                                                            <a href="#" class="btn btn-secondary btn-md" role="button" data-dismiss="modal">NON</a>
+                                                            <a href="index.php?action=removeSpecificUser&userId={{ user.id }}" class="btn btn-danger btn-md" role="button">OUI, je veux vraiment supprimer ce compte !</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endif %}
                 </div>
             </div>
