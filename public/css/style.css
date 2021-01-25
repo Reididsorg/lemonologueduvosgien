@@ -184,17 +184,6 @@ footer {
   margin-bottom: 0;
 }
 
-#presentation {
-  padding: 20px 0 10px 0;
-}
-
-#presentation p {
-  padding: 20px 0 0 0;
-  margin-bottom: 0;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
 div.wrapper h1,
 div.wrapper h2,
 div.wrapper h3,
@@ -207,4 +196,15 @@ div.wrapper form {
 .footer-dark .item.text p {
   opacity: 0.6;
   margin-bottom: 0;
+}
+
+#presentation {
+  padding: 20px 0 10px 0;
+}
+
+#presentation p {
+  padding: 20px 0 0 0;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
