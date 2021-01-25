@@ -28,4 +28,4 @@ There's 3 roles for users :
 - new : When new user has subscribed. Admin can decide to attribute admin or edit role.
 
 # Codacy Badge
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/16b666209eff45b3b3e46c027f275e1f "Codacy")](https://app.codacy.com/gh/Reididsorg/lemonologueduvosgien/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/16b666209eff45b3b3e46c027f275e1f)](https://www.codacy.com/gh/Reididsorg/lemonologueduvosgien/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Reididsorg/lemonologueduvosgien&amp;utm_campaign=Badge_Grade)
