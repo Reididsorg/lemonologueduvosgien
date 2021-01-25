@@ -11,10 +11,12 @@
         <div id="post">
             <div>
                 <h1>
-                    <a href="index.php?action=getOnePostAndHisComments&postId={{ post.id }}">{{ post.postTitle }}</a>
+                    {{ post.postTitle }}
                 </h1>
                 <p>{{ post.postContent }}</p>
-                <em>(Le {{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
+                <p>
+                    <em>(Le {{ post.postDateFr }}) par <strong>{{ post.postAuthor }}</strong></em>
+                </p>
             </div>
         </div>
         <div id="comments">
