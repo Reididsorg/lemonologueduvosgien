@@ -146,11 +146,6 @@ footer {
   }
 }
 
-.footer-dark .item.text p {
-  opacity: 0.6;
-  margin-bottom: 0;
-}
-
 .footer-dark .item.social {
   text-align: center;
   margin-bottom: 10px;
@@ -189,6 +184,20 @@ footer {
   margin-bottom: 0;
 }
 
+div.wrapper h1,
+div.wrapper h2,
+div.wrapper h3,
+div.wrapper p,
+div.wrapper form {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.footer-dark .item.text p {
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
 #presentation {
   padding: 20px 0 10px 0;
 }
@@ -198,13 +207,4 @@ footer {
   margin-bottom: 0;
   font-size: 1.2rem;
   font-weight: bold;
-}
-
-div.wrapper h1,
-div.wrapper h2,
-div.wrapper h3,
-div.wrapper p,
-div.wrapper form {
-  padding-left: 5px;
-  padding-right: 5px;
 }
