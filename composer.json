@@ -9,5 +9,5 @@
     "twig/twig": "^3.1",
     "swiftmailer/swiftmailer": "^6.2",
     "squizlabs/php_codesniffer": "^3.5"
-  },
+  }
 }
