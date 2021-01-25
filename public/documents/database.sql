@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `user_pseudo`, `user_email`, `user_password`, `user_created_at`, `role_id`) VALUES
-(9, 'admin', 'bruno.grosdidier@gmail.com', '$2y$10$Jsb3Q.ifwwABY3h8puHgLeVJ7KoQfcwpdID66WVPLsPBWTv4Gdq3i', '2020-12-15 16:50:10', 1),
+(9, 'admin', 'bruno.grosdidier@gmail.com', '$2y$10$Jsb3Q.ifwwABY3h8puHgLeVJ7KoQfcwpdID66WVPLsPBWTv4Gdq3i', '2020-12-15 16:50:10', 1);
 
 --
 -- Contraintes pour les tables déchargées
