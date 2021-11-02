@@ -10,14 +10,24 @@
    - Mac / MAMP : Duplicate "config/devMac.php.dist" and rename it "devMac.php"
    Fill it with your database credentials
 
-4. Install dependencies with composer :
+4. Fill your mail credentials :
+
+   - Duplicate "config/devMail.php.dist" and rename it "devMail.php"
+
+5. Fill your recaptcha credentials :
+
+   - Duplicate "config/devRecaptcha.php.dist" and rename it "devRacaptcha.php" (Fill with server credential)
+   - Open templates/front/getContact.html.twig and fill with front credential at the bottom (2 lines)
+   - Open templates/front/register.html.twig and fill with front credential at the bottom (2 lines)
+
+6. Install dependencies with composer :
 
    - Twig
    - Swiftmailer
    
-5. Open in your browser by pointing into the folder "public/"
+7. Open in your browser by pointing into the folder "public/"
 
-6. First time access for Superadmin (Highly recommended to change it)  : 
+8. First time access for Superadmin (Highly recommended to change it)  : 
       - pseudo : admin
       - pwd : admin
 
